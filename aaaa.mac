@@ -1,0 +1,183 @@
+﻿debuginfo 2;
+
+debuginfo "■まだノーマルマクロ層\r\n";
+
+jsmode "JScript\\" + currentmacrodirectory;
+
+debuginfo "★jsmodeだけ指定\r\n";
+
+js {
+
+
+
+
+debuginfo("▲js層\r\n");
+
+debuginfo(2);
+
+var fso = createobject("Scripting.FileSystemObject");
+
+var currentMacroDirectory = currentmacrodirectory();
+
+var currentFileFullPath = hidemaru.getFileFullPath();
+
+var gitDirProcess = null;
+
+function destroyProcess(process) {
+    if (process) {
+        process.kill();
+        process = null;
+    }
+}
+
+function checkGitDirectory() {
+    try {
+        // gitのコマンドを発行して、対象のファイルがどこかのローカルリポジトリに所得しているのかを探す
+        var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
+        gitDirProcess = hidemaru.runProcess("git rev-parse --absolute-git-dir", currentFileDir, "stdio", "utf8");
+
+        // gitが無いんですが!!
+        if (!gitDirProcess) {
+            throw "git コマンドにパスが通っていません";
+
+            // 非同期用の標準出力・標準エラーのコールバック関数の設定
+        } else {
+            gitDirProcess.stdOut.onReadAll(onStdOutReadAllGitDir);
+            gitDirProcess.stdErr.onReadAll(onStdErrReadAllGitDir);
+            gitDirProcess.onClose(onCloseGitDir)
+
+        }
+
+    } catch (e) {
+        destroyProcess(gitDirProcess);
+        console.log(e);
+    }
+}
+
+checkGitDirectory();
+
+var gitRootDir = "";
+
+function onStdOutReadAllGitDir(outputText) {
+
+    var gitDir = outputText.replace("\n", "");
+    gitDir = gitDir.replace(/\//g, "\\");
+    gitDir = fso.GetParentFolderName(gitDir);
+
+    if (fso.FolderExists(gitDir)) {
+        console.log(gitDir);
+        gitRootDir = gitDir.replace("\n", "");
+        checkGitStatus();
+    }
+}
+
+function onStdErrReadAllGitDir(outputText) {
+}
+
+function onCloseGitDir() {
+    destroyProcess(gitDirProcess);
+}
+
+var gitStatusProcess = null;
+function checkGitStatus() {
+    gitStatusProcess = hidemaru.runProcess("git status --porcelain", gitRootDir, "stdio", "sjis");
+    gitStatusProcess.stdOut.onReadAll(onStdOutReadAllGitStatus);
+    gitStatusProcess.stdErr.onReadAll(onStdErrReadAllGitStatus);
+    gitStatusProcess.onClose(onCloseGitStatus);
+}
+
+function onStdOutReadAllGitStatus(outputText) {
+    console.log(outputText);
+    var count = outputText.split("\n").length-1;
+    console.log(count);
+    if (count > 0) {
+        getGitBranch();
+    }
+}
+
+function onStdErrReadAllGitStatus(outputText) {
+}
+
+function onCloseGitStatus() {
+    destroyProcess(gitStatusProcess);
+}
+
+var gitBranchProcess = null;
+var branchName = "";
+function getGitBranch() {
+    // git branch --show-current
+    gitBranchProcess = hidemaru.runProcess("git branch --show-current", gitRootDir, "stdio", "sjis");
+    gitBranchProcess.stdOut.onReadAll(onStdOutReadAllGitBranch);
+    gitBranchProcess.stdErr.onReadAll(onStdErrReadAllGitBranch);
+    gitBranchProcess.onClose(onCloseGitBranch);
+}
+
+function onStdOutReadAllGitBranch(outputText) {
+    console.log(outputText);
+    branchName = outputText.replace("\n", "");
+    getGitRemote();
+}
+
+function onStdErrReadAllGitBranch(outputText) {
+}
+
+function onCloseGitBranch() {
+    destroyProcess(gitBranchProcess);
+}
+
+var gitRemoteProcess = null;
+var remoteName = "";
+function getGitRemote() {
+    // git branch --show-current
+    gitRemoteProcess = hidemaru.runProcess("git remote", gitRootDir, "stdio", "sjis");
+    gitRemoteProcess.stdOut.onReadAll(onStdOutReadAllGitRemote);
+    gitRemoteProcess.stdErr.onReadAll(onStdErrReadAllGitRemote);
+    gitRemoteProcess.onClose(onCloseGitRemote);
+}
+
+function onStdOutReadAllGitRemote(outputText) {
+    remoteName = outputText.replace("\n", "");
+    checkGitDiff();
+    console.log(outputText);
+}
+
+function onStdErrReadAllGitRemote(outputText) {
+}
+
+function onCloseGitRemote() {
+    destroyProcess(gitRemoteProcess);
+}
+
+var gitDiffProcess = null;
+function checkGitDiff() {
+    console.log("git diff --name-only " + remoteName + "/" + branchName);
+    console.log(gitRootDir);
+    gitDiffProcess = hidemaru.runProcess("git diff --name-only " + remoteName + "/" + branchName, gitRootDir, "stdio", "sjis");
+    gitDiffProcess.stdOut.onReadAll(onStdOutReadAllGitDiff);
+    gitDiffProcess.stdErr.onReadAll(onStdErrReadAllGitDiff);
+    gitDiffProcess.onClose(onCloseGitDiff);
+}
+
+function onStdOutReadAllGitDiff(outputText) {
+    var count = outputText.split("\n").length-1;
+    console.log("★有効" + count);
+}
+
+function onStdErrReadAllGitDiff(outputText) {
+    console.log("★失敗");
+}
+
+function onCloseGitDiff() {
+    console.log("★終了");
+    destroyProcess(gitRemoteProcess);
+}
+
+
+
+
+
+
+
+
+
+}
