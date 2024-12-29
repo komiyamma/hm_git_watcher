@@ -1,17 +1,9 @@
-﻿debuginfo 2;
-
-debuginfo "■まだノーマルマクロ層\r\n";
-
+﻿
 jsmode "JScript\\" + currentmacrodirectory;
 
-debuginfo "★jsmodeだけ指定\r\n";
 
 js {
 
-
-
-
-debuginfo("▲js層\r\n");
 
 debuginfo(2);
 
@@ -20,6 +12,8 @@ var fso = createobject("Scripting.FileSystemObject");
 var currentMacroDirectory = currentmacrodirectory();
 
 var currentFileFullPath = hidemaru.getFileFullPath();
+
+var intervalTickHandle = 0;
 
 var gitDirProcess = null;
 
@@ -32,6 +26,14 @@ function destroyProcess(process) {
 
 function checkGitDirectory() {
     try {
+        // 前回のがまだ実行中である。
+        if (gitDirProcess || gitStatusProcess || gitCherryProcess) {
+            destroyProcess(gitDirProcess);
+            destroyProcess(gitStatusProcess);
+            destroyProcess(gitCherryProcess);
+            return;
+        }
+
         // gitのコマンドを発行して、対象のファイルがどこかのローカルリポジトリに所得しているのかを探す
         var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
         gitDirProcess = hidemaru.runProcess("git rev-parse --absolute-git-dir", currentFileDir, "stdio", "utf8");
@@ -54,8 +56,6 @@ function checkGitDirectory() {
     }
 }
 
-checkGitDirectory();
-
 var gitRootDir = "";
 
 function onStdOutReadAllGitDir(outputText) {
@@ -68,6 +68,7 @@ function onStdOutReadAllGitDir(outputText) {
         console.log(gitDir);
         gitRootDir = gitDir.replace("\n", "");
         checkGitStatus();
+        checkGitCherry();
     }
 }
 
@@ -80,19 +81,26 @@ function onCloseGitDir() {
 
 var gitStatusProcess = null;
 function checkGitStatus() {
-    gitStatusProcess = hidemaru.runProcess("git status --porcelain", gitRootDir, "stdio", "sjis");
-    gitStatusProcess.stdOut.onReadAll(onStdOutReadAllGitStatus);
-    gitStatusProcess.stdErr.onReadAll(onStdErrReadAllGitStatus);
-    gitStatusProcess.onClose(onCloseGitStatus);
+    try {
+	    gitStatusProcess = hidemaru.runProcess("git status --porcelain", gitRootDir, "stdio", "utf8");
+	    gitStatusProcess.stdOut.onReadAll(onStdOutReadAllGitStatus);
+	    gitStatusProcess.stdErr.onReadAll(onStdErrReadAllGitStatus);
+	    gitStatusProcess.onClose(onCloseGitStatus);
+    } catch (e) {
+        destroyProcess(gitStatusProcess);
+        console.log(e);
+    }
 }
 
+var gitStatusCount = 0;
 function onStdOutReadAllGitStatus(outputText) {
     console.log(outputText);
-    var count = outputText.split("\n").length-1;
-    console.log(count);
-    if (count > 0) {
-        getGitBranch();
+    var list = outputText.split("\n");
+    if (list[list.length-1] == "") { 
+        list.pop();
     }
+    var count = list.length;
+    gitStatusCount = count;
 }
 
 function onStdErrReadAllGitStatus(outputText) {
@@ -102,80 +110,82 @@ function onCloseGitStatus() {
     destroyProcess(gitStatusProcess);
 }
 
-var gitBranchProcess = null;
-var branchName = "";
-function getGitBranch() {
-    // git branch --show-current
-    gitBranchProcess = hidemaru.runProcess("git branch --show-current", gitRootDir, "stdio", "sjis");
-    gitBranchProcess.stdOut.onReadAll(onStdOutReadAllGitBranch);
-    gitBranchProcess.stdErr.onReadAll(onStdErrReadAllGitBranch);
-    gitBranchProcess.onClose(onCloseGitBranch);
+var gitCherryProcess = null;
+function checkGitCherry() {
+    try {
+	    // git branch --show-current
+	    gitCherryProcess = hidemaru.runProcess("git cherry -v", gitRootDir, "stdio", "utf8");
+	    gitCherryProcess.stdOut.onReadAll(onStdOutReadAllGitCherry);
+	    gitCherryProcess.stdErr.onReadAll(onStdErrReadAllGitCherry);
+	    gitCherryProcess.onClose(onCloseGitCherry);
+    } catch (e) {
+        destroyProcess(gitCherryProcess);
+        console.log(e);
+    }
 }
 
-function onStdOutReadAllGitBranch(outputText) {
+var gitCherryCount = 0;
+function onStdOutReadAllGitCherry(outputText) {
     console.log(outputText);
-    branchName = outputText.replace("\n", "");
-    getGitRemote();
+    var list = outputText.split("\n");
+    if (list[list.length-1] == "") { 
+        list.pop();
+    }
+    var count = list.length;
+    console.log(JSON.stringify(list));
+    console.log(count);
+    gitCherryCount = count;
 }
 
-function onStdErrReadAllGitBranch(outputText) {
+function onStdErrReadAllGitCherry(outputText) {
 }
 
-function onCloseGitBranch() {
-    destroyProcess(gitBranchProcess);
+function onCloseGitCherry() {
+    destroyProcess(gitCherryProcess);
 }
 
-var gitRemoteProcess = null;
-var remoteName = "";
-function getGitRemote() {
-    // git branch --show-current
-    gitRemoteProcess = hidemaru.runProcess("git remote", gitRootDir, "stdio", "sjis");
-    gitRemoteProcess.stdOut.onReadAll(onStdOutReadAllGitRemote);
-    gitRemoteProcess.stdErr.onReadAll(onStdErrReadAllGitRemote);
-    gitRemoteProcess.onClose(onCloseGitRemote);
+var limitCurCount = 0;
+var limitMaxCount = 5;
+function tickIntervalFunc() {
+    if (limitCurCount < limitMaxCount) {
+        if (limitCurCount == 1) {
+            sendCommandToBrowser();
+        }
+        limitCurCount++;
+        return;
+
+    } else {
+console.log("=0");
+        limitCurCount = 0;
+    }
+
+	checkGitDirectory();
+
 }
 
-function onStdOutReadAllGitRemote(outputText) {
-    remoteName = outputText.replace("\n", "");
-    checkGitDiff();
-    console.log(outputText);
+var prevGitStatusCount = -1;
+var prevGitCherryCount = -1;
+function sendCommandToBrowser() {
+    if (prevGitStatusCount != gitStatusCount ||
+		prevGitCherryCount != gitCherryCount ) {
+		console.log("送信");
+		console.log(gitStatusCount);
+		console.log(gitCherryCount);
+    }
 }
 
-function onStdErrReadAllGitRemote(outputText) {
+function resetIntervalTick() {
+	if (intervalTickHandle) {
+	    hidemaru.clearInterval(intervalTickHandle);
+	    intervalTickHandle = 0;
+	} else {
+	    intervalTickHandle = hidemaru.setInterval(tickIntervalFunc, 1000);
+	}
 }
 
-function onCloseGitRemote() {
-    destroyProcess(gitRemoteProcess);
-}
+resetIntervalTick();
 
-var gitDiffProcess = null;
-function checkGitDiff() {
-    console.log("git diff --name-only " + remoteName + "/" + branchName);
-    console.log(gitRootDir);
-    gitDiffProcess = hidemaru.runProcess("git diff --name-only " + remoteName + "/" + branchName, gitRootDir, "stdio", "sjis");
-    gitDiffProcess.stdOut.onReadAll(onStdOutReadAllGitDiff);
-    gitDiffProcess.stdErr.onReadAll(onStdErrReadAllGitDiff);
-    gitDiffProcess.onClose(onCloseGitDiff);
-}
-
-function onStdOutReadAllGitDiff(outputText) {
-    var count = outputText.split("\n").length-1;
-    console.log("★有効" + count);
-}
-
-function onStdErrReadAllGitDiff(outputText) {
-    console.log("★失敗");
-}
-
-function onCloseGitDiff() {
-    console.log("★終了");
-    destroyProcess(gitRemoteProcess);
-}
-
-
-
-
-
+checkGitDirectory();
 
 
 
