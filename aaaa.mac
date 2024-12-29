@@ -172,6 +172,10 @@ function sendCommandToBrowser() {
 		console.log(gitStatusCount);
 		console.log(gitCherryCount);
     }
+
+    prevGitStatusCount = gitStatusCount;
+    prevGitCherryCount = gitCherryCount;
+
 }
 
 function resetIntervalTick() {
