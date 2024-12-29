@@ -1,7 +1,7 @@
 ﻿
 jsmode "JScript\\" + currentmacrodirectory;
 
-
+// abc
 js {
 
 
@@ -26,13 +26,7 @@ function destroyProcess(process) {
 
 function checkGitDirectory() {
     try {
-        // 前回のがまだ実行中である。
-        if (gitDirProcess || gitStatusProcess || gitCherryProcess) {
-            destroyProcess(gitDirProcess);
-            destroyProcess(gitStatusProcess);
-            destroyProcess(gitCherryProcess);
-            return;
-        }
+console.log("gitDirProcess");
 
         // gitのコマンドを発行して、対象のファイルがどこかのローカルリポジトリに所得しているのかを探す
         var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
@@ -159,6 +153,7 @@ console.log("=0");
         limitCurCount = 0;
     }
 
+console.log("checkGitDirectory");
 	checkGitDirectory();
 
 }
