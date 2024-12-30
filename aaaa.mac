@@ -1,7 +1,7 @@
 ﻿
 jsmode "JScript\\" + currentmacrodirectory;
 
-// abcdeff
+// abcdeffg
 js {
 
 
