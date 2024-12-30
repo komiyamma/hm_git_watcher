@@ -1,0 +1,14 @@
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.AssemblyInfoInputs.cache
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.AssemblyInfo.cs
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.csproj.CoreCompileInputs.cache
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\bin\Debug\net6.0\HmGitWatcher.deps.json
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\bin\Debug\net6.0\HmGitWatcher.dll
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\bin\Debug\net6.0\HmGitWatcher.pdb
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.dll
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\refint\HmGitWatcher.dll
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.pdb
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\ref\HmGitWatcher.dll
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\bin\Debug\net6.0\HmGitWatcher.comhost.dll
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\bin\Debug\net6.0\HmGitWatcher.runtimeconfig.json
+C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\Debug\net6.0\HmGitWatcher.genruntimeconfig.cache

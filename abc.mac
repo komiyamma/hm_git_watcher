@@ -12,8 +12,8 @@ var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
     console.log(JSON.stringify(repoFullPath));
-    console.log(JSON.stringify(b));
-    console.log(JSON.stringify(c));
+    console.log(JSON.stringify(localDiff));
+    console.log(JSON.stringify(remoteDiff));
 }
 
 gitWatcherComponent.Check(onGitStatusChange);

@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+	<EnableComHosting>true</EnableComHosting>
+	<Platforms>x86;x64</Platforms>
+    <LangVersion>latest</LangVersion>
+    <Copyright>© 2024 Akitsugu Komiyama</Copyright>
+  </PropertyGroup>
+
+	
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+		<PlatformTarget>x86</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+		<PlatformTarget>x86</PlatformTarget>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<PlatformTarget>x64</PlatformTarget>
+		<DebugType>none</DebugType>
+		<DebugSymbols>false</DebugSymbols>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+    <None Remove="C:\Users\master\.nuget\packages\hmnetcom\2.0.8.7\contentFiles\any\any\HmNetCOM.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HmNetCOM" Version="2.0.8.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="HmNetCOM.cs">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>HmNetCOM.cs</LastGenOutput>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HmNetCOM.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+</Project>

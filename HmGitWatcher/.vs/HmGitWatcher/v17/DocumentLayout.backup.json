@@ -3,15 +3,15 @@
   "WorkspaceRootPath": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1389E9DB-D1B8-4DA7-8CE0-898BC25536F5}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1389E9DB-D1B8-4DA7-8CE0-898BC25536F5}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|HmGitWatcher||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,7 +21,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -29,15 +29,27 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "HmGitWatcher.AssemblyInfo.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs",
               "RelativeToolTip": "HmGitWatcher\\obj\\Release\\net6.0\\HmGitWatcher.AssemblyInfo.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T02:27:51.025Z",
+              "WhenOpened": "2024-12-30T02:27:51.025Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\Program.cs",
+              "RelativeDocumentMoniker": "HmGitWatcher\\Program.cs",
+              "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\Program.cs",
+              "RelativeToolTip": "HmGitWatcher\\Program.cs",
+              "ViewState": "AgIAALMAAAAAAAAAAAAAAMcAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-28T13:22:05.027Z",
               "EditorCaption": ""
             },
             {
@@ -47,19 +59,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Program.cs",
-              "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\Program.cs",
-              "RelativeDocumentMoniker": "HmGitWatcher\\Program.cs",
-              "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\Program.cs",
-              "RelativeToolTip": "HmGitWatcher\\Program.cs",
-              "ViewState": "AgIAAGMAAAAAAAAAAAAqwHQAAAALAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-28T13:22:05.027Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "HmGitWatcher",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmGitWatcher.csproj",
               "RelativeDocumentMoniker": "HmGitWatcher\\HmGitWatcher.csproj",
