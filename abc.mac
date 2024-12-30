@@ -31,7 +31,7 @@ function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
 
     var readyState = renderpanecommand({target:strTarget,get:"readyState"});
     if( readyState == "complete" ) {
-    var jscommand = 'javascript:localDiff='+localDiff+';'+'localDiff=' + remoteDiff+';';
+    var jscommand = 'javascript:updateGitStatus('+localDiff+','+remoteDiff+');';
 console.log(jscommand);
     renderpanecommand({
         target:strTarget,
