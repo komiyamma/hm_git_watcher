@@ -8,7 +8,7 @@ namespace HmGitWatcher;
 
 [ComVisible(true)]
 [Guid("CD5AADB6-1A50-436F-85A1-84D72CFAECEB")]
-public class HmGitWatcher
+public partial class HmGitWatcher
 {
 
     string GetAbsoluteGitDir(string filePath)
@@ -189,6 +189,10 @@ public class HmGitWatcher
                     string repoPath = GetAbsoluteGitDir(filePath);
                     if (repoPath != null)
                     {
+                        if (prevRepoPath != repoPath)
+                        {
+                            CreateFileWatcher(repoPath);
+                        }
                         string status = GetGitStatusPorchain(repoPath);
                         string cherry = GetGitCherry(repoPath);
                         // Hm.OutputPane.Output($"Status: {status}\r\n\r\n");
@@ -224,6 +228,12 @@ public class HmGitWatcher
                     break;
                 }
                 await Task.Delay(2000, cancellationToken); // 1秒間隔
+                if (isFileChanged)
+                {
+                    Hm.OutputPane.Output("isFileChangedを検知したので、タイムを短縮");
+                    isFileChanged = false;
+                    break;
+                }
             }
         }
 

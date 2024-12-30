@@ -1,8 +1,6 @@
 <html>
 <head>
 <style>
-.btn { border-radius: 30px; padding: 30px; background: #111; color: #eee; text-align: center; transition: 0.3s;}
-.btn:hover { background: #ccc; color: #222;}
 </style>
 <script>
 var idCallback=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される

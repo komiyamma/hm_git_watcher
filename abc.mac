@@ -10,7 +10,7 @@ var currentMacroDirectory = currentmacrodirectory();
 if (gitWatcherComponent) {
     gitWatcherComponent.StopCheck();
 }
-// abc
+// abcdfefgggbfffg
 //debuginfo(2);
 var strTarget="HmGitWatcher";
 
@@ -19,9 +19,9 @@ var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
-    console.log(JSON.stringify(repoFullPath));
-    console.log(JSON.stringify(localDiff));
-    console.log(JSON.stringify(remoteDiff));
+//    console.log(JSON.stringify(repoFullPath));
+//    console.log(JSON.stringify(localDiff));
+//    console.log(JSON.stringify(remoteDiff));
     if (localDiff) {
         localDiff = 1;
     } else {
@@ -46,6 +46,7 @@ console.log(jscommand);
 
 }
 
+// abc
 gitWatcherComponent.Check(onGitStatusChange);
 
 
