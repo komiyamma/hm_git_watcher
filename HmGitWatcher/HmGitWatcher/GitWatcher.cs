@@ -65,6 +65,98 @@ public partial class HmGitWatcher
             return null;
         }
     }
+
+    string GetGitFetch(string workingDirectory)
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = "git",
+            Arguments = "fetch",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            WorkingDirectory = workingDirectory,
+            UseShellExecute = false, // ShellExecute を false にしてリダイレクトを有効にする
+            CreateNoWindow = true,  // コンソールウィンドウを表示しない
+            StandardOutputEncoding = Encoding.UTF8, // 出力エンコーディングをUTF-8に指定
+            StandardErrorEncoding = Encoding.UTF8
+        };
+
+        try
+        {
+            using (Process process = Process.Start(startInfo))
+            {
+
+                if (process == null)
+                {
+                    return null; // プロセスが起動できなかった
+                }
+
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    string error = process.StandardError.ReadToEnd();
+                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    return null; // エラーが発生した場合、nullを返す
+                }
+
+                string output = process.StandardOutput.ReadToEnd();
+                return output;
+            }
+        }
+        catch (Exception ex)
+        {
+            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            return null; // エラー発生時もnullを返す
+        }
+    }
+
+    string GetGitStatus(string workingDirectory)
+    {
+        ProcessStartInfo startInfo = new ProcessStartInfo
+        {
+            FileName = "git",
+            Arguments = "status",
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            WorkingDirectory = workingDirectory,
+            UseShellExecute = false, // ShellExecute を false にしてリダイレクトを有効にする
+            CreateNoWindow = true,  // コンソールウィンドウを表示しない
+            StandardOutputEncoding = Encoding.UTF8, // 出力エンコーディングをUTF-8に指定
+            StandardErrorEncoding = Encoding.UTF8
+        };
+
+        try
+        {
+            using (Process process = Process.Start(startInfo))
+            {
+
+                if (process == null)
+                {
+                    return null; // プロセスが起動できなかった
+                }
+
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    string error = process.StandardError.ReadToEnd();
+                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    return null; // エラーが発生した場合、nullを返す
+                }
+
+                string output = process.StandardOutput.ReadToEnd();
+                return output;
+            }
+        }
+        catch (Exception ex)
+        {
+            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            return null; // エラー発生時もnullを返す
+        }
+    }
+
+
     string GetGitCherry(string workingDirectory)
     {
 
@@ -138,7 +230,6 @@ public partial class HmGitWatcher
                     return null; // プロセスが起動できなかった
                 }
 
-                process.Start();
                 process.WaitForExit();
 
                 if (process.ExitCode != 0)
@@ -160,6 +251,7 @@ public partial class HmGitWatcher
     }
 
     string prevStatus = "";
+    string prevPorchain = "";
     string prevCherry = "";
     string prevRepoPath = "";
     string prevFilePath = "";
@@ -182,6 +274,7 @@ public partial class HmGitWatcher
                 {
                     // callBackFunc("", "", "");
                     prevStatus = "";
+                    prevPorchain = "";
                     prevCherry = "";
                     prevRepoPath = "";
                     prevFilePath = "";
@@ -192,6 +285,7 @@ public partial class HmGitWatcher
                 if (prevFilePath != filePath)
                 {
                     prevStatus = "";
+                    prevPorchain = "";
                     prevCherry = "";
                     prevRepoPath = "";
                     prevFilePath = "";
@@ -208,20 +302,23 @@ public partial class HmGitWatcher
                         {
                             CreateFileWatcher(repoPath);
                         }
+                        GetGitFetch(repoPath);
                         string status = GetGitStatusPorchain(repoPath);
+                        string porchain = GetGitStatusPorchain(repoPath);
                         string cherry = GetGitCherry(repoPath);
                         // Hm.OutputPane.Output($"Status: {status}\r\n\r\n");
-                        if (prevStatus != status || prevCherry != cherry || prevRepoPath != repoPath)
+                        if (prevStatus != status || prevPorchain != porchain || prevCherry != cherry || prevRepoPath != repoPath)
                         {
                             Hm.OutputPane.Output("変更がありました。");
                             prevStatus = status;
+                            prevPorchain = porchain;
                             prevCherry = cherry;
                             prevRepoPath = repoPath;
 
                             string doubleCheckfilePath = Hm.Edit.FilePath;
                             if (!string.IsNullOrEmpty(doubleCheckfilePath))
                             {
-                                callBackFunc(repoPath, status, cherry);
+                                callBackFunc(repoPath, status, porchain, cherry);
                             }
 
                         }

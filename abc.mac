@@ -18,7 +18,7 @@ var strTarget="HmGitWatcher";
 var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
-function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
+function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
 hidemaruversion("9.25.99");
 console.log("★★");
     if (repoFullPath == "") {
@@ -31,22 +31,22 @@ console.log("★★");
         return;
     }
 //    console.log(JSON.stringify(repoFullPath));
-//    console.log(JSON.stringify(localDiff));
-//    console.log(JSON.stringify(remoteDiff));
-    if (localDiff) {
-        localDiff = 1;
+//    console.log(JSON.stringify(gitStatusPorchain));
+//    console.log(JSON.stringify(gitCherry));
+    if (gitStatusPorchain) {
+        gitStatusPorchain = 1;
     } else {
-        localDiff = 0;
+        gitStatusPorchain = 0;
 	}
-    if (remoteDiff) {
-        remoteDiff = 1;
+    if (gitCherry) {
+        gitCherry = 1;
     } else {
-        remoteDiff = 0;
+        gitCherry = 0;
     }
 
     var readyState = renderpanecommand({target:strTarget,get:"readyState"});
     if( readyState == "complete" ) {
-    var jscommand = 'javascript:HmGitWatcher_Update('+localDiff+','+remoteDiff+');';
+    var jscommand = 'javascript:HmGitWatcher_Update('+gitStatusPorchain+','+gitCherry+');';
 console.log(jscommand);
     renderpanecommand({
         target:strTarget,
