@@ -86,7 +86,12 @@ gitWatcherComponent.Check(onGitStatusChange);
       target:strTarget,
       show:1,
       uri:currentMacroDirectory + "\\HmGitWatcher.html",
-      place:"leftside",
+      place:"overlay",
+      align: "right",
+      x: 30,
+      y: 30,
+      cx: 150,
+      cy: "50",
       });
       
 
