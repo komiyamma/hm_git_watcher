@@ -46,8 +46,6 @@ console.log(jscommand);
 
 }
 
-// abc
-gitWatcherComponent.Check(onGitStatusChange);
 
 
 
@@ -63,6 +61,10 @@ gitWatcherComponent.Check(onGitStatusChange);
   }
   
   function funcCompleted() {
+
+// abc
+gitWatcherComponent.Check(onGitStatusChange);
+
     //実行の順番(4)
     var idCallback=hidemaru.getFunctionId(funcCallback);
     renderpanecommand({
