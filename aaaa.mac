@@ -1,11 +1,8 @@
 ﻿
 jsmode "JScript\\" + currentmacrodirectory;
 
-<<<<<<< HEAD
-// abcdeffg
-=======
-// abcdeffghgh
->>>>>>> ea4c018364631251032532dd355e758cbe67909d
+// abc
+
 js {
 
 
