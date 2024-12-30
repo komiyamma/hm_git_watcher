@@ -33,6 +33,7 @@ console.log("★★");
 //    console.log(JSON.stringify(repoFullPath));
 //    console.log(JSON.stringify(gitStatusPorchain));
 //    console.log(JSON.stringify(gitCherry));
+    // derived
     if (gitStatusPorchain) {
         gitStatusPorchain = 1;
     } else {
