@@ -30,7 +30,7 @@ function HmGitWatcher_Update(_localDiff, _remoteDiff) {
 
 </script>
 </head>
-<body style="background-color:#333;">
+<body>
 <div id="btn1">ボタン１</div>
 <BR>
 <div id="btn2">ボタン２</div>

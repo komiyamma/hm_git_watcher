@@ -221,13 +221,13 @@ public partial class HmGitWatcher
                 Hm.OutputPane.Output($"An error occurred: {ex.Message}");
             }
 
-            for(int i = 0; i < 3; i++)
+            for(int i = 0; i < 4; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
-                await Task.Delay(2000, cancellationToken); // 1秒間隔
+                await Task.Delay(1000, cancellationToken); // 1秒間隔
                 if (isFileChanged)
                 {
                     Hm.OutputPane.Output("isFileChangedを検知したので、タイムを短縮");
