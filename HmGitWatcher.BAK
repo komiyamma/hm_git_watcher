@@ -4,8 +4,8 @@
 </style>
 <script>
 var idCallback=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
-function HmGitWatcher_PushBotton(s){
-  //document.body.insertAdjacentHTML("beforeend", "["+idCallback+"]<BR>");
+function HmGitWatcher_PushBotton(arg){
+   window.alert("OK");
   window.chrome.webview.postMessage({funcid:idCallback,message:localDiff+":"+remoteDiff});
 }
 
@@ -14,16 +14,16 @@ var remoteDiff = 0;
 function HmGitWatcher_Update(_localDiff, _remoteDiff) {
     localDiff = _localDiff;
     if (localDiff > 0) {
-		document.getElementById('commit_all_img').style.opacity = 1.0;
+		document.getElementById('commit_all').style.opacity = 1.0;
     } else {
-		document.getElementById('commit_all_img').style.opacity = 0.2;
+		document.getElementById('commit_all').style.opacity = 0.2;
     }
 
     remoteDiff = _remoteDiff;
     if (remoteDiff > 0) {
-		document.getElementById('push_all_img').style.opacity = 0.2;
+		document.getElementById('push_all').style.opacity = 1.0;
     } else {
-		document.getElementById('push_all_img').style.opacity = 0.2;
+		document.getElementById('push_all').style.opacity = 0.2;
     }
 
 }
