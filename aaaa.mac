@@ -26,7 +26,6 @@ function destroyProcess(process) {
 
 function checkGitDirectory() {
     try {
-console.log("gitDirProcess");
 
         // gitのコマンドを発行して、対象のファイルがどこかのローカルリポジトリに所得しているのかを探す
         var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
@@ -59,7 +58,7 @@ function onStdOutReadAllGitDir(outputText) {
     gitDir = fso.GetParentFolderName(gitDir);
 
     if (fso.FolderExists(gitDir)) {
-        console.log(gitDir);
+        // console.log(gitDir);
         gitRootDir = gitDir.replace("\n", "");
         checkGitStatus();
         checkGitCherry();
@@ -88,7 +87,7 @@ function checkGitStatus() {
 
 var gitStatusCount = 0;
 function onStdOutReadAllGitStatus(outputText) {
-    console.log(outputText);
+    // console.log(outputText);
     var list = outputText.split("\n");
     if (list[list.length-1] == "") { 
         list.pop();
@@ -120,14 +119,16 @@ function checkGitCherry() {
 
 var gitCherryCount = 0;
 function onStdOutReadAllGitCherry(outputText) {
-    console.log(outputText);
+//    console.log(outputText);
     var list = outputText.split("\n");
     if (list[list.length-1] == "") { 
         list.pop();
     }
     var count = list.length;
+/*
     console.log(JSON.stringify(list));
     console.log(count);
+*/
     gitCherryCount = count;
 }
 
@@ -149,7 +150,7 @@ function tickIntervalFunc() {
         return;
 
     } else {
-console.log("=0");
+// console.log("=0");
         limitCurCount = 0;
     }
 
