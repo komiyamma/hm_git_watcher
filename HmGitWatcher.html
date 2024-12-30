@@ -1,25 +1,36 @@
 <html>
 <head>
 <style>
+body { margin: 0; padding: 0 }
 </style>
 <script>
 var idCallback=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
-function HmGitWatcher_PushBotton(arg){
-  window.chrome.webview.postMessage({funcid:idCallback,message:localDiff+":"+remoteDiff});
+function HmGitWatcher_Botton(arg){
+  window.chrome.webview.postMessage({funcid:idCallback,message:gitStatusPorchain+":"+gitCherry});
 }
 
-var localDiff = 0;
-var remoteDiff = 0;
-function HmGitWatcher_Update(_localDiff, _remoteDiff) {
-    localDiff = _localDiff;
-    if (localDiff > 0) {
+var gitStatus = 0;
+var gitStatusPorchain = 0;
+var gitCherry = 0;
+function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
+
+    gitStatus = _gitStatus;
+    if (gitStatus > 0) {
+		document.getElementById('pull_all').style.opacity = 1.0;
+    } else {
+		document.getElementById('pull_all').style.opacity = 0.2;
+    }
+
+
+    gitStatusPorchain = _gitStatusPorchain;
+    if (gitStatusPorchain > 0) {
 		document.getElementById('commit_all').style.opacity = 1.0;
     } else {
 		document.getElementById('commit_all').style.opacity = 0.2;
     }
 
-    remoteDiff = _remoteDiff;
-    if (remoteDiff > 0) {
+    gitCherry = _gitCherry;
+    if (gitCherry > 0) {
 		document.getElementById('push_all').style.opacity = 1.0;
     } else {
 		document.getElementById('push_all').style.opacity = 0.2;
@@ -30,10 +41,13 @@ function HmGitWatcher_Update(_localDiff, _remoteDiff) {
 </script>
 </head>
 <body>
-<button id="commit_all" type="button" onclick="HmGitWatcher_PushBotton('commit_all');">
+<button id="pull_all" type="button" onclick="HmGitWatcher_Botton('pull_all');">
+  <img id="pull_all_img" src="./icon/icon_pull.png" alt="全てプル">
+</button>
+<button id="commit_all" type="button" onclick="HmGitWatcher_Botton('commit_all');">
   <img id="commit_all_img" src="./icon/icon_commit.png" alt="全てコミット">
 </button>
-<button id="push_all" type="button" onclick="HmGitWatcher_PushBotton('push_all');">
+<button id="push_all" type="button" onclick="HmGitWatcher_Botton('push_all');">
   <img id="push_all_img" src="./icon/icon_push.png" alt="全てプッシュ">
 </button>
 </body>

@@ -303,7 +303,7 @@ public partial class HmGitWatcher
                             CreateFileWatcher(repoPath);
                         }
                         GetGitFetch(repoPath);
-                        string status = GetGitStatusPorchain(repoPath);
+                        string status = GetGitStatus(repoPath);
                         string porchain = GetGitStatusPorchain(repoPath);
                         string cherry = GetGitCherry(repoPath);
                         // Hm.OutputPane.Output($"Status: {status}\r\n\r\n");

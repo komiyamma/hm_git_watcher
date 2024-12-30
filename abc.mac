@@ -16,6 +16,7 @@ var strTarget="HmGitWatcher";
 
 
 var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
+debuginfo(2);
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
@@ -30,10 +31,17 @@ console.log("★★");
 
         return;
     }
-//    console.log(JSON.stringify(repoFullPath));
-//    console.log(JSON.stringify(gitStatusPorchain));
-//    console.log(JSON.stringify(gitCherry));
     // derived
+    if (gitStatus.indexOf('use "git pull" to merge') !== -1) {
+        gitStatus = 2;
+    }
+    else if (gitStatus.indexOf('use "git pull" to update') !== -1) {
+        gitStatus = 1;
+    }
+    else {
+        gitStatus = 0;
+    }
+
     if (gitStatusPorchain) {
         gitStatusPorchain = 1;
     } else {
@@ -47,7 +55,7 @@ console.log("★★");
 
     var readyState = renderpanecommand({target:strTarget,get:"readyState"});
     if( readyState == "complete" ) {
-    var jscommand = 'javascript:HmGitWatcher_Update('+gitStatusPorchain+','+gitCherry+');';
+    var jscommand = 'javascript:HmGitWatcher_Update('+gitStatus + ',' + gitStatusPorchain+','+gitCherry+');';
 console.log(jscommand);
     renderpanecommand({
         target:strTarget,
@@ -103,8 +111,8 @@ gitWatcherComponent.Check(onGitStatusChange);
       align: "right",
       x: 30,
       y: 30,
-      cx: 150,
-      cy: "50",
+      cx: 200,
+      cy: 60,
       });
       
 
