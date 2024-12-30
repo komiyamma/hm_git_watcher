@@ -3,19 +3,21 @@
 js {
 debuginfo(2);
 
-    var a = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
+if (gitWatcherComponent) {
+    gitWatcherComponent.StopCheck();
+}
 
-console.log(a);
+var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
-function abc(a,b,c) {
-    console.log(JSON.stringify(a));
+// ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
+function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
+    console.log(JSON.stringify(repoFullPath));
     console.log(JSON.stringify(b));
     console.log(JSON.stringify(c));
 }
 
-a.Check(abc);
+gitWatcherComponent.Check(onGitStatusChange);
 
-// abcdefg
 
-}
+} // js
 
