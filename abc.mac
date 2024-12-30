@@ -15,7 +15,7 @@ function abc(a,b,c) {
 
 a.Check(abc);
 
-// abc
+// abcdefg
 
 }
 
