@@ -21,11 +21,15 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 3,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
             },
             {
               "$type": "Document",
@@ -47,14 +51,10 @@
               "RelativeDocumentMoniker": "HmGitWatcher\\Program.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\Program.cs",
               "RelativeToolTip": "HmGitWatcher\\Program.cs",
-              "ViewState": "AgIAALMAAAAAAAAAAAAAAMcAAAA0AAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAmwEEAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T13:22:05.027Z",
               "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
             },
             {
               "$type": "Document",

@@ -10,3 +10,15 @@ C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\Hm
 C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\refint\HmGitWatcher.dll
 C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.genruntimeconfig.cache
 C:\Users\master\source\repos\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\ref\HmGitWatcher.dll
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\bin\x64\Release\net8.0\HmGitWatcher.comhost.dll
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\bin\x64\Release\net8.0\HmGitWatcher.deps.json
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\bin\x64\Release\net8.0\HmGitWatcher.runtimeconfig.json
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\bin\x64\Release\net8.0\HmGitWatcher.dll
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.GeneratedMSBuildEditorConfig.editorconfig
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.AssemblyInfoInputs.cache
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.AssemblyInfo.cs
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.csproj.CoreCompileInputs.cache
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.dll
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\refint\HmGitWatcher.dll
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\HmGitWatcher.genruntimeconfig.cache
+G:\repogitory\hm_git_watcher\HmGitWatcher\HmGitWatcher\obj\x64\Release\net8.0\ref\HmGitWatcher.dll
