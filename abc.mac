@@ -1,7 +1,11 @@
-﻿jsmode "JScript\\" + currentmacrofilename;
+﻿hidemaruversion "9.25.99";
+
+jsmode "JScript\\" + currentmacrofilename;
 
 js {
 debuginfo(2);
+
+var currentMacroDirectory = currentmacrodirectory();
 
 if (gitWatcherComponent) {
     gitWatcherComponent.StopCheck();
@@ -14,9 +18,79 @@ function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
     console.log(JSON.stringify(repoFullPath));
     console.log(JSON.stringify(localDiff));
     console.log(JSON.stringify(remoteDiff));
+    if (localDiff) {
+        localDiff = 1;
+    } else {
+        localDiff = 0;
+	}
+    if (remoteDiff) {
+        remoteDiff = 1;
+    } else {
+        remoteDiff = 0;
+    }
+
+    var readyState = renderpanecommand({target:strTarget,get:"readyState"});
+    if( readyState == "complete" ) {
+    var jscommand = 'javascript:localDiff='+localDiff+';'+'localDiff=' + remoteDiff+';';
+console.log(jscommand);
+    renderpanecommand({
+        target:strTarget,
+        uri:jscommand,
+        });
+
+    }
+
 }
 
 gitWatcherComponent.Check(onGitStatusChange);
+
+
+
+  //debuginfo(2);
+  var strTarget="HmGitWatcher";
+  
+  function checkComplete(){
+    //実行の順番(3) 繰り返し
+    var readyState = renderpanecommand({target:strTarget,get:"readyState"});
+    console.log(readyState);
+    if( readyState == "complete" ) {
+      hidemaru.clearInterval(idInterval);
+      funcCompleted();
+    }
+  }
+  
+  function funcCompleted() {
+    //実行の順番(4)
+    var idCallback=hidemaru.getFunctionId(funcCallback);
+    renderpanecommand({
+        target:strTarget,
+        uri:'javascript:idCallback='+idCallback+';',
+        });
+  }
+  
+  var sGlobal="";
+  function funcCallback(s){
+    //実行の順番(5) 手動操作時
+    sGlobal=s;
+    console.log(s);
+    hidemaru.postExecMacroMemory('js{message(sGlobal);}');
+  }
+  
+  //実行の順番(1)
+  renderpanecommand({
+      target:strTarget,
+      show:1,
+      uri:currentMacroDirectory + "\\HmGitWatcher.html",
+      place:"leftside",
+      });
+      
+
+  //実行の順番(2)
+  var idInterval;
+  if( typeof(idInterval)!="undefined" ) {
+    hidemaru.clearInterval(idInterval);
+  }
+  idInterval = hidemaru.setInterval(checkComplete,500);
 
 
 } // js
