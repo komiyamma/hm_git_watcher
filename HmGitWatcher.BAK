@@ -16,16 +16,16 @@ var remoteDiff = 0;
 function HmGitWatcher_Update(_localDiff, _remoteDiff) {
     localDiff = _localDiff;
     if (localDiff > 0) {
-		document.getElementById('btn1').disabled = false;
+		document.getElementById('btn1').innerText = "◯";
     } else {
-		document.getElementById('btn1').disabled = true;
+		document.getElementById('btn1').innerText = "×";
     }
 
     remoteDiff = _remoteDiff;
     if (remoteDiff > 0) {
-		document.getElementById('btn2').disabled = false;
+		document.getElementById('btn2').innerText = "◯";
     } else {
-		document.getElementById('btn2').disabled = true;
+		document.getElementById('btn2').innerText = "×";
     }
 
 }
@@ -33,9 +33,9 @@ function HmGitWatcher_Update(_localDiff, _remoteDiff) {
 </script>
 </head>
 <body style="background-color:#333;">
-<div id="btn1" class="btn" onclick="onbtn('ボタン１押した')">ボタン１</div>
+<div id="btn1">ボタン１</div>
 <BR>
-<div id="btn2" class="btn" onclick="onbtn('ボタン２押した')">ボタン２</div>
+<div id="btn2">ボタン２</div>
 <BR>
 </body>
 </html>
