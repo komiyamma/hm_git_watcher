@@ -11,6 +11,10 @@ if (gitWatcherComponent) {
     gitWatcherComponent.StopCheck();
 }
 
+//debuginfo(2);
+var strTarget="HmGitWatcher";
+
+
 var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
@@ -31,7 +35,7 @@ function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
 
     var readyState = renderpanecommand({target:strTarget,get:"readyState"});
     if( readyState == "complete" ) {
-    var jscommand = 'javascript:updateGitStatus('+localDiff+','+remoteDiff+');';
+    var jscommand = 'javascript:HmGitWatcher_Update('+localDiff+','+remoteDiff+');';
 console.log(jscommand);
     renderpanecommand({
         target:strTarget,
@@ -46,8 +50,6 @@ gitWatcherComponent.Check(onGitStatusChange);
 
 
 
-  //debuginfo(2);
-  var strTarget="HmGitWatcher";
   
   function checkComplete(){
     //実行の順番(3) 繰り返し

@@ -1,0 +1,41 @@
+<html>
+<head>
+<style>
+.btn { border-radius: 30px; padding: 30px; background: #111; color: #eee; text-align: center; transition: 0.3s;}
+.btn:hover { background: #ccc; color: #222;}
+</style>
+<script>
+var idCallback=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
+function onbtn(s){
+  //document.body.insertAdjacentHTML("beforeend", "["+idCallback+"]<BR>");
+  window.chrome.webview.postMessage({funcid:idCallback,message:localDiff+":"+remoteDiff});
+}
+
+var localDiff = 0;
+var remoteDiff = 0;
+function HmGitWatcher_Update(_localDiff, _remoteDiff) {
+    localDiff = _localDiff;
+    if (localDiff > 0) {
+		document.getElementById('btn1').disabled = false;
+    } else {
+		document.getElementById('btn1').disabled = true;
+    }
+
+    remoteDiff = _remoteDiff;
+    if (remoteDiff > 0) {
+		document.getElementById('btn2').disabled = false;
+    } else {
+		document.getElementById('btn2').disabled = true;
+    }
+
+}
+
+</script>
+</head>
+<body style="background-color:#333;">
+<div id="btn1" class="btn" onclick="onbtn('ボタン１押した')">ボタン１</div>
+<BR>
+<div id="btn2" class="btn" onclick="onbtn('ボタン２押した')">ボタン２</div>
+<BR>
+</body>
+</html>
