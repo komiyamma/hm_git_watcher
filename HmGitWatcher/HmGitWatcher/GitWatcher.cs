@@ -221,7 +221,7 @@ public partial class HmGitWatcher
                 Hm.OutputPane.Output($"An error occurred: {ex.Message}");
             }
 
-            for(int i = 0; i < 5; i++)
+            for(int i = 0; i < 3; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
