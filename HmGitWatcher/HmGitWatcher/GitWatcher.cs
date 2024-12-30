@@ -162,6 +162,7 @@ public partial class HmGitWatcher
     string prevStatus = "";
     string prevCherry = "";
     string prevRepoPath = "";
+    string prevFilePath = "";
 
     private async Task CheckInternal(dynamic callBackFunc, CancellationToken cancellationToken)
     {
@@ -179,11 +180,25 @@ public partial class HmGitWatcher
 
                 if (string.IsNullOrEmpty(filePath))
                 {
-                    callBackFunc("", "", "");
+                    // callBackFunc("", "", "");
                     prevStatus = "";
                     prevCherry = "";
                     prevRepoPath = "";
+                    prevFilePath = "";
+                    StopCheck();
+                    break;
                 }
+
+                if (prevFilePath != filePath)
+                {
+                    prevStatus = "";
+                    prevCherry = "";
+                    prevRepoPath = "";
+                    prevFilePath = "";
+                    StopCheck();
+                    break;
+                }
+
                 else
                 {
                     string repoPath = GetAbsoluteGitDir(filePath);
@@ -202,7 +217,12 @@ public partial class HmGitWatcher
                             prevStatus = status;
                             prevCherry = cherry;
                             prevRepoPath = repoPath;
-                            callBackFunc(repoPath, status, cherry);
+
+                            string doubleCheckfilePath = Hm.Edit.FilePath;
+                            if (!string.IsNullOrEmpty(doubleCheckfilePath))
+                            {
+                                callBackFunc(repoPath, status, cherry);
+                            }
 
                         }
                         else
@@ -241,6 +261,8 @@ public partial class HmGitWatcher
     private CancellationTokenSource _cancellationTokenSource;
     public void StartCheck(dynamic callBackFunc)
     {
+        prevFilePath = Hm.Edit.FilePath;
+
         // すでに監視を開始している場合は停止する
         StopCheck();
 

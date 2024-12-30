@@ -14,16 +14,16 @@ var remoteDiff = 0;
 function HmGitWatcher_Update(_localDiff, _remoteDiff) {
     localDiff = _localDiff;
     if (localDiff > 0) {
-		document.getElementById('commit_all').disable = false;
+		document.getElementById('commit_all_img').style.opacity = 1.0;
     } else {
-		document.getElementById('commit_all').disable = truue;
+		document.getElementById('commit_all_img').style.opacity = 0.2;
     }
 
     remoteDiff = _remoteDiff;
     if (remoteDiff > 0) {
-		document.getElementById('push_all').disable = false;
+		document.getElementById('push_all_img').style.opacity = 0.2;
     } else {
-		document.getElementById('push_all').disable = true;
+		document.getElementById('push_all_img').style.opacity = 0.2;
     }
 
 }
@@ -32,10 +32,10 @@ function HmGitWatcher_Update(_localDiff, _remoteDiff) {
 </head>
 <body>
 <button id="commit_all" type="button" onclick="HmGitWatcher_PushBotton('commit_all');">
-  <img src="./icon/icon_commit.png" alt="全てコミット">
+  <img id="commit_all_img" src="./icon/icon_commit.png" alt="全てコミット">
 </button>
 <button id="push_all" type="button" onclick="HmGitWatcher_PushBotton('push_all');">
-  <img src="./icon/icon_push.png" alt="全てプッシュ">
+  <img id="push_all_img" src="./icon/icon_push.png" alt="全てプッシュ">
 </button>
 </body>
 </html>

@@ -19,6 +19,17 @@ var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath,localDiff,remoteDiff) {
+hidemaruversion("9.25.99");
+console.log("★★");
+    if (repoFullPath == "") {
+
+	    renderpanecommand({
+	        target:strTarget,
+	        show: 0
+	        });
+
+        return;
+    }
 //    console.log(JSON.stringify(repoFullPath));
 //    console.log(JSON.stringify(localDiff));
 //    console.log(JSON.stringify(remoteDiff));
@@ -40,6 +51,7 @@ console.log(jscommand);
     renderpanecommand({
         target:strTarget,
         uri:jscommand,
+        show: 1
         });
 
     }
