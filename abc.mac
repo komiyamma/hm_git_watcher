@@ -10,7 +10,7 @@ var currentMacroDirectory = currentmacrodirectory();
 if (gitWatcherComponent) {
     gitWatcherComponent.StopCheck();
 }
-
+// abc
 //debuginfo(2);
 var strTarget="HmGitWatcher";
 
