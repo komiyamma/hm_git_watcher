@@ -14,11 +14,9 @@
 				gitCommitAll(gRepoFullPath);
 		    }
         }
-        /*
         if (command_label=="open_vscode") {
             openVSCode();
         }
-        */
 
     } catch(e) {
 		console.log(e);
@@ -109,7 +107,6 @@ function onCloseGitPush() {
     destroyProcess(gitPushProcess);
 }
   
-/*
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
 function pushPostExecMacroFile(command, arg) {
     var isScheduled = 0;
@@ -133,7 +130,5 @@ function pushPostExecMacroFile(command, arg) {
 }
 
 function openVSCode() {
-    pushPostExecMacroFile('"' + currentMacroDirectory  + '\\HmOpenVSCodeFromHidemaru.mac', "scm" );
+    pushPostExecMacroFile('"' + currentMacroDirectory  + '\\HmOpenVSCodeFromHidemaru.mac"', "scm" );
 }
-
-*/

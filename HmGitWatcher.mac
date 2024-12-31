@@ -27,6 +27,7 @@ var gRepoFullPath; // 初期化しないこと。非同期で使っているか�
 
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
+console.log("あれ？");
 hidemaruversion("9.25.99");
 repoFullPath = repoFullPath.replace(/\//g, '\\');
 gRepoFullPath = repoFullPath;

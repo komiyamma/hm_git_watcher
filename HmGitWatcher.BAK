@@ -57,7 +57,7 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
 <button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
   <img src="./icon/icon_push.png" alt="全てプッシュ">
 </button><br>
-<button id="run_vscode" class="command-button" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
+<button id="run_vscode" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_vscode');">
   <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
 </button>
 <script>
