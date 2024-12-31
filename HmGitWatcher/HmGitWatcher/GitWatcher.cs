@@ -256,7 +256,7 @@ public partial class HmGitWatcher
     string prevRepoPath = "";
     string prevFilePath = "";
 
-    private bool isAnythingChanged = false;
+    private bool isChangeNotify = false;
 
     private async Task CheckInternal(dynamic callBackFunc, CancellationToken cancellationToken)
     {
@@ -348,10 +348,10 @@ public partial class HmGitWatcher
                     break;
                 }
                 await Task.Delay(1000, cancellationToken); // 1秒間隔
-                if (isAnythingChanged)
+                if (isChangeNotify)
                 {
                     Hm.OutputPane.Output("isFileChangedを検知したので、タイムを短縮");
-                    isAnythingChanged = false;
+                    isChangeNotify = false;
                     break;
                 }
             }
@@ -391,8 +391,8 @@ public partial class HmGitWatcher
         }
     }
 
-    public void ChangeAnything()
+    public void ChangeNotify()
     {
-        isAnythingChanged = true;
+        isChangeNotify = true;
     }
 }
