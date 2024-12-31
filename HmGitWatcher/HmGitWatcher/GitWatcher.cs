@@ -360,9 +360,6 @@ public partial class HmGitWatcher
     {
         prevFilePath = Hm.Edit.FilePath;
 
-        // すでに監視を開始している場合は停止する
-        StopCheck();
-
         _cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = _cancellationTokenSource.Token;
 
@@ -383,8 +380,10 @@ public partial class HmGitWatcher
         }
     }
 
-    public void Check(dynamic callBackFunc)
+    public void ReStart(dynamic callBackFunc)
     {
+        // すでに監視を開始している場合は停止する
+        StopCheck();
         StartCheck(callBackFunc);
     }
 }

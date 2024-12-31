@@ -2,11 +2,14 @@
 <head>
 <style>
 body { margin: 0; padding: 0 }
+.command-button {
+  border-color:#CCCCCC; border-style:solid; opacity:0.1 }
+}
 </style>
 <script>
-var idCallback=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
+var HmGitWatcher_onButtonPushed=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
 function HmGitWatcher_Botton(arg){
-  window.chrome.webview.postMessage({funcid:idCallback,message:gitStatusPorchain+":"+gitCherry});
+  window.chrome.webview.postMessage({funcid:HmGitWatcher_onButtonPushed,message:arg});
 }
 
 var gitStatus = 0;
@@ -36,19 +39,23 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
 		document.getElementById('push_all').style.opacity = 0.2;
     }
 
+	document.getElementById('run_vscode').style.opacity = 1.0;
 }
 
 </script>
 </head>
 <body>
-<button id="pull_all" type="button" onclick="HmGitWatcher_Botton('pull_all');">
+<button id="pull_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('pull_all');">
   <img id="pull_all_img" src="./icon/icon_pull.png" alt="全てプル">
-</button>
-<button id="commit_all" type="button" onclick="HmGitWatcher_Botton('commit_all');">
+</button><br>
+<button id="commit_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('commit_all');">
   <img id="commit_all_img" src="./icon/icon_commit.png" alt="全てコミット">
-</button>
-<button id="push_all" type="button" onclick="HmGitWatcher_Botton('push_all');">
+</button><br>
+<button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
   <img id="push_all_img" src="./icon/icon_push.png" alt="全てプッシュ">
+</button><br>
+<button id="run_vscode" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_vscode');">
+  <img id="push_all_img" src="./icon/icon_vsc.png" alt="全てプッシュ">
 </button>
 </body>
 </html>

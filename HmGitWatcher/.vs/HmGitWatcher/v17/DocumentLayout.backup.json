@@ -43,9 +43,10 @@
               "RelativeDocumentMoniker": "HmGitWatcher\\HmNetCOM.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmNetCOM.cs",
               "RelativeToolTip": "HmGitWatcher\\HmNetCOM.cs",
-              "ViewState": "AgIAADUAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:47:56.346Z"
+              "WhenOpened": "2024-12-30T10:47:56.346Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -55,9 +56,10 @@
               "RelativeDocumentMoniker": "HmGitWatcher\\FileWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\FileWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\FileWatcher.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAUwBAAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:41:42.504Z"
+              "WhenOpened": "2024-12-30T10:41:42.504Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -79,7 +81,7 @@
               "RelativeDocumentMoniker": "HmGitWatcher\\GitWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\GitWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\GitWatcher.cs",
-              "ViewState": "AgIAAH4AAAAAAAAAAAAcwHEAAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAG8BAAAAAAAAAADgv34BAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T13:22:05.027Z",
               "EditorCaption": ""

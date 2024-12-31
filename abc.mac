@@ -72,7 +72,6 @@ console.log(jscommand);
 
   
   function checkComplete(){
-    //実行の順番(3) 繰り返し
     var readyState = renderpanecommand({target:strTarget,get:"readyState"});
     console.log(readyState);
     if( readyState == "complete" ) {
@@ -83,23 +82,20 @@ console.log(jscommand);
   
   function funcCompleted() {
 
-// abc
-gitWatcherComponent.Check(onGitStatusChange);
+	gitWatcherComponent.ReStart(onGitStatusChange);
 
     //実行の順番(4)
-    var idCallback=hidemaru.getFunctionId(funcCallback);
+    var idCallback=hidemaru.getFunctionId(onButtonPushed);
     renderpanecommand({
         target:strTarget,
-        uri:'javascript:idCallback='+idCallback+';',
+        uri:'javascript:HmGitWatcher_onButtonPushed='+idCallback+';',
         });
   }
   
-  var sGlobal="";
-  function funcCallback(s){
+  function onButtonPushed(command_label){
     //実行の順番(5) 手動操作時
-    sGlobal=s;
-    console.log(s);
-    hidemaru.postExecMacroMemory('js{message(sGlobal);}');
+    console.log(command_label);
+    console.log(typeof(command_label));
   }
   
   //実行の順番(1)
@@ -111,8 +107,8 @@ gitWatcherComponent.Check(onGitStatusChange);
       align: "right",
       x: 30,
       y: 30,
-      cx: 200,
-      cy: 60,
+      cx: 50,
+      cy: 220,
       });
       
 
