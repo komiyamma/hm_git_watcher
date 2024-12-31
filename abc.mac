@@ -18,10 +18,15 @@ var strTarget="HmGitWatcher";
 var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 debuginfo(2);
 
+var gRepoFullPath = "";
+
 // ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
+repoFullPath = repoFullPath.replace(/\//g, '\\');
 hidemaruversion("9.25.99");
 console.log("★★");
+gRepoFullPath = repoFullPath;
+console.log(repoFullPath);
     if (repoFullPath == "") {
 
 	    renderpanecommand({
@@ -96,12 +101,35 @@ console.log(jscommand);
     //実行の順番(5) 手動操作時
     console.log(command_label);
     console.log(typeof(command_label));
-    if (command_label=="pull_all" || command_label=="commit_all" || command_label=="pull_all") {
-    if (gitWatcherComponent) {
-        gitWatcherComponent.ChangeAnything();
-    }
-    }
+    if (command_label=="pull_all") {
+		gitPushAll(gRepoFullPath);
+    }//  || command_label=="commit_all" || command_label=="pull_all") {
   }
+
+var gitPushProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function checkGitPush(repoFullPath) {
+    try {
+	    gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
+	    gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
+	    gitPushProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
+	    gitPushProcess.onClose(onCloseGitPush);
+    } catch (e) {
+        destroyProcess(gitPushProcess);
+        console.log(e);
+    }
+}
+
+function onStdOutReadAllGitPush(outputText) {
+    console.log(outputText);
+}
+
+function onStdErrReadAllGitPush(outputText) {
+    console.log(outputText);
+}
+
+function onCloseGitPush() {
+    destroyProcess(gitPushProcess);
+}
   
   //実行の順番(1)
   renderpanecommand({
@@ -123,6 +151,8 @@ console.log(jscommand);
     hidemaru.clearInterval(idInterval);
   }
   idInterval = hidemaru.setInterval(checkComplete,500);
+
+
 
 
 } // js
