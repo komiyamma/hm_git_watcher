@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\urltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\urltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\gitwatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\gitwatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\urltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\urltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{00000000-0000-0000-0000-000000000000}|\u003CSolution\u003E|HmGitWatcher||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
@@ -33,7 +33,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -41,7 +41,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "UrlTool.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\UrlTool.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\UrlTool.cs",
@@ -53,30 +53,27 @@
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 1,
               "Title": "HmNetCOM.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmNetCOM.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\HmNetCOM.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmNetCOM.cs",
               "RelativeToolTip": "HmGitWatcher\\HmNetCOM.cs",
-              "ViewState": "AgIAAG8AAAAAAAAAAAAqwAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:47:56.346Z"
+              "WhenOpened": "2024-12-30T10:47:56.346Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "FileWatcher.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\FileWatcher.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\FileWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\FileWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\FileWatcher.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAIwAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-30T10:41:42.504Z",
               "EditorCaption": ""
@@ -95,16 +92,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "GitWatcher.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\GitWatcher.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\GitWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\GitWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\GitWatcher.cs",
-              "ViewState": "AgIAAE8BAAAAAAAAAAAcwPcAAAAWAAAAAAAAAA==",
+              "ViewState": "AgIAABMBAAAAAAAAAAAcwB4BAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T13:22:05.027Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
             },
             {
               "$type": "Document",

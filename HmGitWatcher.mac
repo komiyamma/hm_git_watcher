@@ -1,5 +1,9 @@
 ﻿hidemaruversion "9.25.99";
 
+if (filename2 == "") {
+    endmacro;
+}
+
 jsmode "JScript\\" + currentmacrofilename;
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
@@ -28,7 +32,7 @@ repoFullPath = repoFullPath.replace(/\//g, '\\');
 gRepoFullPath = repoFullPath;
 
     if (repoFullPath == "") {
-
+console.log("あれ？");
 	    renderpanecommand({
 	        target:strRanderPaneName,
 	        show: 0
@@ -146,7 +150,14 @@ function filePathToUrl(fileFullPath) {
 
   urlFullPath = filePathToUrl(urlFullPath);
   urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallback + '&bgcolor=' + bgcolor;
-console.log(urlFullPath);
+
+  var curFileFullPath = hidemaru.getFileFullPath();
+
+  var isShowed = renderpanecommand({
+      target:strRanderPaneName,
+      get: "show",
+  });
+
   //実行の順番(1)
   renderpanecommand({
       target:strRanderPaneName,
@@ -160,7 +171,6 @@ console.log(urlFullPath);
       cx: 48,
       cy: 148,
       });
-      
 
   //実行の順番(2)
   var idInterval;

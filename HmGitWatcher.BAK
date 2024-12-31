@@ -10,10 +10,11 @@ body { margin: 0; padding: 0; }
 var urlSearchParams = new URLSearchParams(window.location.search);
 var HmGitWatcher_onButtonPushed = urlSearchParams.get('HmGitWatcher_onButtonPushed');
 var HmGitWatcher_onButtonPushed=Number(HmGitWatcher_onButtonPushed);
+
 function HmGitWatcher_Botton(arg){
   window.chrome.webview.postMessage({funcid:HmGitWatcher_onButtonPushed,message:arg});
 }
-window.alert("HmGitWatcher_onButtonPushed" + String(HmGitWatcher_onButtonPushed));
+
 var gitStatus = 0;
 var gitStatusPorchain = 0;
 var gitCherry = 0;
@@ -23,7 +24,7 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
     if (gitStatus > 0) {
 		document.getElementById('pull_all').style.opacity = 1.0;
     } else {
-		document.getElementById('pull_all').style.opacity = 0.2;
+		document.getElementById('pull_all').style.opacity = 0.0;
     }
 
 
@@ -31,14 +32,14 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
     if (gitStatusPorchain > 0) {
 		document.getElementById('commit_all').style.opacity = 1.0;
     } else {
-		document.getElementById('commit_all').style.opacity = 0.2;
+		document.getElementById('commit_all').style.opacity = 0.0;
     }
 
     gitCherry = _gitCherry;
     if (gitCherry > 0) {
 		document.getElementById('push_all').style.opacity = 1.0;
     } else {
-		document.getElementById('push_all').style.opacity = 0.2;
+		document.getElementById('push_all').style.opacity = 0.0;
     }
 
 	document.getElementById('run_vscode').style.opacity = 1.0;

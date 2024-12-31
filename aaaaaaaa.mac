@@ -1,7 +1,0 @@
-﻿#bcolor = bcolor;
-
-js {
-
-console.log(JSON.stringify(bcolor()));
-
-}
