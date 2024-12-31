@@ -44,7 +44,9 @@ public partial class HmGitWatcher
                 if (process.ExitCode != 0)
                 {
                     string error = process.StandardError.ReadToEnd();
+                    /*
                     Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    */
                     return null; // git コマンドがエラー
                 }
 
@@ -96,7 +98,9 @@ public partial class HmGitWatcher
                 if (process.ExitCode != 0)
                 {
                     string error = process.StandardError.ReadToEnd();
+                    /*
                     Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    */
                     return null; // エラーが発生した場合、nullを返す
                 }
 
@@ -141,7 +145,9 @@ public partial class HmGitWatcher
                 if (process.ExitCode != 0)
                 {
                     string error = process.StandardError.ReadToEnd();
+                    /*
                     Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    */
                     return null; // エラーが発生した場合、nullを返す
                 }
 
@@ -188,7 +194,9 @@ public partial class HmGitWatcher
                 if (process.ExitCode != 0)
                 {
                     string error = process.StandardError.ReadToEnd();
+                    /*
                     Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    */
                     return null; // git コマンドがエラー
                 }
 
@@ -235,7 +243,9 @@ public partial class HmGitWatcher
                 if (process.ExitCode != 0)
                 {
                     string error = process.StandardError.ReadToEnd();
+                    /*
                     Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
+                    */
                     return null; // エラーが発生した場合、nullを返す
                 }
 

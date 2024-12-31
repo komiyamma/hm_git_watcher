@@ -27,9 +27,7 @@ hidemaruversion("9.25.99");
 repoFullPath = repoFullPath.replace(/\//g, '\\');
 gRepoFullPath = repoFullPath;
 
-console.log("きました");
     if (repoFullPath == "") {
-console.log("きました5");
 
 	    renderpanecommand({
 	        target:strRanderPaneName,
@@ -70,19 +68,15 @@ console.log("きました5");
 		        uri:jscommand,
 		        show: 1
 		        });
-console.log(jscommand);
 
             return true;
 	    }
-
-console.log("きました4");
 
         return false;
     }
 
     var updated = HtmlUpdate();
     if (updated) {
-console.log("きました4");
         return;
     }
 
@@ -92,7 +86,6 @@ console.log("きました4");
 
     var updateRetry = hidemaru.setInterval(
 		function() {
-console.log("きました2");
 	        if (updated) {
                 hidemaru.clearInterval(updateRetry);
                 return;
@@ -117,6 +110,15 @@ function bgrToRgb(bgrColor) {
 
   return (red << 16) | (green << 8) | blue; // RGBの順番で結合
 }
+
+function filePathToUrl(fileFullPath) {
+    if (gitWatcherComponent) {
+        return gitWatcherComponent.ConvertToUrl(fileFullPath);
+    }
+
+    return filepath;
+}
+
   
   function tickRenderPaneStatus(){
     var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
@@ -132,9 +134,9 @@ function bgrToRgb(bgrColor) {
 
   gitWatcherComponent.ReStart(onGitStatusChange);
   
-  var bcolor = getconfigcolor(0,1);
-  bcolor = bgrToRgb(bcolor);
-  bcolor = sprintf("%06x", bcolor)
+  var bgcolor = getconfigcolor(0,1);
+  bgcolor = bgrToRgb(bgcolor);
+  bgcolor = sprintf("%06x", bgcolor)
   var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
   if (!existfile(urlFullPath)) {
       message(urlFullPath + "が存在しません")
@@ -142,8 +144,8 @@ function bgrToRgb(bgrColor) {
 
   var idCallback=hidemaru.getFunctionId(onButtonPushed);
 
-  urlFullPath = "file:///" + urlFullPath.replace(/\\/g, "/");
-  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallback + '&bcolor=' + bcolor;
+  urlFullPath = filePathToUrl(urlFullPath);
+  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallback + '&bgcolor=' + bgcolor;
 console.log(urlFullPath);
   //実行の順番(1)
   renderpanecommand({

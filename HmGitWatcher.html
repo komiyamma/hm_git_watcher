@@ -7,7 +7,10 @@ body { margin: 0; padding: 0; }
 }
 </style>
 <script>
-var HmGitWatcher_onButtonPushed=0; //idCallbackは、ページ表示後にマクロ側からjavascript: で設定される
+var urlSearchParams = new URLSearchParams(window.location.search);
+var HmGitWatcher_onButtonPushed = urlSearchParams.get('HmGitWatcher_onButtonPushed');
+var HmGitWatcher_onButtonPushed=Number(HmGitWatcher_onButtonPushed);
+
 function HmGitWatcher_Botton(arg){
   window.chrome.webview.postMessage({funcid:HmGitWatcher_onButtonPushed,message:arg});
 }
@@ -58,10 +61,9 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
   <img id="push_all_img" src="./icon/icon_vsc.png" alt="全てプッシュ">
 </button>
 <script>
-var urlSearchParams = new URLSearchParams(window.location.search);
-var bColor = urlSearchParams.get('bcolor');
-if (bColor) {
-    document.body.style.backgroundColor = bColor;
+var bgcolor = urlSearchParams.get('bgcolor');
+if (bgcolor) {
+    document.body.style.backgroundColor = bgcolor;
 }
 </script>
 
