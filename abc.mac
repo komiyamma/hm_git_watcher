@@ -8,7 +8,7 @@ debuginfo(2);
 var currentMacroDirectory = currentmacrodirectory();
 
 if (gitWatcherComponent) {
-    gitWatcherComponent.StopCheck();
+    gitWatcherComponent.Stop();
 }
 // abcdfefgggbfffgggeefsg
 //debuginfo(2);
@@ -96,6 +96,11 @@ console.log(jscommand);
     //実行の順番(5) 手動操作時
     console.log(command_label);
     console.log(typeof(command_label));
+    if (command_label=="pull_all" || command_label=="commit_all" || command_label=="pull_all") {
+    if (gitWatcherComponent) {
+        gitWatcherComponent.ChangeAnything();
+    }
+    }
   }
   
   //実行の順番(1)

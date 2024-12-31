@@ -12,9 +12,8 @@ namespace HmGitWatcher;
 public partial class HmGitWatcher
 {
     private FileSystemWatcher watcher;
-    private bool isFileChanged = false;
 
-    public void CreateFileWatcher(string targetPath)
+    private void ReCreateFileWatcher(string targetPath)
     {
         DesposeFileWatcher();
         watcher = new FileSystemWatcher();
@@ -40,7 +39,7 @@ public partial class HmGitWatcher
 
         Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // イベントが発生した場合は変更フラグを立てる
-        isFileChanged = true;
+        isAnythingChanged = true;
         Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
 
@@ -53,13 +52,10 @@ public partial class HmGitWatcher
 
         Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // イベントが発生した場合は変更フラグを立てる
-        isFileChanged = true;
+        isAnythingChanged = true;
         Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
-
-
-
-    public void DesposeFileWatcher()
+    private void DesposeFileWatcher()
     {
         if (watcher != null)
         {

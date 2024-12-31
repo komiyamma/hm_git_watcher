@@ -256,6 +256,8 @@ public partial class HmGitWatcher
     string prevRepoPath = "";
     string prevFilePath = "";
 
+    private bool isAnythingChanged = false;
+
     private async Task CheckInternal(dynamic callBackFunc, CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
@@ -278,7 +280,7 @@ public partial class HmGitWatcher
                     prevCherry = "";
                     prevRepoPath = "";
                     prevFilePath = "";
-                    StopCheck();
+                    Stop();
                     break;
                 }
 
@@ -289,66 +291,67 @@ public partial class HmGitWatcher
                     prevCherry = "";
                     prevRepoPath = "";
                     prevFilePath = "";
-                    StopCheck();
+                    Stop();
                     break;
                 }
 
-                else
+                string repoPath = GetAbsoluteGitDir(filePath);
+                if (repoPath != null)
                 {
-                    string repoPath = GetAbsoluteGitDir(filePath);
-                    if (repoPath != null)
+                    if (prevRepoPath != repoPath)
                     {
-                        if (prevRepoPath != repoPath)
-                        {
-                            CreateFileWatcher(repoPath);
-                        }
-                        GetGitFetch(repoPath);
-                        string status = GetGitStatus(repoPath);
-                        string porchain = GetGitStatusPorchain(repoPath);
-                        string cherry = GetGitCherry(repoPath);
-                        // Hm.OutputPane.Output($"Status: {status}\r\n\r\n");
-                        if (prevStatus != status || prevPorchain != porchain || prevCherry != cherry || prevRepoPath != repoPath)
-                        {
-                            Hm.OutputPane.Output("変更がありました。");
-                            prevStatus = status;
-                            prevPorchain = porchain;
-                            prevCherry = cherry;
-                            prevRepoPath = repoPath;
+                        ReCreateFileWatcher(repoPath);
+                    }
+                    GetGitFetch(repoPath);
+                    string status = GetGitStatus(repoPath);
+                    string porchain = GetGitStatusPorchain(repoPath);
+                    string cherry = GetGitCherry(repoPath);
 
-                            string doubleCheckfilePath = Hm.Edit.FilePath;
-                            if (!string.IsNullOrEmpty(doubleCheckfilePath))
-                            {
-                                callBackFunc(repoPath, status, porchain, cherry);
-                            }
-
-                        }
-                        else
-                        {
-                            Hm.OutputPane.Output("変更はありません。");
-                        }
+                    if (prevStatus == status && prevPorchain == porchain && prevCherry == cherry && prevRepoPath == repoPath)
+                    {
+                        // 変更なし
                     }
                     else
                     {
-                        // Hm.OutputPane.Output($"Repository root path: {repoPath}");
+                        // Hm.OutputPane.Output("変更がありました。");
+                        prevStatus = status;
+                        prevPorchain = porchain;
+                        prevCherry = cherry;
+                        prevRepoPath = repoPath;
+
+                        string lastCheckFilePath = Hm.Edit.FilePath;
+                        if (!string.IsNullOrEmpty(lastCheckFilePath))
+                        {
+                            try
+                            {
+                                // 実行先が存在しないことが考えられる。
+                                callBackFunc(repoPath, status, porchain, cherry);
+                            }
+                            catch (Exception ex)
+                            {
+                                Stop();
+                                break;
+                            }
+                        }
                     }
                 }
             }
             catch (Exception ex)
             {
-                Hm.OutputPane.Output($"An error occurred: {ex.Message}");
+                Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
             }
 
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
                 await Task.Delay(1000, cancellationToken); // 1秒間隔
-                if (isFileChanged)
+                if (isAnythingChanged)
                 {
                     Hm.OutputPane.Output("isFileChangedを検知したので、タイムを短縮");
-                    isFileChanged = false;
+                    isAnythingChanged = false;
                     break;
                 }
             }
@@ -356,7 +359,7 @@ public partial class HmGitWatcher
 
     }
     private CancellationTokenSource _cancellationTokenSource;
-    public void StartCheck(dynamic callBackFunc)
+    private void StartCheck(dynamic callBackFunc)
     {
         prevFilePath = Hm.Edit.FilePath;
 
@@ -369,7 +372,15 @@ public partial class HmGitWatcher
         Hm.OutputPane.Output("Git監視を開始しました。");
     }
 
-    public void StopCheck()
+
+    public void ReStart(dynamic callBackFunc)
+    {
+        // すでに監視を開始している場合は停止する
+        Stop();
+        StartCheck(callBackFunc);
+    }
+
+    public void Stop()
     {
         if (_cancellationTokenSource != null)
         {
@@ -380,10 +391,8 @@ public partial class HmGitWatcher
         }
     }
 
-    public void ReStart(dynamic callBackFunc)
+    public void ChangeAnything()
     {
-        // すでに監視を開始している場合は停止する
-        StopCheck();
-        StartCheck(callBackFunc);
+        isAnythingChanged = true;
     }
 }
