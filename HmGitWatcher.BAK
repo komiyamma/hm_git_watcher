@@ -24,7 +24,7 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
     if (gitStatus > 0) {
 		document.getElementById('pull_all').style.opacity = 1.0;
     } else {
-		document.getElementById('pull_all').style.opacity = 0.0;
+		document.getElementById('pull_all').style.opacity = 0.2;
     }
 
 
@@ -32,14 +32,14 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
     if (gitStatusPorchain > 0) {
 		document.getElementById('commit_all').style.opacity = 1.0;
     } else {
-		document.getElementById('commit_all').style.opacity = 0.0;
+		document.getElementById('commit_all').style.opacity = 0.2;
     }
 
     gitCherry = _gitCherry;
     if (gitCherry > 0) {
 		document.getElementById('push_all').style.opacity = 1.0;
     } else {
-		document.getElementById('push_all').style.opacity = 0.0;
+		document.getElementById('push_all').style.opacity = 0.2;
     }
 
 	document.getElementById('run_vscode').style.opacity = 1.0;

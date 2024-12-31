@@ -360,7 +360,7 @@ public partial class HmGitWatcher
                 await Task.Delay(1000, cancellationToken); // 1秒間隔
                 if (isChangeNotify)
                 {
-                    Hm.OutputPane.Output("isFileChangedを検知したので、タイムを短縮");
+                    Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
                     isChangeNotify = false;
                     break;
                 }

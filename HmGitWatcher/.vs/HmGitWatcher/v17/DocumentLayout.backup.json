@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\gitwatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\filewatcher.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|solutionrelative:hmgitwatcher\\hmnetcom.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{7C5BFCDA-E7F6-4986-994B-3BED8165B8CD}|HmGitWatcher\\HmGitWatcher.csproj|g:\\repogitory\\hm_git_watcher\\hmgitwatcher\\hmgitwatcher\\urltool.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -49,12 +49,11 @@
               "RelativeToolTip": "HmGitWatcher\\UrlTool.cs",
               "ViewState": "AgIAAAQAAAAAAAAAAAAAAAsAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-31T12:31:49.697Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-31T12:31:49.697Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "HmNetCOM.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmNetCOM.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\HmNetCOM.cs",
@@ -62,18 +61,17 @@
               "RelativeToolTip": "HmGitWatcher\\HmNetCOM.cs",
               "ViewState": "AgIAACEAAAAAAAAAAAAQwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-30T10:47:56.346Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-30T10:47:56.346Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "FileWatcher.cs",
               "DocumentMoniker": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\FileWatcher.cs",
               "RelativeDocumentMoniker": "HmGitWatcher\\FileWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\FileWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\FileWatcher.cs",
-              "ViewState": "AgIAAC0AAAAAAAAAAAAIwAgAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-30T10:41:42.504Z",
               "EditorCaption": ""
@@ -98,7 +96,7 @@
               "RelativeDocumentMoniker": "HmGitWatcher\\GitWatcher.cs",
               "ToolTip": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\GitWatcher.cs",
               "RelativeToolTip": "HmGitWatcher\\GitWatcher.cs",
-              "ViewState": "AgIAABMBAAAAAAAAAAAcwB4BAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAAE8BAAAAAAAAAAAkwGoBAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-28T13:22:05.027Z",
               "EditorCaption": ""
