@@ -98,16 +98,29 @@ console.log(jscommand);
   }
   
   function onButtonPushed(command_label){
+    try {
     //実行の順番(5) 手動操作時
     console.log(command_label);
     console.log(typeof(command_label));
-    if (command_label=="pull_all") {
+    if (command_label=="push_all") {
 		gitPushAll(gRepoFullPath);
     }//  || command_label=="commit_all" || command_label=="pull_all") {
+    } catch(e) {
+		console.log(e);
+    }
   }
 
+function destroyProcess(process) {
+    if (process) {
+        process.kill();
+        process = null;
+    }
+}
+
+
 var gitPushProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
-function checkGitPush(repoFullPath) {
+function gitPushAll(repoFullPath) {
+console.log("プッシュ!!");
     try {
 	    gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
 	    gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
