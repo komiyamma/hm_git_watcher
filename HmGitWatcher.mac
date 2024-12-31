@@ -146,10 +146,10 @@ function filePathToUrl(fileFullPath) {
       message(urlFullPath + "が存在しません")
   }
 
-  var idCallback=hidemaru.getFunctionId(onButtonPushed);
+  var idCallBack_OnButtonPushed=hidemaru.getFunctionId(onButtonPushed);
 
   urlFullPath = filePathToUrl(urlFullPath);
-  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallback + '&bgcolor=' + bgcolor;
+  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
 
   var curFileFullPath = hidemaru.getFileFullPath();
 
@@ -166,8 +166,8 @@ function filePathToUrl(fileFullPath) {
       place:"overlay",
       align: "right",
       initialize: "async",
-      x: 30,
-      y: 30,
+      x: 32,
+      y: 26,
       cx: 48,
       cy: 148,
       });
