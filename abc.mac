@@ -4,6 +4,7 @@ jsmode "JScript\\" + currentmacrofilename;
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
+
 js {
 debuginfo(2);
 
@@ -25,7 +26,10 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 hidemaruversion("9.25.99");
 repoFullPath = repoFullPath.replace(/\//g, '\\');
 gRepoFullPath = repoFullPath;
+
+console.log("きました");
     if (repoFullPath == "") {
+console.log("きました5");
 
 	    renderpanecommand({
 	        target:strRanderPaneName,
@@ -66,15 +70,19 @@ gRepoFullPath = repoFullPath;
 		        uri:jscommand,
 		        show: 1
 		        });
+console.log(jscommand);
 
             return true;
 	    }
+
+console.log("きました4");
 
         return false;
     }
 
     var updated = HtmlUpdate();
     if (updated) {
+console.log("きました4");
         return;
     }
 
@@ -84,6 +92,7 @@ gRepoFullPath = repoFullPath;
 
     var updateRetry = hidemaru.setInterval(
 		function() {
+console.log("きました2");
 	        if (updated) {
                 hidemaru.clearInterval(updateRetry);
                 return;
@@ -101,8 +110,13 @@ gRepoFullPath = repoFullPath;
     );
 }
 
+function bgrToRgb(bgrColor) {
+  var red = (bgrColor & 0xFF);       // 下位8ビットが青
+  var green = (bgrColor >> 8) & 0xFF; // 中位8ビットが緑
+  var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
 
-
+  return (red << 16) | (green << 8) | blue; // RGBの順番で結合
+}
   
   function tickRenderPaneStatus(){
     var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
@@ -114,24 +128,23 @@ gRepoFullPath = repoFullPath;
   }
   
   function onRenderPaneCompleted() {
-
-
-    //実行の順番(4)
-    var idCallback=hidemaru.getFunctionId(onButtonPushed);
-    renderpanecommand({
-        target:strRanderPaneName,
-        uri:'javascript:HmGitWatcher_onButtonPushed='+idCallback+';',
-        });
   }
 
   gitWatcherComponent.ReStart(onGitStatusChange);
   
-
+  var bcolor = getconfigcolor(0,1);
+  bcolor = bgrToRgb(bcolor);
+  bcolor = sprintf("%06x", bcolor)
   var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
   if (!existfile(urlFullPath)) {
       message(urlFullPath + "が存在しません")
   }
 
+  var idCallback=hidemaru.getFunctionId(onButtonPushed);
+
+  urlFullPath = "file:///" + urlFullPath.replace(/\\/g, "/");
+  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallback + '&bcolor=' + bcolor;
+console.log(urlFullPath);
   //実行の順番(1)
   renderpanecommand({
       target:strRanderPaneName,
@@ -142,8 +155,8 @@ gRepoFullPath = repoFullPath;
       initialize: "async",
       x: 30,
       y: 30,
-      cx: 50,
-      cy: 220,
+      cx: 48,
+      cy: 148,
       });
       
 

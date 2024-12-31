@@ -59,6 +59,10 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
 </button>
 <script>
 var urlSearchParams = new URLSearchParams(window.location.search);
+var tColor = urlSearchParams.get('tcolor');
+if (tColor) {
+    document.body.style.text = tColor;
+}
 var bColor = urlSearchParams.get('bcolor');
 if (bColor) {
     document.body.style.backgroundColor = bColor;
