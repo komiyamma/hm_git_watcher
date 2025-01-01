@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
-<html lang="ja">bbb
-=======
-ああああ<!DOCTYPE html>
 <html lang="ja">
->>>>>>> 5e20ae1539b4498c1729da52b231604fd8f6773c
 <head>
   <meta charset="UTF-8">
   <title>入力ダイアログの例</title>
