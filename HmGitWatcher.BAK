@@ -42,7 +42,7 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
 		document.getElementById('push_all').style.opacity = 0.2;
     }
 
-	document.getElementById('run_vscode').style.opacity = 1.0;
+	document.getElementById('open_vscode').style.opacity = 1.0;
 }
 
 </script>
@@ -57,7 +57,7 @@ function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
 <button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
   <img src="./icon/icon_push.png" alt="全てプッシュ">
 </button><br>
-<button id="run_vscode" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_vscode');">
+<button id="open_vscode" style=class="command-button" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
   <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
 </button>
 <script>
