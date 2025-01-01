@@ -1,75 +1,115 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body { margin: 0; padding: 0; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
 .command-button {
-  border-color:#CCCCCC; border-style:solid; opacity:0.1 }
-}
-</style>
-<script>
-var urlSearchParams = new URLSearchParams(window.location.search);
-var HmGitWatcher_onButtonPushed = urlSearchParams.get('HmGitWatcher_onButtonPushed');
-var HmGitWatcher_onButtonPushed=Number(HmGitWatcher_onButtonPushed);
-
-function HmGitWatcher_Botton(arg){
-  window.chrome.webview.postMessage({funcid:HmGitWatcher_onButtonPushed,message:arg});
-}
-
-var gitStatus = 0;
-var gitStatusPorchain = 0;
-var gitCherry = 0;
-function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
-
-    gitStatus = _gitStatus;
-    if (gitStatus > 0) {
-		document.getElementById('pull_all').style.opacity = 1.0;
-    } else {
-		document.getElementById('pull_all').style.opacity = 0.2;
-    }
-
-
-    gitStatusPorchain = _gitStatusPorchain;
-    if (gitStatusPorchain > 0) {
-		document.getElementById('commit_all').style.opacity = 1.0;
-    } else {
-		document.getElementById('commit_all').style.opacity = 0.2;
-    }
-
-    gitCherry = _gitCherry;
-    if (gitCherry > 0) {
-		document.getElementById('push_all').style.opacity = 1.0;
-    } else {
-		document.getElementById('push_all').style.opacity = 0.2;
-    }
-
-	document.getElementById('open_vscode').style.opacity = 1.0;
+  opacity: 0.1;
+  width: 34px; /* ボタンの幅を34pxに固定 */
+  height: 34px; /* 高さは内容に応じて自動調整 */
+  padding:0; /* デフォルトのpaddingを削除 */
+  border: none; /* デフォルトのborderを削除 */
+  background-color: transparent; /* デフォルトの背景色を透明にする */
+  display: flex; /* flexboxを利用して画像の上下中央揃えを実現 */
+  justify-content: center; /* 水平方向の中央揃え */
+  align-items: center; /* 垂直方向の中央揃え */
 }
 
-</script>
-<title>HmGitWatcher</title>
+.command-button img {
+  max-width: 30px; /* 画像がボタンの幅を超えないようにする */
+  height: 30px; /* 画像のアスペクト比を維持 */
+  display: block; /* インライン要素の余白をなくす */
+}
+
+
+    .command-button-always {
+  opacity: 1.0;
+  width: 34px; /* ボタンの幅を34pxに固定 */
+  height: 34px; /* 高さは内容に応じて自動調整 */
+  padding:0; /* デフォルトのpaddingを削除 */
+  border: none; /* デフォルトのborderを削除 */
+  background-color: transparent; /* デフォルトの背景色を透明にする */
+  display: flex; /* flexboxを利用して画像の上下中央揃えを実現 */
+  justify-content: center; /* 水平方向の中央揃え */
+  align-items: center; /* 垂直方向の中央揃え */
+    }
+
+.command-button-always img {
+  max-width: 30px; /* 画像がボタンの幅を超えないようにする */
+  height: 30px; /* 画像のアスペクト比を維持 */
+  display: block; /* インライン要素の余白をなくす */
+}
+
+  }
+  </style>
+  <script>
+    var urlSearchParams = new URLSearchParams(window.location.search);
+    var HmGitWatcher_onButtonPushed = urlSearchParams.get('HmGitWatcher_onButtonPushed');
+    var HmGitWatcher_onButtonPushed = Number(HmGitWatcher_onButtonPushed);
+
+    function HmGitWatcher_Botton(arg) {
+      window.chrome.webview.postMessage({ funcid: HmGitWatcher_onButtonPushed, message: arg });
+    }
+
+    var gitStatus = 0;
+    var gitStatusPorchain = 0;
+    var gitCherry = 0;
+    function HmGitWatcher_Update(_gitStatus, _gitStatusPorchain, _gitCherry) {
+
+      gitStatus = _gitStatus;
+      if (gitStatus > 0) {
+        document.getElementById('pull_all').style.opacity = 1.0;
+      } else {
+        document.getElementById('pull_all').style.opacity = 0.2;
+      }
+
+
+      gitStatusPorchain = _gitStatusPorchain;
+      if (gitStatusPorchain > 0) {
+        document.getElementById('commit_all').style.opacity = 1.0;
+      } else {
+        document.getElementById('commit_all').style.opacity = 0.2;
+      }
+
+      gitCherry = _gitCherry;
+      if (gitCherry > 0) {
+        document.getElementById('push_all').style.opacity = 1.0;
+      } else {
+        document.getElementById('push_all').style.opacity = 0.2;
+      }
+
+      document.getElementById('open_vscode').style.opacity = 1.0;
+    }
+
+  </script>
+  <title>HmGitWatcher</title>
 </head>
-<body>
-<button id="pull_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('pull_all');">
-  <img src="./icon/icon_pull.png" alt="全てプル">
-</button><br>
-<button id="commit_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('commit_all');">
-  <img src="./icon/icon_commit.png" alt="全てコミット">
-</button><br>
-<button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
-  <img src="./icon/icon_push.png" alt="全てプッシュ">
-</button><br>
-<button id="open_vscode" style="opacity:1.0" class="command-button" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
-  <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-</button>
-<script>
-var bgcolor = urlSearchParams.get('bgcolor');
-if (bgcolor) {
-    document.body.style.backgroundColor = bgcolor;
-}
-</script>
 
+<body>
+  <button id="pull_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('pull_all');">
+    <img src="./icon/icon_pull.png" alt="全てプル">
+  </button>
+  <button id="commit_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('commit_all');">
+    <img src="./icon/icon_commit.png" alt="全てコミット">
+  </button>
+  <button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
+    <img src="./icon/icon_push.png" alt="全てプッシュ">
+  </button>
+  <button class="command-button-always" style="opacity:1.0" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
+    <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
+  </button>
+  <script>
+    var bgcolor = urlSearchParams.get('bgcolor');
+    if (bgcolor) {
+      document.body.style.backgroundColor = "#" + bgcolor;
+    }
+  </script>
 </body>
 </html>

@@ -159,6 +159,8 @@ function filePathToUrl(fileFullPath) {
       get: "show",
   });
 
+console.log(urlFullPath);
+
   //実行の順番(1)
   renderpanecommand({
       target:strRanderPaneName,
@@ -169,8 +171,8 @@ function filePathToUrl(fileFullPath) {
       initialize: "async",
       x: 32,
       y: 26,
-      cx: 48,
-      cy: 148,
+      cx: 36,
+      cy: 140,
       });
 
   //実行の順番(2)
