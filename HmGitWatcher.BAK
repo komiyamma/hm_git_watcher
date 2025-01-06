@@ -46,6 +46,7 @@
   max-width: 30px; /* 画像がボタンの幅を超えないようにする */
   height: 30px; /* 画像のアスペクト比を維持 */
   display: block; /* インライン要素の余白をなくす */
+  cursor: pointer; /* 手の形にする */
 }
 
   }
