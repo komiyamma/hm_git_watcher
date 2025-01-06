@@ -55,7 +55,7 @@ public partial class HmGitWatcher
         isChangeNotify = true;
         Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
-    private void DesposeFileWatcher()
+    public void DesposeFileWatcher()
     {
         if (watcher != null)
         {

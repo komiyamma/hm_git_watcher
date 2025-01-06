@@ -106,6 +106,89 @@ function onCloseGitPush() {
     changeNotify();
     destroyProcess(gitPushProcess);
 }
+
+
+function gitCommitAll(repoFullPath) {
+    gitAdd(repoFullPath);
+}
+
+
+var gitAddProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitAdd(repoFullPath) {
+
+    if (!repoFullPath) {
+        return;
+	}
+console.log("add!!");
+    try {
+	    gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
+	    gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
+	    gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
+	    gitAddProcess.onClose(onCloseGitAdd);
+    } catch (e) {
+        destroyProcess(gitAddProcess);
+        writeOutputPane(e);
+    }
+}
+
+function onStdOutReadAllGitAdd(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onStdErrReadAllGitAdd(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onCloseGitAdd() {
+    destroyProcess(gitAddProcess);
+    gitCommit(gRepoFullPath);
+}
+
+
+
+
+
+var gitCommitProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitCommit(repoFullPath) {
+
+    if (!repoFullPath) {
+        return;
+	}
+console.log("komittoo!!");
+    try {
+        var comment = "コメント";
+        var jsonComment = JSON.stringify(comment);
+	    gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
+	    gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
+	    gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
+	    gitCommitProcess.onClose(onCloseGitPush);
+    } catch (e) {
+        destroyProcess(gitCommitProcess);
+        writeOutputPane(e);
+    }
+}
+
+function onStdOutReadAllGitPush(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onStdErrReadAllGitPush(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onCloseGitPush() {
+    changeNotify();
+    destroyProcess(gitCommitProcess);
+}
+
+
+
+
+
+
+
+
+
   
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
 function pushPostExecMacroFile(command, arg) {

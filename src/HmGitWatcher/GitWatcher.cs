@@ -392,6 +392,8 @@ public partial class HmGitWatcher
 
     public void Stop()
     {
+        DesposeFileWatcher();
+
         if (_cancellationTokenSource != null)
         {
             _cancellationTokenSource.Cancel();

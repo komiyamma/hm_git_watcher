@@ -108,7 +108,7 @@
   <script>
     var bgcolor = urlSearchParams.get('bgcolor');
     if (bgcolor) {
-//      document.body.style.backgroundColor = "#" + bgcolor;
+      document.body.style.backgroundColor = "#" + bgcolor;
     }
   </script>
 </body>

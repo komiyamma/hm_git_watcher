@@ -185,8 +185,10 @@ console.log(urlFullPath);
 
 // エラーメッセージ用
 function writeOutputPane(msg) {
+    if (msg === null) { return; }
     var dll = loaddll("HmOutputPane.dll");
-    msg = msg.replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
+    console.log("★" + typeof msg);
+    msg = msg.toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
 }
 

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmGitWatcher.csproj": {}
+    "G:\\repogitory\\hm_git_watcher\\src\\HmGitWatcher\\HmGitWatcher.csproj": {}
   },
   "projects": {
-    "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmGitWatcher.csproj": {
+    "G:\\repogitory\\hm_git_watcher\\src\\HmGitWatcher\\HmGitWatcher.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmGitWatcher.csproj",
+        "projectUniqueName": "G:\\repogitory\\hm_git_watcher\\src\\HmGitWatcher\\HmGitWatcher.csproj",
         "projectName": "HmGitWatcher",
-        "projectPath": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\HmGitWatcher.csproj",
+        "projectPath": "G:\\repogitory\\hm_git_watcher\\src\\HmGitWatcher\\HmGitWatcher.csproj",
         "packagesPath": "C:\\Users\\master\\.nuget\\packages\\",
-        "outputPath": "G:\\repogitory\\hm_git_watcher\\HmGitWatcher\\HmGitWatcher\\obj\\",
+        "outputPath": "G:\\repogitory\\hm_git_watcher\\src\\HmGitWatcher\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -22,7 +22,7 @@
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
-          "net8.0"
+          "net8.0-windows"
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -30,8 +30,8 @@
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
+          "net8.0-windows7.0": {
+            "targetAlias": "net8.0-windows",
             "projectReferences": {}
           }
         },
@@ -48,8 +48,8 @@
         "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
           "dependencies": {
             "HmNetCOM": {
               "target": "Package",
