@@ -93,18 +93,18 @@
 </head>
 
 <body>
-  <button id="pull_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('pull_all');">
+  <a id="pull_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('pull_all');">
     <img src="./icon/icon_pull.png" alt="全てプル">
-  </button>
-  <button id="commit_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('commit_all');">
+  </a>
+  <a id="commit_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('commit_all');">
     <img src="./icon/icon_commit.png" alt="全てコミット">
-  </button>
-  <button id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
+  </a>
+  <a id="push_all" class="command-button" type="button" onclick="HmGitWatcher_Botton('push_all');">
     <img src="./icon/icon_push.png" alt="全てプッシュ">
-  </button>
-  <button class="command-button-always" style="opacity:1.0" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
+  </a>
+  <a class="command-button-always" style="opacity:1.0" type="button" onclick="HmGitWatcher_Botton('open_vscode');">
     <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-  </button>
+  </a>
   <script>
     var bgcolor = urlSearchParams.get('bgcolor');
     if (bgcolor) {
