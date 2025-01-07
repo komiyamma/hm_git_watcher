@@ -36,9 +36,9 @@ function changeNotify() {
 
 function destroyProcess(process) {
     try {
-	    if (process) {
-	        process.kill();
-	    }
+        if (process) {
+            process.kill();
+        }
     } catch(e) {
     } finally {
         process = null;
@@ -127,8 +127,8 @@ function gitAdd(repoFullPath, comment) {
         gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
         gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
         gitAddProcess.onClose = function() {
-		    destroyProcess(gitAddProcess);
-		    gitCommit(repoFullPath, comment);
+            destroyProcess(gitAddProcess);
+            gitCommit(repoFullPath, comment);
         }
     } catch (e) {
         destroyProcess(gitAddProcess);
