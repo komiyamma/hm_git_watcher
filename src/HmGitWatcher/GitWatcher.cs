@@ -230,27 +230,36 @@ public partial class HmGitWatcher
 
         try
         {
-            using (Process process = Process.Start(startInfo))
-            {
+            string stdOutSum = "";
+            string stdErrSum = "";
 
-                if (process == null)
+            using (Process process = new Process())
+            {
+                process.StartInfo = startInfo;
+
+                process.OutputDataReceived += (sender, args) =>
                 {
-                    return null; // プロセスが起動できなかった
-                }
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        stdOutSum += args.Data;
+                    }
+                };
+
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        stdErrSum += args.Data;
+                    }
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 process.WaitForExit();
 
-                if (process.ExitCode != 0)
-                {
-                    string error = process.StandardError.ReadToEnd();
-                    /*
-                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
-                    */
-                    return null; // エラーが発生した場合、nullを返す
-                }
-
-                string output = process.StandardOutput.ReadToEnd();
-                return output;
+                return stdOutSum + stdErrSum;
             }
         }
         catch (Exception ex)
