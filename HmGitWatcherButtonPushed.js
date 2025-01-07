@@ -3,9 +3,6 @@ var onPushButtonRepoFullPath = ""; // ボタンを押した瞬間のリポジト
 function onButtonPushed(command_label){
     onPushButtonRepoFullPath = gRepoFullPath; // 押した瞬間に
     try {
-        //実行の順番(5) 手動操作時
-        console.log(command_label);
-        console.log(typeof(command_label));
         if (onPushButtonRepoFullPath) {
             if (command_label=="pull_all") {
                 gitPullAll(onPushButtonRepoFullPath);
