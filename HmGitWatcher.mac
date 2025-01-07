@@ -11,6 +11,7 @@ execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
 js {
 debuginfo(2);
+
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
 
@@ -20,7 +21,7 @@ if (gitWatcherComponent) {
 }
 
 // レンダリングペイン名
-var strRanderPaneName="HmGitWatcher";
+var strRanderPaneName = "HmGitWatcher";
 
 // 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
@@ -28,7 +29,8 @@ var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.c
 // 本当はグローバルにはしたくないが、グローバルにせざるを得ない。
 var gRepoFullPath; // 初期化しないこと。非同期で使っているかもしれない。
 
-// この関数は「C#のdllの中から非同期で」呼び出される。
+
+// この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     // なぜかここに必要な模様。
@@ -40,29 +42,38 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     // リポジトリに所属していないならば、
     if (repoFullPath == "") {
         // レンダリングペインは消してしまう
-        renderpanecommand({
-            target:strRanderPaneName,
-            show: 0
-            });
-
+        closeRenderPane();
         return;
     }
-    // derived
+
+    // --------------------------------------------------------------------
+    // プルする必要があるかどうかの判定
+    // --------------------------------------------------------------------
+    // derived(派生)している。(github上のコミット進行とローカルリポジトリのコミット進行が異なってしまっている)
     if (gitStatus.indexOf('use "git pull" to merge') !== -1) {
         gitStatus = 2;
     }
+    // 普通にプル可能
     else if (gitStatus.indexOf('use "git pull" to update') !== -1) {
         gitStatus = 1;
     }
+    // プルする必要はない
     else {
         gitStatus = 0;
     }
 
+    // --------------------------------------------------------------------
+    // コミット可能かどうかの判定
+    // --------------------------------------------------------------------
     if (gitStatusPorchain) {
         gitStatusPorchain = 1;
     } else {
         gitStatusPorchain = 0;
     }
+
+    // --------------------------------------------------------------------
+    // プッシュ可能かどうかの判定
+    // --------------------------------------------------------------------
     if (gitCherry) {
         gitCherry = 1;
     } else {
@@ -70,15 +81,15 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     }
 
     function HtmlUpdate() {
-        var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
+        var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
 
-        if( readyState == "complete" ) {
-            var jscommand = 'javascript:HmGitWatcher_Update('+gitStatus + ',' + gitStatusPorchain+','+gitCherry+');';
+        if (readyState == "complete") {
+            var jscommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
             renderpanecommand({
-                target:strRanderPaneName,
-                uri:jscommand,
+                target: strRanderPaneName,
+                uri: jscommand,
                 show: 1
-                });
+            });
 
             return true;
         }
@@ -86,18 +97,18 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return false;
     }
 
-    var updated = HtmlUpdate();
-    if (updated) {
+    var htmlUpdated = HtmlUpdate();
+    if (htmlUpdated) {
         return;
     }
 
     // アップデートに失敗している。レンダリングペインが何かの事情でComplete出来ていないのかもしれない。
 
-    var retryCounter = 0; // リトライ回数。何かの事情でずっと更新できない場合に備えて、５回やってもダメだったら諦める。
+    var retryCounter = 0; // リトライ回数。何かの事情でずっと更新できない場合に備えて、１秒おきで５回やってもダメだったら諦める。
 
     var updateRetry = hidemaru.setInterval(
-        function() {
-            if (updated) {
+        function () {
+            if (htmlUpdated) {
                 hidemaru.clearInterval(updateRetry);
                 return;
             }
@@ -107,93 +118,101 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
                 return;
             }
 
-            updated = HtmlUpdate();
+            htmlUpdated = HtmlUpdate();
             retryCounter++;
         },
         1000
     );
 }
 
-function bgrToRgb(bgrColor) {
-  var red = (bgrColor & 0xFF);       // 下位8ビットが青
-  var green = (bgrColor >> 8) & 0xFF; // 中位8ビットが緑
-  var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
-
-  return (red << 16) | (green << 8) | blue; // RGBの順番で結合
+// レンダリングを閉じる
+function closeRenderPane() {
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 0
+    });
 }
 
-function filePathToUrl(fileFullPath) {
-    if (gitWatcherComponent) {
-        return gitWatcherComponent.ConvertToUrl(fileFullPath);
+function tickRenderPaneStatus() {
+    var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
+    if (readyState == "complete") {
+        hidemaru.clearInterval(idInterval);
+        onRenderPaneCompleted();
     }
-
-    return filepath;
 }
 
-  
-  function tickRenderPaneStatus(){
-    var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
-    console.log(readyState);
-    if( readyState == "complete" ) {
-      hidemaru.clearInterval(idInterval);
-      onRenderPaneCompleted();
-    }
-  }
-  
-  function onRenderPaneCompleted() {
-  }
+function onRenderPaneCompleted() {
+}
 
-  gitWatcherComponent.ReStart(onGitStatusChange);
-  
-  var bgcolor = getconfigcolor(0,1);
-  bgcolor = bgrToRgb(bgcolor);
-  bgcolor = sprintf("%06x", bgcolor)
-  var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
-  if (!existfile(urlFullPath)) {
-      message(urlFullPath + "が存在しません")
-  }
+gitWatcherComponent.ReStart(onGitStatusChange);
 
-  var idCallBack_OnButtonPushed=hidemaru.getFunctionId(onButtonPushed);
+function initRenderPane() {
 
-  urlFullPath = filePathToUrl(urlFullPath);
-  urlFullPath = urlFullPath + '?HmGitWatcher_onButtonPushed=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
+	// BGR順 → RGB順とする。
+	function bgrToRgb(bgrColor) {
+	    var red = (bgrColor & 0xFF);         // 下位8ビットが青
+	    var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
+	    var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
 
-  var curFileFullPath = hidemaru.getFileFullPath();
+	    return (red << 16) | (green << 8) | blue; // RGBの順番で結合
+	}
 
-  var isShowed = renderpanecommand({
-      target:strRanderPaneName,
-      get: "show",
-  });
+	// Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
+	function filePathToUrl(fileFullPath) {
+	    if (gitWatcherComponent) {
+	        return gitWatcherComponent.ConvertToUrl(fileFullPath);
+	    }
 
-console.log(urlFullPath);
+	    return fileFullPath;
+	}
 
-  //実行の順番(1)
-  renderpanecommand({
-      target:strRanderPaneName,
-      show:1,
-      uri:urlFullPath,
-      place:"overlay",
-      align: "right",
-      initialize: "async",
-      x: 32,
-      y: 26,
-      cx: 36,
-      cy: 140,
-      });
+    // 背景色を文字列化する
+	var bgcolor = getconfigcolor(0, 1);
+	bgcolor = bgrToRgb(bgcolor);
+	bgcolor = sprintf("%06x", bgcolor)
 
-  //実行の順番(2)
-  var idInterval;
-  if( typeof(idInterval)!="undefined" ) {
+    // HmGitWatcher.htmlを使ってボタンをレンダリング
+	var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
+	if (!existfile(urlFullPath)) {
+	    message(urlFullPath + "が存在しません")
+	}
+	urlFullPath = filePathToUrl(urlFullPath);
+
+    // ボタンが押された時の関数
+	var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
+
+    // funcIDとbgcolorを伝えながら、URLを開く
+	var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
+
+	//実行の順番(1)
+	renderpanecommand({
+	    target: strRanderPaneName,
+	    show: 1,
+	    uri: targetURL,
+	    place: "overlay",
+	    align: "right",
+	    initialize: "async",
+	    x: 32,
+	    y: 26,
+	    cx: 36,
+	    cy: 140,
+	});
+
+}
+
+initRenderPane();
+
+var idInterval;
+if (typeof (idInterval) != "undefined") {
     hidemaru.clearInterval(idInterval);
-  }
-  idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
+}
+idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
 
 
 // エラーメッセージ用
 function writeOutputPane(msg) {
     if (msg === null) { return; }
     var dll = loaddll("HmOutputPane.dll");
-    console.log("★" + typeof msg);
     msg = msg.toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
 }

@@ -22,7 +22,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            cursor: pointer;
             /* カーソルを指にする */
         }
 
@@ -34,13 +33,14 @@
 
         .command-button.active {
             opacity: 1.0;
+            cursor: pointer;
             /* アクティブ時の透明度 */
         }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
-            const onButtonPushedId = Number(urlParams.get('HmGitWatcher_onButtonPushed'));
+            const callFuncId = Number(urlParams.get('callBackId'));
 
             const pullButton = document.getElementById('pull_all');
             const commitButton = document.getElementById('commit_all');
@@ -48,7 +48,7 @@
             const openVscodeButton = document.getElementById('open_vscode');
 
             function HmGitWatcher_sendMessageToWebView(message) {
-                window.chrome.webview.postMessage({ funcid: onButtonPushedId, message: message });
+                window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
             }
 
             function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
