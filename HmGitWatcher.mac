@@ -13,7 +13,7 @@ execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
 js {
 
-debuginfo(2);a
+debuginfo(2);
 
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
@@ -35,7 +35,7 @@ var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.c
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     // なぜかここに必要な模様。
     hidemaruversion("9.25.99");
-
+console.log("■");
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
 
