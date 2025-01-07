@@ -37,9 +37,10 @@ public partial class HmGitWatcher
             return;
         }
 
-        Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // イベントが発生した場合は変更フラグを立てる
         isChangeNotify = true;
+
+        // Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
 
@@ -50,10 +51,11 @@ public partial class HmGitWatcher
             return;
         }
 
-        Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // イベントが発生した場合は変更フラグを立てる
         isChangeNotify = true;
-        Hm.OutputPane.Output("OnFileChanged" + "\r\n");
+
+        // Hm.OutputPane.Output(e?.FullPath + "\r\n");
+        // Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
     public void DesposeFileWatcher()
     {

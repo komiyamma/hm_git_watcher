@@ -22,7 +22,6 @@ var strRanderPaneName = "HmGitWatcher";
 // 本当はグローバルにはしたくないが、グローバルにせざるを得ない。
 var gRepoFullPath; // 初期化しないこと。非同期で使っているかもしれない。
 
-
 // 前回マクロ実行した残骸が残ってるなら、ストップ
 if (typeof gitWatcherComponent !== 'undefined') {
     gitWatcherComponent.Stop();
@@ -126,11 +125,11 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     );
 }
 
-
+// 監視コンポーネント・リスタート。変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
 gitWatcherComponent.ReStart(onGitStatusChange);
 
 
-
+var idRenderPaneInterval; // 初期化しないこと。非同期で使っている。
 
 // レンダリングを閉じる
 function closeRenderPane() {
@@ -143,7 +142,7 @@ function closeRenderPane() {
 function tickRenderPaneStatus() {
     var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
     if (readyState == "complete") {
-        hidemaru.clearInterval(idInterval);
+        hidemaru.clearInterval(idRenderPaneInterval);
         onRenderPaneCompleted();
     }
 }
@@ -208,12 +207,12 @@ function initRenderPane() {
 
 initRenderPane();
 
+
 {
-    var idInterval;
-    if (typeof (idInterval) != "undefined") {
-        hidemaru.clearInterval(idInterval);
+    if (typeof (idRenderPaneInterval) != "undefined") {
+        hidemaru.clearInterval(idRenderPaneInterval);
     }
-    idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
+    idRenderPaneInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
 }
 
 // エラーメッセージ用
