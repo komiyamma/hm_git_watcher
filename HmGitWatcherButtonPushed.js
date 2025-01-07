@@ -154,6 +154,8 @@ function onStdErrReadAllGitAdd(outputText) {
     writeOutputPane(outputText);
 }
 
+
+
 var gitCommitProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
 function gitCommit(repoFullPath, comment) {
 
@@ -192,6 +194,7 @@ function onCloseGitCommit() {
 
 
 
+// -------------------------- V S C O D E 用 -------------------------------------
 
 
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
