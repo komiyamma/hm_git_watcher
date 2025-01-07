@@ -26,6 +26,7 @@ var strRanderPaneName = "HmGitWatcher";
 // 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
+
 // 本当はグローバルにはしたくないが、グローバルにせざるを得ない。
 var gRepoFullPath; // 初期化しないこと。非同期で使っているかもしれない。
 
@@ -125,6 +126,12 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     );
 }
 
+
+gitWatcherComponent.ReStart(onGitStatusChange);
+
+
+
+
 // レンダリングを閉じる
 function closeRenderPane() {
     renderpanecommand({
@@ -144,7 +151,6 @@ function tickRenderPaneStatus() {
 function onRenderPaneCompleted() {
 }
 
-gitWatcherComponent.ReStart(onGitStatusChange);
 
 function initRenderPane() {
 
@@ -202,12 +208,13 @@ function initRenderPane() {
 
 initRenderPane();
 
-var idInterval;
-if (typeof (idInterval) != "undefined") {
-    hidemaru.clearInterval(idInterval);
+{
+	var idInterval;
+	if (typeof (idInterval) != "undefined") {
+	    hidemaru.clearInterval(idInterval);
+	}
+	idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
 }
-idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
-
 
 // エラーメッセージ用
 function writeOutputPane(msg) {
