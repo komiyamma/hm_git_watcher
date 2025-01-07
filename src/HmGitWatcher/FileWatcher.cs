@@ -40,7 +40,7 @@ public partial class HmGitWatcher
         Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // イベントが発生した場合は変更フラグを立てる
         isChangeNotify = true;
-        Hm.OutputPane.Output("OnFileChanged" + "\r\n");
+        // Hm.OutputPane.Output("OnFileChanged" + "\r\n");
     }
 
     private void OnFileChanged(object sender, RenamedEventArgs e)
