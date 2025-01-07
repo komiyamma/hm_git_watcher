@@ -169,9 +169,9 @@ function initRenderPane() {
     }
 
     // 背景色を文字列化する
-    var nBGcolor = getconfigcolor(0, 1);
-    nBGcolor = convertBGRtoRGB(nBGcolor);
-    sBGcolor = sprintf("%06x", nBGcolor)
+    var numBGcolor = getconfigcolor(0, 1);
+    numBGcolor = convertBGRtoRGB(numBGcolor);
+    var strBGcolor = sprintf("%06x", numBGcolor)
 
     // HmGitWatcher.htmlを使ってボタンをレンダリング
     var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
@@ -184,7 +184,7 @@ function initRenderPane() {
     var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
 
     // funcIDとbgcolorを伝えながら、URLを開く
-    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + sBGcolor;
+    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + strBGcolor;
 
     //実行の順番(1)
     renderpanecommand({

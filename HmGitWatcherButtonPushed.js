@@ -1,51 +1,54 @@
 var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
-function onButtonPushed(command_label){
+function onButtonPushed(command_label) {
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     try {
         if (gRepoFullPathAtPushButton) {
-            if (command_label=="pull_all") {
+            if (command_label == "pull_all") {
                 gitPullAll(gRepoFullPathAtPushButton);
             }
-            else if (command_label=="push_all") {
+            else if (command_label == "push_all") {
                 gitPushAll(gRepoFullPathAtPushButton);
             }
-            else if (command_label=="commit_all") {
+            else if (command_label == "commit_all") {
                 if (gitWatcherComponent) {
+                    // 先にコミット用コメントの画面。閉じたら何もしないキャンセル相当になる。
+                    // 承認相当行為を押した時だけ「gitCommitAllCallBack」が実行される。
                     gitWatcherComponent.ShowGitCommitForm(gitCommitAllCallBack);
                 }
             }
         }
-        if (command_label=="open_vscode") {
+        if (command_label == "open_vscode") {
             openVSCode();
         }
 
-    } catch(e) {
+    } catch (e) {
         writeOutputPane(e);
     }
 }
 
-
+// 変化が起きたということを意図的に伝搬することによって、次の状態検知チェックまでの間隔を通常より速くする。
 function changeNotify() {
     try {
-    if (gitWatcherComponent) {
-        gitWatcherComponent.ChangeNotify();
-    }
-    } catch(e) {}
+        if (gitWatcherComponent) {
+            gitWatcherComponent.ChangeNotify();
+        }
+    } catch (e) { }
 }
 
+// プロセス明示的に閉じ。(どうも秀丸 hidemaru.runProcess は残るんじゃね？ 疑惑があるので意図して閉じる)
 function destroyProcess(process) {
     try {
         if (process) {
             process.kill();
         }
-    } catch(e) {
+    } catch (e) {
     } finally {
         process = null;
     }
 }
 
-
+// -------------------------- P U L L 用 -------------------------------------
 
 var gitPullProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
 function gitPullAll(repoFullPath) {
@@ -77,9 +80,10 @@ function onCloseGitPull() {
     changeNotify();
     destroyProcess(gitPullProcess);
 }
-  
 
 
+
+// -------------------------- P U S H 用 -------------------------------------
 
 var gitPushProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
 function gitPushAll(repoFullPath) {
@@ -111,7 +115,13 @@ function onCloseGitPush() {
     destroyProcess(gitPushProcess);
 }
 
+
+
+// -------------------------- C O M M I T 用 -------------------------------------
+
 function gitCommitAllCallBack(comment) {
+    // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「コミット」というコメントにする。
+    if (comment == "") comment = "コミット";
     gitAdd(gRepoFullPathAtPushButton, comment);
 }
 
@@ -126,7 +136,7 @@ function gitAdd(repoFullPath, comment) {
         gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
         gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
         gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
-        gitAddProcess.onClose = function() {
+        gitAddProcess.onClose = function () {
             destroyProcess(gitAddProcess);
             gitCommit(repoFullPath, comment);
         }
@@ -153,24 +163,24 @@ function gitCommit(repoFullPath, comment) {
     try {
         var jsonComment = JSON.stringify(comment);
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
-        gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
-        gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
-        gitCommitProcess.onClose(onCloseGitPush);
+        gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitCommit);
+        gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitCommit);
+        gitCommitProcess.onClose(onCloseGitCommit);
     } catch (e) {
         destroyProcess(gitCommitProcess);
         writeOutputPane(e);
     }
 }
 
-function onStdOutReadAllGitPush(outputText) {
+function onStdOutReadAllGitCommit(outputText) {
     writeOutputPane(outputText);
 }
 
-function onStdErrReadAllGitPush(outputText) {
+function onStdErrReadAllGitCommit(outputText) {
     writeOutputPane(outputText);
 }
 
-function onCloseGitPush() {
+function onCloseGitCommit() {
     changeNotify();
     destroyProcess(gitCommitProcess);
 }
@@ -183,7 +193,7 @@ function onCloseGitPush() {
 
 
 
-  
+
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
 function pushPostExecMacroFile(command, arg) {
     var isScheduled = 0;
@@ -209,5 +219,5 @@ function pushPostExecMacroFile(command, arg) {
 // VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
 // カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
 function openVSCode() {
-    pushPostExecMacroFile('"' + currentMacroDirectory  + '\\HmOpenVSCodeFromHidemaru.mac"', "scm" );
+    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmOpenVSCodeFromHidemaru.mac"', "scm");
 }
