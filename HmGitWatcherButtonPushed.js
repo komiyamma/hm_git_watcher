@@ -11,6 +11,9 @@ function onButtonPushed(command_label){
                 gitPushAll(onPushButtonRepoFullPath);
             }
             else if (command_label=="commit_all") {
+                if (gitWatcherComponent) {
+                    gitWatcherComponent.ShowGitCommitForm(abc);
+                }
                 gitCommitAll(onPushButtonRepoFullPath);
             }
         }
@@ -21,7 +24,11 @@ function onButtonPushed(command_label){
     } catch(e) {
         console.log(e);
     }
-  }
+}
+
+function abc() {
+    console.log("あいうえお");
+}
 
 function changeNotify() {
     try {

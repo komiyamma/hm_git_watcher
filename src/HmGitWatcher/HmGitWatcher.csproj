@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
 	<EnableComHosting>true</EnableComHosting>
+    <UseWindowsForms>true</UseWindowsForms>
 	<Platforms>x86;x64</Platforms>
     <LangVersion>latest</LangVersion>
     <Copyright>Akitsugu Komiyama</Copyright>

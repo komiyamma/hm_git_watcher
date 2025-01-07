@@ -1,7 +1,6 @@
 {
   "runtimeOptions": {
     "tfm": "net8.0",
-    "rollForward": "LatestMinor",
     "frameworks": [
       {
         "name": "Microsoft.NETCore.App",
@@ -12,10 +11,16 @@
         "version": "8.0.0"
       }
     ],
+    "additionalProbingPaths": [
+      "C:\\Users\\master\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\master\\.nuget\\packages",
+      "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+    ],
     "configProperties": {
       "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": true,
-      "CSWINRT_USE_WINDOWS_UI_XAML_PROJECTIONS": false
+      "CSWINRT_USE_WINDOWS_UI_XAML_PROJECTIONS": false,
+      "Microsoft.NETCore.DotNetHostPolicy.SetAppPaths": true
     }
   }
 }

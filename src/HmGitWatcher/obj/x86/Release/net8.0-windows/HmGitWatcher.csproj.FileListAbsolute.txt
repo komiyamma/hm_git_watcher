@@ -10,3 +10,5 @@ G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\HmG
 G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\refint\HmGitWatcher.dll
 G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\HmGitWatcher.genruntimeconfig.cache
 G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\ref\HmGitWatcher.dll
+G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\HmGitWatcher.csproj.GenerateResource.cache
+G:\repogitory\hm_git_watcher\src\HmGitWatcher\obj\x86\Release\net8.0-windows\HmGitWatcher.HmGitWatcher.resources
