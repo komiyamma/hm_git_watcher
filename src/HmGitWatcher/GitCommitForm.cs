@@ -39,10 +39,12 @@ public GitCommitForm(dynamic func)
     textBox1.Size = new System.Drawing.Size(260, 200);
     textBox1.TabIndex = 0;
     textBox1.Font = new Font("MS UI Gothic", 16F, FontStyle.Regular, GraphicsUnit.Point, 128);
+    textBox1.Focus();
+    textBox1.KeyDown += tb_KeyEventHandler;
 
     AutoScaleDimensions = new SizeF(7F, 15F);
     AutoScaleMode = AutoScaleMode.Font;
-    ClientSize = new Size(800, 450);
+    ClientSize = new Size(400, 200);
     Name = "コミットのコメント";
     Text = "コミットのコメント";
 
@@ -55,7 +57,20 @@ public GitCommitForm(dynamic func)
     AdjustButtonPosition(); // 初期配置のために呼び出し
 }
 
-private void btnSubmit_Click(object sender, EventArgs e)
+    private void tb_KeyEventHandler(object sender, KeyEventArgs e)
+    {
+        // リターンキーが押されていて
+        if (e.KeyCode == Keys.Return)
+        {
+            // CTRLキーも押されている時だけ、送信ボタンを押した相当にする。
+            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
+            {
+                btnSubmit_Click(null, e);
+            }
+        }
+    }   
+
+    private void btnSubmit_Click(object sender, EventArgs e)
 {
     if (jsCallBackFunc != null)
     {
