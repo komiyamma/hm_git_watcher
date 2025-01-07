@@ -35,7 +35,6 @@ var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.c
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     // なぜかここに必要な模様。
     hidemaruversion("9.25.99");
-console.log("■");
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
 
@@ -154,7 +153,7 @@ function onRenderPaneCompleted() {
 function initRenderPane() {
 
     // BGR順 → RGB順とする。
-    function bgrToRgb(bgrColor) {
+    function convertBGRtoRGB(bgrColor) {
         var red = (bgrColor & 0xFF);         // 下位8ビットが青
         var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
         var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
@@ -172,9 +171,9 @@ function initRenderPane() {
     }
 
     // 背景色を文字列化する
-    var bgcolor = getconfigcolor(0, 1);
-    bgcolor = bgrToRgb(bgcolor);
-    bgcolor = sprintf("%06x", bgcolor)
+    var nBGcolor = getconfigcolor(0, 1);
+    nBGcolor = convertBGRtoRGB(nBGcolor);
+    sBGcolor = sprintf("%06x", nBGcolor)
 
     // HmGitWatcher.htmlを使ってボタンをレンダリング
     var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
@@ -187,7 +186,7 @@ function initRenderPane() {
     var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
 
     // funcIDとbgcolorを伝えながら、URLを開く
-    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
+    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + sBGcolor;
 
     //実行の順番(1)
     renderpanecommand({
