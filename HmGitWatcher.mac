@@ -5,8 +5,6 @@ if (filename2 == "") {
     endmacro;
 }
 
-
-
 jsmode "JScript\\" + currentmacrofilename;
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";

@@ -439,6 +439,12 @@ public partial class HmGitWatcher
             _cancellationTokenSource = null;
             Hm.OutputPane.Output("Git監視を停止しました。\r\n");
         }
+
+        if (form != null)
+        {
+            form.Close();
+            form = null;
+        }
     }
 
     public void ChangeNotify()

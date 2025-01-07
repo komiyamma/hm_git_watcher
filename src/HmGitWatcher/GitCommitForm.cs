@@ -5,12 +5,11 @@ namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
+    Form form;
     public void ShowGitCommitForm(dynamic func)
     {
-        using (var form = new GitCommitForm(func))
-        {
-            form.ShowDialog();
-        }
+        form = new GitCommitForm(func);
+        form.Show();
     }
 }
 

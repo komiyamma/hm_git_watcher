@@ -12,9 +12,8 @@ function onButtonPushed(command_label){
             }
             else if (command_label=="commit_all") {
                 if (gitWatcherComponent) {
-                    gitWatcherComponent.ShowGitCommitForm(abc);
+                    gitWatcherComponent.ShowGitCommitForm(gitCommitAllCallBack);
                 }
-                gitCommitAll(onPushButtonRepoFullPath);
             }
         }
         if (command_label=="open_vscode") {
@@ -113,9 +112,12 @@ function onCloseGitPush() {
     destroyProcess(gitPushProcess);
 }
 
-
-function gitCommitAll(repoFullPath) {
-    gitAdd(repoFullPath);
+var gGitComment = "";
+function gitCommitAllCallBack(comment) {
+    gGitComment = comment; // コメントの伝搬用
+    console.log(comment);
+    
+    gitAdd(onPushButtonRepoFullPath);
 }
 
 
