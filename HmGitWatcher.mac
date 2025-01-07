@@ -1,35 +1,35 @@
 ﻿hidemaruversion "9.25.99";
 
+// 無題スタートは対象外
 if (filename2 == "") {
     endmacro;
 }
+
+
 
 jsmode "JScript\\" + currentmacrofilename;
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
-
 js {
+
 debuginfo(2);
 
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
-
-// 前回マクロ実行した残骸が残ってるなら、ストップ
-if (gitWatcherComponent) {
-    gitWatcherComponent.Stop();
-}
-
 // レンダリングペイン名
 var strRanderPaneName = "HmGitWatcher";
-
-// 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
-var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
-
-
 // 本当はグローバルにはしたくないが、グローバルにせざるを得ない。
 var gRepoFullPath; // 初期化しないこと。非同期で使っているかもしれない。
 
+
+// 前回マクロ実行した残骸が残ってるなら、ストップ
+if (typeof gitWatcherComponent !== 'undefined') {
+    gitWatcherComponent.Stop();
+}
+
+// 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
+var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
@@ -223,6 +223,7 @@ function writeOutputPane(msg) {
     msg = msg.toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
 }
+
 
 } // js
 
