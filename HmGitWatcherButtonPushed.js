@@ -1,14 +1,14 @@
-var onPushButtonRepoFullPath = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
+var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
 function onButtonPushed(command_label){
-    onPushButtonRepoFullPath = gRepoFullPath; // 押した瞬間に
+    gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     try {
-        if (onPushButtonRepoFullPath) {
+        if (gRepoFullPathAtPushButton) {
             if (command_label=="pull_all") {
-                gitPullAll(onPushButtonRepoFullPath);
+                gitPullAll(gRepoFullPathAtPushButton);
             }
             else if (command_label=="push_all") {
-                gitPushAll(onPushButtonRepoFullPath);
+                gitPushAll(gRepoFullPathAtPushButton);
             }
             else if (command_label=="commit_all") {
                 if (gitWatcherComponent) {
@@ -38,9 +38,11 @@ function destroyProcess(process) {
     try {
     if (process) {
         process.kill();
-        process = null;
     }
     } catch(e) {}
+    } finally {
+        process = null;
+    }
 }
 
 
@@ -112,7 +114,7 @@ function onCloseGitPush() {
 var gGitComment = "";
 function gitCommitAllCallBack(comment) {
     gGitComment = comment; // コメントの伝搬用
-    gitAdd(onPushButtonRepoFullPath);
+    gitAdd(gRepoFullPathAtPushButton);
 }
 
 
@@ -143,7 +145,7 @@ function onStdErrReadAllGitAdd(outputText) {
 
 function onCloseGitAdd() {
     destroyProcess(gitAddProcess);
-    gitCommit(onPushButtonRepoFullPath);
+    gitCommit(gRepoFullPathAtPushButton);
 }
 
 
