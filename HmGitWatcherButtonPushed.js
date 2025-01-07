@@ -21,7 +21,7 @@ function onButtonPushed(command_label){
         }
 
     } catch(e) {
-        console.log(e);
+        writeOutputPane(e);
     }
 }
 
@@ -112,8 +112,6 @@ function onCloseGitPush() {
 var gGitComment = "";
 function gitCommitAllCallBack(comment) {
     gGitComment = comment; // コメントの伝搬用
-    console.log(comment);
-    
     gitAdd(onPushButtonRepoFullPath);
 }
 
