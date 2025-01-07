@@ -36,10 +36,10 @@ function changeNotify() {
 
 function destroyProcess(process) {
     try {
-    if (process) {
-        process.kill();
-    }
-    } catch(e) {}
+	    if (process) {
+	        process.kill();
+	    }
+    } catch(e) {
     } finally {
         process = null;
     }
@@ -111,15 +111,13 @@ function onCloseGitPush() {
     destroyProcess(gitPushProcess);
 }
 
-var gGitComment = "";
 function gitCommitAllCallBack(comment) {
-    gGitComment = comment; // コメントの伝搬用
-    gitAdd(gRepoFullPathAtPushButton);
+    gitAdd(gRepoFullPathAtPushButton, comment);
 }
 
 
 var gitAddProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
-function gitAdd(repoFullPath) {
+function gitAdd(repoFullPath, comment) {
 
     if (!repoFullPath) {
         return;
@@ -128,7 +126,10 @@ function gitAdd(repoFullPath) {
         gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
         gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
         gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
-        gitAddProcess.onClose(onCloseGitAdd);
+        gitAddProcess.onClose = function() {
+		    destroyProcess(gitAddProcess);
+		    gitCommit(repoFullPath, comment);
+        }
     } catch (e) {
         destroyProcess(gitAddProcess);
         writeOutputPane(e);
@@ -143,23 +144,13 @@ function onStdErrReadAllGitAdd(outputText) {
     writeOutputPane(outputText);
 }
 
-function onCloseGitAdd() {
-    destroyProcess(gitAddProcess);
-    gitCommit(gRepoFullPathAtPushButton);
-}
-
-
-
-
-
 var gitCommitProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
-function gitCommit(repoFullPath) {
+function gitCommit(repoFullPath, comment) {
 
     if (!repoFullPath) {
         return;
     }
     try {
-        var comment = gGitComment;
         var jsonComment = JSON.stringify(comment);
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
         gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
