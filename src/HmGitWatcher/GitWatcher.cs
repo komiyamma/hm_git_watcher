@@ -360,7 +360,7 @@ public partial class HmGitWatcher
                 await Task.Delay(1000, cancellationToken); // 1秒間隔
                 if (isChangeNotify)
                 {
-                    Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
+                    // Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
                     isChangeNotify = false;
                     break;
                 }
@@ -379,7 +379,7 @@ public partial class HmGitWatcher
         // 非同期処理を開始
         Task.Run(async () => await CheckInternal(callBackFunc, cancellationToken));
 
-        Hm.OutputPane.Output("Git監視を開始しました。");
+        Hm.OutputPane.Output("Git監視を開始しました。\r\n");
     }
 
 
@@ -399,7 +399,7 @@ public partial class HmGitWatcher
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
             _cancellationTokenSource = null;
-            Hm.OutputPane.Output("Git監視を停止しました。");
+            Hm.OutputPane.Output("Git監視を停止しました。\r\n");
         }
     }
 
