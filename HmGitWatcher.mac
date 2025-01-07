@@ -154,66 +154,66 @@ function onRenderPaneCompleted() {
 
 function initRenderPane() {
 
-	// BGR順 → RGB順とする。
-	function bgrToRgb(bgrColor) {
-	    var red = (bgrColor & 0xFF);         // 下位8ビットが青
-	    var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
-	    var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
+    // BGR順 → RGB順とする。
+    function bgrToRgb(bgrColor) {
+        var red = (bgrColor & 0xFF);         // 下位8ビットが青
+        var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
+        var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
 
-	    return (red << 16) | (green << 8) | blue; // RGBの順番で結合
-	}
+        return (red << 16) | (green << 8) | blue; // RGBの順番で結合
+    }
 
-	// Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
-	function filePathToUrl(fileFullPath) {
-	    if (gitWatcherComponent) {
-	        return gitWatcherComponent.ConvertToUrl(fileFullPath);
-	    }
+    // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
+    function filePathToUrl(fileFullPath) {
+        if (gitWatcherComponent) {
+            return gitWatcherComponent.ConvertToUrl(fileFullPath);
+        }
 
-	    return fileFullPath;
-	}
+        return fileFullPath;
+    }
 
     // 背景色を文字列化する
-	var bgcolor = getconfigcolor(0, 1);
-	bgcolor = bgrToRgb(bgcolor);
-	bgcolor = sprintf("%06x", bgcolor)
+    var bgcolor = getconfigcolor(0, 1);
+    bgcolor = bgrToRgb(bgcolor);
+    bgcolor = sprintf("%06x", bgcolor)
 
     // HmGitWatcher.htmlを使ってボタンをレンダリング
-	var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
-	if (!existfile(urlFullPath)) {
-	    message(urlFullPath + "が存在しません")
-	}
-	urlFullPath = filePathToUrl(urlFullPath);
+    var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
+    if (!existfile(urlFullPath)) {
+        message(urlFullPath + "が存在しません")
+    }
+    urlFullPath = filePathToUrl(urlFullPath);
 
     // ボタンが押された時の関数
-	var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
+    var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
 
     // funcIDとbgcolorを伝えながら、URLを開く
-	var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
+    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + bgcolor;
 
-	//実行の順番(1)
-	renderpanecommand({
-	    target: strRanderPaneName,
-	    show: 1,
-	    uri: targetURL,
-	    place: "overlay",
-	    align: "right",
-	    initialize: "async",
-	    x: 32,
-	    y: 26,
-	    cx: 36,
-	    cy: 140,
-	});
+    //実行の順番(1)
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 1,
+        uri: targetURL,
+        place: "overlay",
+        align: "right",
+        initialize: "async",
+        x: 32,
+        y: 26,
+        cx: 36,
+        cy: 140,
+    });
 
 }
 
 initRenderPane();
 
 {
-	var idInterval;
-	if (typeof (idInterval) != "undefined") {
-	    hidemaru.clearInterval(idInterval);
-	}
-	idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
+    var idInterval;
+    if (typeof (idInterval) != "undefined") {
+        hidemaru.clearInterval(idInterval);
+    }
+    idInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
 }
 
 // エラーメッセージ用
