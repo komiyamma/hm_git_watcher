@@ -83,34 +83,44 @@ public partial class HmGitWatcher
             StandardErrorEncoding = Encoding.UTF8
         };
 
+
         try
         {
-            using (Process process = Process.Start(startInfo))
-            {
+            string stdOutSum = "";
+            string stdErrSum = "";
 
-                if (process == null)
+            using (Process process = new Process())
+            {
+                process.StartInfo = startInfo;
+
+                process.OutputDataReceived += (sender, args) =>
                 {
-                    return null; // プロセスが起動できなかった
-                }
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        stdOutSum += args.Data;
+                    }
+                };
+
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        Hm.OutputPane.Output(args.Data + "\r\n");
+                    }
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 process.WaitForExit();
 
-                if (process.ExitCode != 0)
-                {
-                    string error = process.StandardError.ReadToEnd();
-                    /*
-                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
-                    */
-                    return null; // エラーが発生した場合、nullを返す
-                }
-
-                string output = process.StandardOutput.ReadToEnd();
-                return output;
+                return stdOutSum;
             }
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }
@@ -130,34 +140,44 @@ public partial class HmGitWatcher
             StandardErrorEncoding = Encoding.UTF8
         };
 
+
         try
         {
-            using (Process process = Process.Start(startInfo))
-            {
+            string stdOutSum = "";
+            string stdErrSum = "";
 
-                if (process == null)
+            using (Process process = new Process())
+            {
+                process.StartInfo = startInfo;
+
+                process.OutputDataReceived += (sender, args) =>
                 {
-                    return null; // プロセスが起動できなかった
-                }
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        stdOutSum += args.Data;
+                    }
+                };
+
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        // Hm.OutputPane.Output(args.Data + "\r\n");
+                    }
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 process.WaitForExit();
 
-                if (process.ExitCode != 0)
-                {
-                    string error = process.StandardError.ReadToEnd();
-                    /*
-                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
-                    */
-                    return null; // エラーが発生した場合、nullを返す
-                }
-
-                string output = process.StandardOutput.ReadToEnd();
-                return output;
+                return stdOutSum;
             }
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }
@@ -179,36 +199,45 @@ public partial class HmGitWatcher
             StandardErrorEncoding = Encoding.UTF8
         };
 
+
         try
         {
+            string stdOutSum = "";
+            string stdErrSum = "";
 
-            using (Process process = Process.Start(startInfo))
+            using (Process process = new Process())
             {
-                if (process == null)
+                process.StartInfo = startInfo;
+
+                process.OutputDataReceived += (sender, args) =>
                 {
-                    return null; // プロセスが起動できなかった
-                }
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        stdOutSum += args.Data;
+                    }
+                };
+
+                process.ErrorDataReceived += (sender, args) =>
+                {
+                    if (!string.IsNullOrEmpty(args.Data))
+                    {
+                        // Hm.OutputPane.Output(args.Data + "\r\n");
+                    }
+                };
+
+                process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
 
                 process.WaitForExit();
 
-                if (process.ExitCode != 0)
-                {
-                    string error = process.StandardError.ReadToEnd();
-                    /*
-                    Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {error} + \r\n");
-                    */
-                    return null; // git コマンドがエラー
-                }
-
-
-                string output = process.StandardOutput.ReadToEnd();
-                return output;
+                return stdOutSum;
             }
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
-            return null;
+            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            return null; // エラー発生時もnullを返す
         }
     }
 
@@ -249,7 +278,7 @@ public partial class HmGitWatcher
                 {
                     if (!string.IsNullOrEmpty(args.Data))
                     {
-                        stdErrSum += args.Data;
+                        // Hm.OutputPane.Output(args.Data + "\r\n");
                     }
                 };
 
@@ -259,12 +288,12 @@ public partial class HmGitWatcher
 
                 process.WaitForExit();
 
-                return stdOutSum + stdErrSum;
+                return stdOutSum;
             }
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }

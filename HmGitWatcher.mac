@@ -75,6 +75,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     // プッシュ可能かどうかの判定
     // --------------------------------------------------------------------
     if (gitCherry) {
+console.log("■" + gitCherry + "■");
         gitCherry = 1;
     } else {
         gitCherry = 0;
