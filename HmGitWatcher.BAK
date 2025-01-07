@@ -38,14 +38,6 @@
         }
     </style>
     <script>
-
-        function HmGitWatcher_Update(gitStatus, gitStatusPorchain, gitCherry) {
-            pullButton.classList.toggle('active', gitStatus > 0);
-            commitButton.classList.toggle('active', gitStatusPorchain > 0);
-            pushButton.classList.toggle('active', gitCherry > 0);
-            openVscodeButton.classList.add('active');
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const onButtonPushedId = Number(urlParams.get('HmGitWatcher_onButtonPushed'));
@@ -58,6 +50,15 @@
             function HmGitWatcher_sendMessageToWebView(message) {
                 window.chrome.webview.postMessage({ funcid: onButtonPushedId, message: message });
             }
+
+            function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
+                pullButton.classList.toggle('active', gitStatus > 0);
+                commitButton.classList.toggle('active', gitStatusPorchain > 0);
+                pushButton.classList.toggle('active', gitCherry > 0);
+                openVscodeButton.classList.add('active');
+            }
+
+            window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
 
             function handleButtonClick(buttonId) {
                 HmGitWatcher_sendMessageToWebView(buttonId);
