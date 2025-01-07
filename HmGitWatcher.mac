@@ -13,7 +13,7 @@ execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
 js {
 
-debuginfo(2);
+debuginfo(2);a
 
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
