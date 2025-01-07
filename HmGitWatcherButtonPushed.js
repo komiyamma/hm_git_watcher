@@ -25,9 +25,6 @@ function onButtonPushed(command_label){
     }
 }
 
-function abc() {
-    console.log("あいうえお");
-}
 
 function changeNotify() {
     try {
@@ -162,7 +159,7 @@ function gitCommit(repoFullPath) {
         return;
     }
     try {
-        var comment = "コミット・コメント";
+        var comment = gGitComment;
         var jsonComment = JSON.stringify(comment);
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
         gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
