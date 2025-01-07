@@ -1,7 +1,7 @@
 var onPushButtonRepoFullPath = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
-  function onButtonPushed(command_label){
-onPushButtonRepoFullPath = gRepoFullPath; // 押した瞬間に
+function onButtonPushed(command_label){
+    onPushButtonRepoFullPath = gRepoFullPath; // 押した瞬間に
     try {
         //実行の順番(5) 手動操作時
         console.log(command_label);
@@ -156,7 +156,7 @@ function gitCommit(repoFullPath) {
         return;
     }
     try {
-        var comment = "コメント";
+        var comment = "コミット・コメント";
         var jsonComment = JSON.stringify(comment);
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
         gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
