@@ -1,25 +1,28 @@
+var onPushButtonRepoFullPath = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
+
   function onButtonPushed(command_label){
+onPushButtonRepoFullPath = gRepoFullPath; // 押した瞬間に
     try {
-	    //実行の順番(5) 手動操作時
-	    console.log(command_label);
-	    console.log(typeof(command_label));
-        if (gRepoFullPath) {
-		    if (command_label=="pull_all") {
-				gitPullAll(gRepoFullPath);
-		    }
-		    else if (command_label=="push_all") {
-				gitPushAll(gRepoFullPath);
-		    }
-		    else if (command_label=="commit_all") {
-				gitCommitAll(gRepoFullPath);
-		    }
+        //実行の順番(5) 手動操作時
+        console.log(command_label);
+        console.log(typeof(command_label));
+        if (onPushButtonRepoFullPath) {
+            if (command_label=="pull_all") {
+                gitPullAll(onPushButtonRepoFullPath);
+            }
+            else if (command_label=="push_all") {
+                gitPushAll(onPushButtonRepoFullPath);
+            }
+            else if (command_label=="commit_all") {
+                gitCommitAll(onPushButtonRepoFullPath);
+            }
         }
         if (command_label=="open_vscode") {
             openVSCode();
         }
 
     } catch(e) {
-		console.log(e);
+        console.log(e);
     }
   }
 
@@ -50,10 +53,10 @@ function gitPullAll(repoFullPath) {
     }
 
     try {
-	    gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
-	    gitPullProcess.stdOut.onReadAll(onStdOutReadAllGitPull);
-	    gitPullProcess.stdErr.onReadAll(onStdErrReadAllGitPull);
-	    gitPullProcess.onClose(onCloseGitPull);
+        gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
+        gitPullProcess.stdOut.onReadAll(onStdOutReadAllGitPull);
+        gitPullProcess.stdErr.onReadAll(onStdErrReadAllGitPull);
+        gitPullProcess.onClose(onCloseGitPull);
     } catch (e) {
         destroyProcess(gitPullProcess);
         writeOutputPane(e);
@@ -81,13 +84,12 @@ function gitPushAll(repoFullPath) {
 
     if (!repoFullPath) {
         return;
-	}
-console.log("プッシュ!!");
+    }
     try {
-	    gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
-	    gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
-	    gitPushProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
-	    gitPushProcess.onClose(onCloseGitPush);
+        gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
+        gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
+        gitPushProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
+        gitPushProcess.onClose(onCloseGitPush);
     } catch (e) {
         destroyProcess(gitPushProcess);
         writeOutputPane(e);
@@ -118,13 +120,12 @@ function gitAdd(repoFullPath) {
 
     if (!repoFullPath) {
         return;
-	}
-console.log("add!!");
+    }
     try {
-	    gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
-	    gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
-	    gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
-	    gitAddProcess.onClose(onCloseGitAdd);
+        gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
+        gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
+        gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
+        gitAddProcess.onClose(onCloseGitAdd);
     } catch (e) {
         destroyProcess(gitAddProcess);
         writeOutputPane(e);
@@ -141,7 +142,7 @@ function onStdErrReadAllGitAdd(outputText) {
 
 function onCloseGitAdd() {
     destroyProcess(gitAddProcess);
-    gitCommit(gRepoFullPath);
+    gitCommit(onPushButtonRepoFullPath);
 }
 
 
@@ -153,15 +154,14 @@ function gitCommit(repoFullPath) {
 
     if (!repoFullPath) {
         return;
-	}
-console.log("komittoo!!");
+    }
     try {
         var comment = "コメント";
         var jsonComment = JSON.stringify(comment);
-	    gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
-	    gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
-	    gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
-	    gitCommitProcess.onClose(onCloseGitPush);
+        gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
+        gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
+        gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
+        gitCommitProcess.onClose(onCloseGitPush);
     } catch (e) {
         destroyProcess(gitCommitProcess);
         writeOutputPane(e);
@@ -212,6 +212,8 @@ function pushPostExecMacroFile(command, arg) {
     }, 100);
 }
 
+// VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
+// カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
 function openVSCode() {
     pushPostExecMacroFile('"' + currentMacroDirectory  + '\\HmOpenVSCodeFromHidemaru.mac"', "scm" );
 }

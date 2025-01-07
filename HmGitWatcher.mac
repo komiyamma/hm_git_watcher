@@ -11,33 +11,39 @@ execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
 js {
 debuginfo(2);
-
+// カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
 
+// 前回マクロ実行した残骸が残ってるなら、ストップ
 if (gitWatcherComponent) {
     gitWatcherComponent.Stop();
 }
+
+// レンダリングペイン名
 var strRanderPaneName="HmGitWatcher";
 
+// 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
+var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
-var gitWatcherComponent = createobject(currentmacrodirectory() + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
-debuginfo(2);
-
+// 本当はグローバルにはしたくないが、グローバルにせざるを得ない。
 var gRepoFullPath; // 初期化しないこと。非同期で使っているかもしれない。
 
-// ローカルリポジトリ、もしくは、結びつけられたリモートリポジトリの変化を検知した
+// この関数は「C#のdllの中から非同期で」呼び出される。
+// 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
-console.log("あれ？");
-hidemaruversion("9.25.99");
-repoFullPath = repoFullPath.replace(/\//g, '\\');
-gRepoFullPath = repoFullPath;
+    // なぜかここに必要な模様。
+    hidemaruversion("9.25.99");
 
+    repoFullPath = repoFullPath.replace(/\//g, '\\');
+    gRepoFullPath = repoFullPath;
+
+    // リポジトリに所属していないならば、
     if (repoFullPath == "") {
-console.log("あれ？");
-	    renderpanecommand({
-	        target:strRanderPaneName,
-	        show: 0
-	        });
+        // レンダリングペインは消してしまう
+        renderpanecommand({
+            target:strRanderPaneName,
+            show: 0
+            });
 
         return;
     }
@@ -56,7 +62,7 @@ console.log("あれ？");
         gitStatusPorchain = 1;
     } else {
         gitStatusPorchain = 0;
-	}
+    }
     if (gitCherry) {
         gitCherry = 1;
     } else {
@@ -64,18 +70,18 @@ console.log("あれ？");
     }
 
     function HtmlUpdate() {
-	    var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
+        var readyState = renderpanecommand({target:strRanderPaneName,get:"readyState"});
 
-	    if( readyState == "complete" ) {
-		    var jscommand = 'javascript:HmGitWatcher_Update('+gitStatus + ',' + gitStatusPorchain+','+gitCherry+');';
-		    renderpanecommand({
-		        target:strRanderPaneName,
-		        uri:jscommand,
-		        show: 1
-		        });
+        if( readyState == "complete" ) {
+            var jscommand = 'javascript:HmGitWatcher_Update('+gitStatus + ',' + gitStatusPorchain+','+gitCherry+');';
+            renderpanecommand({
+                target:strRanderPaneName,
+                uri:jscommand,
+                show: 1
+                });
 
             return true;
-	    }
+        }
 
         return false;
     }
@@ -90,8 +96,8 @@ console.log("あれ？");
     var retryCounter = 0; // リトライ回数。何かの事情でずっと更新できない場合に備えて、５回やってもダメだったら諦める。
 
     var updateRetry = hidemaru.setInterval(
-		function() {
-	        if (updated) {
+        function() {
+            if (updated) {
                 hidemaru.clearInterval(updateRetry);
                 return;
             }
@@ -103,7 +109,7 @@ console.log("あれ？");
 
             updated = HtmlUpdate();
             retryCounter++;
-	    },
+        },
         1000
     );
 }
