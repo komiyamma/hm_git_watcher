@@ -417,7 +417,7 @@ public partial class HmGitWatcher
         // 非同期処理を開始
         Task.Run(async () => await CheckInternal(callBackFunc, cancellationToken));
 
-        Hm.OutputPane.Output("Git監視を開始しました。\r\n");
+        // Hm.OutputPane.Output("Git監視を開始しました。\r\n");
     }
 
 
@@ -437,7 +437,7 @@ public partial class HmGitWatcher
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
             _cancellationTokenSource = null;
-            Hm.OutputPane.Output("Git監視を停止しました。\r\n");
+            // Hm.OutputPane.Output("Git監視を停止しました。\r\n");
         }
 
         if (form != null)

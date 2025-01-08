@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using HmNetCOM;
 
 namespace HmGitWatcher;
 
@@ -15,49 +16,67 @@ public partial class HmGitWatcher
 
 internal class GitCommitForm : Form
 {
-TextBox textBox1;
-Button btnSubmit;
+TextBox commentTextBox;
+Button submitButton;
 
 dynamic jsCallBackFunc = null;
 
 public GitCommitForm(dynamic func)
-{
-    jsCallBackFunc = func;
+    {
+        jsCallBackFunc = func;
 
-    btnSubmit = new Button();
-    btnSubmit.Location = new System.Drawing.Point(12, 220);
-    btnSubmit.Size = new System.Drawing.Size(60, 32);
-    btnSubmit.Name = "コミット";
-    btnSubmit.Text = "コミット";
-    btnSubmit.Click += btnSubmit_Click;
+        InitForm();
 
+        InitSubmitButton();
+        InitCommentTextBox();
 
-    textBox1 = new TextBox();
-    textBox1.Location = new System.Drawing.Point(12, 12);
-    textBox1.Multiline = true;
-    textBox1.Name = "textBox1";
-    textBox1.Size = new System.Drawing.Size(260, 200);
-    textBox1.TabIndex = 0;
-    textBox1.Font = new Font("MS UI Gothic", 16F, FontStyle.Regular, GraphicsUnit.Point, 128);
-    textBox1.Focus();
-    textBox1.KeyDown += tb_KeyEventHandler;
+        AdjustTextBoxPositionAndSize();
+        AdjustButtonPositionAndSize();
+    }
 
-    AutoScaleDimensions = new SizeF(7F, 15F);
-    AutoScaleMode = AutoScaleMode.Font;
-    ClientSize = new Size(400, 200);
-    Name = "コミットのコメント";
-    Text = "コミットのコメント";
+    private void InitForm()
+    {
+        AutoScaleDimensions = new SizeF(7F, 15F);
+        AutoScaleMode = AutoScaleMode.Font;
+        ClientSize = new Size(400, 200);
+        Name = "コミットのコメント";
+        Text = "コミットのコメント";
 
-    Resize += Form1_Resize;
+        Resize += Form1_Resize;
+    }
 
-    Controls.Add(textBox1);
-    Controls.Add(btnSubmit);
+    private void InitSubmitButton()
+    {
+        submitButton = new Button
+        {
+            Location = new System.Drawing.Point(12, 220),
+            Size = new System.Drawing.Size(60, 32),
+            Name = "コミット",
+            Text = "コミット"
+        };
+        submitButton.Click += BtnSubmit_Click;
 
-    AdjustTextBoxPositionAndSize();
-    AdjustButtonPosition(); // 初期配置のために呼び出し
-}
+        Controls.Add(submitButton);
+    }
 
-    private void tb_KeyEventHandler(object sender, KeyEventArgs e)
+    private void InitCommentTextBox()
+    {
+        commentTextBox = new TextBox
+        {
+            Location = new System.Drawing.Point(12, 12),
+            Multiline = true,
+            Name = "textBox1",
+            Size = new System.Drawing.Size(260, 200),
+            TabIndex = 0,
+            Font = new Font("MS UI Gothic", 16F, FontStyle.Regular, GraphicsUnit.Point, 128)
+        };
+        commentTextBox.Focus();
+        commentTextBox.KeyDown += TextBox_KeyEventHandler;
+
+        Controls.Add(commentTextBox);
+    }
+
+    private void TextBox_KeyEventHandler(object sender, KeyEventArgs e)
     {
         // リターンキーが押されていて
         if (e.KeyCode == Keys.Return)
@@ -65,26 +84,26 @@ public GitCommitForm(dynamic func)
             // CTRLキーも押されている時だけ、送信ボタンを押した相当にする。
             if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
             {
-                btnSubmit_Click(null, e);
+                BtnSubmit_Click(null, e);
             }
         }
     }   
 
-    private void btnSubmit_Click(object sender, EventArgs e)
+    private void BtnSubmit_Click(object sender, EventArgs e)
 {
     if (jsCallBackFunc != null)
     {
         try
         {
-            jsCallBackFunc(textBox1.Text);
+            jsCallBackFunc(commentTextBox.Text);
         }
         catch (Exception ex)
         {
-            MessageBox.Show(ex.Message);
+            // Hm.OutputPane.Output(ex.Message + "\r\n");
         }
         finally
         {
-            textBox1.Text = "";
+            commentTextBox.Text = "";
             this.Close();
         }
     }
@@ -94,7 +113,7 @@ private void Form1_Resize(object sender, EventArgs e)
 {
     // フォームリサイズ時にTextBoxの位置とサイズを調整
     AdjustTextBoxPositionAndSize();
-    AdjustButtonPosition();
+    AdjustButtonPositionAndSize();
 }
 
 private void AdjustTextBoxPositionAndSize()
@@ -109,16 +128,16 @@ private void AdjustTextBoxPositionAndSize()
     int height = this.ClientSize.Height - 2 * padding - 40;
 
     // TextBoxの位置とサイズを設定
-    this.textBox1.Location = new Point(x, y);
-    this.textBox1.Size = new Size(width, height);
+    this.commentTextBox.Location = new Point(x, y);
+    this.commentTextBox.Size = new Size(width, height);
 }
 
-private void AdjustButtonPosition()
+private void AdjustButtonPositionAndSize()
 {
     // ボタンの位置を計算
-    int x = (this.ClientSize.Width - btnSubmit.Width) / 2;
-    int y = this.ClientSize.Height - btnSubmit.Height - 10; // 下部からのマージンを10とする
+    int x = (this.ClientSize.Width - submitButton.Width) / 2;
+    int y = this.ClientSize.Height - submitButton.Height - 10; // 下部からのマージンを10とする
 
-    this.btnSubmit.Location = new Point(x, y);
+    this.submitButton.Location = new Point(x, y);
 }
 }
