@@ -126,7 +126,6 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 gitWatcherComponent.ReStart(onGitStatusChange);
 
 
-var idRenderPaneInterval; // 初期化しないこと。非同期で使っている。
 
 // レンダリングを閉じる
 function closeRenderPane() {
@@ -134,17 +133,6 @@ function closeRenderPane() {
         target: strRanderPaneName,
         show: 0
     });
-}
-
-function tickRenderPaneStatus() {
-    var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
-    if (readyState == "complete") {
-        hidemaru.clearInterval(idRenderPaneInterval);
-        onRenderPaneCompleted();
-    }
-}
-
-function onRenderPaneCompleted() {
 }
 
 
@@ -202,15 +190,10 @@ function initRenderPane() {
 
 }
 
+
 initRenderPane();
 
 
-{
-    if (typeof (idRenderPaneInterval) != "undefined") {
-        hidemaru.clearInterval(idRenderPaneInterval);
-    }
-    idRenderPaneInterval = hidemaru.setInterval(tickRenderPaneStatus, 500);
-}
 
 // エラーメッセージ用
 function writeOutputPane(msg) {
