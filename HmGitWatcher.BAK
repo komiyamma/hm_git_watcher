@@ -30,9 +30,9 @@ body {
 }
 
 .command-button.active {
-    opacity: 1.0;
+    opacity: 1.0; /* アクティブ時の透明度 */
     cursor: pointer;
-    /* アクティブ時の透明度 */
+    
 }
 </style>
 <script>
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => { handleButtonClick(button.id) });
     });
 
-    const bgcolor = urlParams.get('bgcolor');
-    if (bgcolor) {
+    const bgColor = urlParams.get('bgColor');
+    if (bgColor) {
         document.body.style.backgroundColor = "#" + bgcolor;
     }
 });

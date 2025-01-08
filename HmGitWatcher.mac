@@ -135,9 +135,7 @@ function closeRenderPane() {
     });
 }
 
-
-function initRenderPane() {
-
+function getBGColor() {
     // BGR順 → RGB順とする。
     function convertBGRtoRGB(bgrColor) {
         var red = (bgrColor & 0xFF);         // 下位8ビットが青
@@ -146,6 +144,15 @@ function initRenderPane() {
 
         return (red << 16) | (green << 8) | blue; // RGBの順番で結合
     }
+
+    // 背景色を文字列化する
+    var numBGColor = getconfigcolor(0, 1);
+    numBGColor = convertBGRtoRGB(numBGColor);
+
+    return sprintf("%06x", numBGColor);
+}
+
+function getHtmlUrl() {
 
     // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
     function filePathToUrl(fileFullPath) {
@@ -156,10 +163,6 @@ function initRenderPane() {
         return fileFullPath;
     }
 
-    // 背景色を文字列化する
-    var numBGcolor = getconfigcolor(0, 1);
-    numBGcolor = convertBGRtoRGB(numBGcolor);
-    var strBGcolor = sprintf("%06x", numBGcolor)
 
     // HmGitWatcher.htmlを使ってボタンをレンダリング
     var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
@@ -168,17 +171,27 @@ function initRenderPane() {
     }
     urlFullPath = filePathToUrl(urlFullPath);
 
+    return urlFullPath;
+}
+
+
+function initRenderPane() {
+
+    var bgColor = getBGColor();
+
+    var htmlUrl = getHtmlUrl();
+
     // ボタンが押された時の関数
-    var idCallBack_OnButtonPushed = hidemaru.getFunctionId(onButtonPushed);
+    var callFuncId = hidemaru.getFunctionId(onButtonPushed);
 
     // funcIDとbgcolorを伝えながら、URLを開く
-    var targetURL = urlFullPath + '?callFuncId=' + idCallBack_OnButtonPushed + '&bgcolor=' + strBGcolor;
+    var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
     //実行の順番(1)
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,
-        uri: targetURL,
+        uri: targetUrl,
         place: "overlay",
         align: "right",
         initialize: "async",
