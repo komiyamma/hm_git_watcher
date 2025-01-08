@@ -58,7 +58,7 @@ function gitPullAll(repoFullPath) {
     }
 
     try {
-        gitPullProcess = hidemaru.runProcess("git pull --rebase", repoFullPath, "stdio", "utf8");
+        gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
         gitPullProcess.stdOut.onReadAll(onStdOutReadAllGitPull);
         gitPullProcess.stdErr.onReadAll(onStdErrReadAllGitPull);
         gitPullProcess.onClose(onCloseGitPull);
