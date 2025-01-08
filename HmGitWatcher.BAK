@@ -12,8 +12,7 @@ body {
 }
 
 .command-button {
-    opacity: 0.2;
-    /* デフォルトの透明度 */
+    opacity: 0.2; /* デフォルトの透明度 */
     width: 34px;
     height: 34px;
     padding: 0;
@@ -22,7 +21,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* カーソルを指にする */
 }
 
 .command-button img {
@@ -68,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => { handleButtonClick(button.id) });
     });
 
-
     const bgcolor = urlParams.get('bgcolor');
     if (bgcolor) {
         document.body.style.backgroundColor = "#" + bgcolor;
@@ -87,9 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="push_all" class="command-button" type="button" role="button">
         <img src="./icon/icon_push.png" alt="全てプッシュ">
     </button>
-    <!--button id="open_vscode" class="command-button active" type="button" role="button">
+    <button id="open_vscode" class="command-button active" type="button" role="button">
         <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-    </button-->
+    </button>
 </body>
 
 </html>
