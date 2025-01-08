@@ -38,42 +38,42 @@ body {
 }
 </style>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const callFuncId = Number(urlParams.get('callFuncId'));
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const callFuncId = Number(urlParams.get('callFuncId'));
 
-        const pullButton = document.getElementById('pull_all');
-        const commitButton = document.getElementById('commit_all');
-        const pushButton = document.getElementById('push_all');
-        const openVscodeButton = document.getElementById('open_vscode');
+    const pullButton = document.getElementById('pull_all');
+    const commitButton = document.getElementById('commit_all');
+    const pushButton = document.getElementById('push_all');
+    const openVscodeButton = document.getElementById('open_vscode');
 
-        function HmGitWatcher_sendMessageToWebView(message) {
-            window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
-        }
+    function HmGitWatcher_sendMessageToWebView(message) {
+        window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
+    }
 
-        function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
-            pullButton.classList.toggle('active', gitStatus > 0);
-            commitButton.classList.toggle('active', gitStatusPorchain > 0);
-            pushButton.classList.toggle('active', gitCherry > 0);
-            openVscodeButton.classList.add('active');
-        }
+    function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
+        pullButton?.classList.toggle('active', gitStatus > 0);
+        commitButton?.classList.toggle('active', gitStatusPorchain > 0);
+        pushButton?.classList.toggle('active', gitCherry > 0);
+        openVscodeButton?.classList.add('active');
+    }
 
-        window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
+    window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
 
-        function handleButtonClick(buttonId) {
-            HmGitWatcher_sendMessageToWebView(buttonId);
-        }
+    function handleButtonClick(buttonId) {
+        HmGitWatcher_sendMessageToWebView(buttonId);
+    }
 
-        document.querySelectorAll('.command-button').forEach(button => {
-            button.addEventListener('click', () => { handleButtonClick(button.id) });
-        });
-
-
-        const bgcolor = urlParams.get('bgcolor');
-        if (bgcolor) {
-            document.body.style.backgroundColor = "#" + bgcolor;
-        }
+    document.querySelectorAll('.command-button').forEach(button => {
+        button.addEventListener('click', () => { handleButtonClick(button.id) });
     });
+
+
+    const bgcolor = urlParams.get('bgcolor');
+    if (bgcolor) {
+        document.body.style.backgroundColor = "#" + bgcolor;
+    }
+});
 </script>
 </head>
 

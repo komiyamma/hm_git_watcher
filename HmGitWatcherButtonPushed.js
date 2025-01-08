@@ -11,7 +11,7 @@ function onButtonPushed(command_label) {
                 gitPushAll(gRepoFullPathAtPushButton);
             }
             else if (command_label == "commit_all") {
-                gitCommitDialog(gRepoFullPathAtPushButton);
+                gitCommentDialog(gRepoFullPathAtPushButton);
             }
         }
         if (command_label == "open_vscode") {
@@ -115,19 +115,19 @@ function onCloseGitPush() {
 
 // -------------------------- C O M M I T 用 -------------------------------------
 
-function gitCommitDialog(repoFullPath) {
+function gitCommentDialog(repoFullPath) {
     if (gitWatcherComponent) {
 
         // 先にコミット用コメントの画面。閉じたら何もしないキャンセル相当になる。
         // 承認相当行為を押した時だけ「gitCommitAllCallBack」が実行される。
         gitWatcherComponent.ShowGitCommitForm(
-	        function (comment) {
-	             if (comment == "") comment = "コミット";
-	             // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「コミット」というコメントにする。
+            function (comment) {
+                 if (comment == "") comment = "コミット";
+                 // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「コミット」というコメントにする。
 
                  // git add . へと移行
-	             gitAdd(repoFullPath, comment);
-		    }
+                 gitAdd(repoFullPath, comment);
+            }
         );
     }
 

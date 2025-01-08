@@ -52,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
-        pullButton.classList.toggle('active', gitStatus > 0);
-        commitButton.classList.toggle('active', gitStatusPorchain > 0);
-        pushButton.classList.toggle('active', gitCherry > 0);
-        openVscodeButton.classList.add('active');
+        pullButton?.classList.toggle('active', gitStatus > 0);
+        commitButton?.classList.toggle('active', gitStatusPorchain > 0);
+        pushButton?.classList.toggle('active', gitCherry > 0);
+        openVscodeButton?.classList.add('active');
     }
 
     window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="push_all" class="command-button" type="button" role="button">
         <img src="./icon/icon_push.png" alt="全てプッシュ">
     </button>
-    <button id="open_vscode" class="command-button active" type="button" role="button">
+    <!--button id="open_vscode" class="command-button active" type="button" role="button">
         <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-    </button>
+    </button-->
 </body>
 
 </html>
