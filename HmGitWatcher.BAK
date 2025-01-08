@@ -87,9 +87,9 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="push_all" class="command-button" type="button" role="button">
         <img src="./icon/icon_push.png" alt="全てプッシュ">
     </button>
-    <button id="open_vscode" class="command-button active" type="button" role="button">
+    <!--button id="open_vscode" class="command-button active" type="button" role="button">
         <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-    </button>
+    </button-->
 </body>
 
 </html>
