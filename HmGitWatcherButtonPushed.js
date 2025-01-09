@@ -67,7 +67,7 @@ function gitPullAll(repoFullPath) {
 }
 
 function onStartGitPull() {
-    writeOutputPane("------------ P U L L ------------\r\n");
+    writeOutputPane("------------ P U L L ------------");
 }
 
 function onStdOutReadAllGitPull(outputText) {
@@ -108,7 +108,7 @@ function gitPushAll(repoFullPath) {
 }
 
 function onStartGitPush() {
-    writeOutputPane("------------ P U S H ------------\r\n");
+    writeOutputPane("------------ P U S H ------------");
 }
 
 
@@ -172,7 +172,7 @@ function gitAdd(repoFullPath, comment) {
 }
 
 function onStartGitAdd() {
-    // writeOutputPane("------------ A D D ------------\r\n");
+    // writeOutputPane("------------ A D D ------------");
 }
 
 function onStdOutReadAllGitAdd(outputText) {
@@ -207,7 +207,7 @@ function gitCommit(repoFullPath, comment) {
 }
 
 function onStartGitCommit() {
-    writeOutputPane("------------ C O M M I T ------------\r\n");
+    writeOutputPane("------------ C O M M I T ------------");
 }
 
 function onStdOutReadAllGitCommit(outputText) {
