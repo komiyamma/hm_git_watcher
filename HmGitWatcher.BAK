@@ -12,7 +12,7 @@ body {
 }
 
 .command-button {
-    opacity: 0.2; /* デフォルトの透明度 */
+    opacity: 0.1; /* デフォルトの透明度 */
     width: 34px;
     height: 34px;
     padding: 0;
@@ -84,10 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
 </body>
 <script>
+function setBgColor() {
     const urlParams = new URLSearchParams(window.location.search);
     const bgColor = urlParams.get('bgColor');
     if (bgColor) {
         document.body.style.backgroundColor = "#" + bgColor;
     }
+}
+setBgColor();
 </script>
 </html>
