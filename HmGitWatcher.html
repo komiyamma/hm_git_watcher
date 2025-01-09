@@ -40,20 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const callFuncId = Number(urlParams.get('callFuncId'));
 
-    const openVscodeButton = document.getElementById('open_vscode');
     const pullButton = document.getElementById('pull_all');
     const commitButton = document.getElementById('commit_all');
     const pushButton = document.getElementById('push_all');
+    const openVscodeButton = document.getElementById('open_vscode');
 
     function HmGitWatcher_sendMessageToWebView(message) {
         window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
     }
 
     function HmGitWatcher_updateButtonState(gitStatus, gitStatusPorchain, gitCherry) {
-        openVscodeButton?.classList.add('active');
         pullButton?.classList.toggle('active', gitStatus > 0);
         commitButton?.classList.toggle('active', gitStatusPorchain > 0);
         pushButton?.classList.toggle('active', gitCherry > 0);
+        openVscodeButton?.classList.add('active');
     }
 
     window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
@@ -70,9 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
 </head>
 
 <body>
-    <button id="open_vscode" class="command-button active" type="button" role="button">
-        <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
-    </button>
     <button id="pull_all" class="command-button" type="button" role="button">
         <img src="./icon/icon_pull.png" alt="全てプル">
     </button>
@@ -81,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
     <button id="push_all" class="command-button" type="button" role="button">
         <img src="./icon/icon_push.png" alt="全てプッシュ">
+    </button>
+    <button id="open_vscode" class="command-button active" type="button" role="button">
+        <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
     </button>
 </body>
 <script>
