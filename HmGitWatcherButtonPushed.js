@@ -53,6 +53,8 @@ function gitPullAll(repoFullPath) {
         return;
     }
 
+	onStartGitPull();
+
     try {
         gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
         gitPullProcess.stdOut.onReadAll(onStdOutReadAllGitPull);
@@ -62,6 +64,10 @@ function gitPullAll(repoFullPath) {
         destroyProcess(gitPullProcess);
         writeOutputPane(e);
     }
+}
+
+function onStartGitPull() {
+    writeOutputPane("------------ P U L L ------------\r\n");
 }
 
 function onStdOutReadAllGitPull(outputText) {
@@ -87,6 +93,9 @@ function gitPushAll(repoFullPath) {
     if (!repoFullPath) {
         return;
     }
+
+	onStartGitPush();
+
     try {
         gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
         gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
@@ -97,6 +106,11 @@ function gitPushAll(repoFullPath) {
         writeOutputPane(e);
     }
 }
+
+function onStartGitPush() {
+    writeOutputPane("------------ P U S H ------------\r\n");
+}
+
 
 function onStdOutReadAllGitPush(outputText) {
     writeOutputPane(outputText);
@@ -140,6 +154,9 @@ function gitAdd(repoFullPath, comment) {
     if (!repoFullPath) {
         return;
     }
+
+    onStartGitAdd();
+
     try {
         gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
         gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
@@ -152,6 +169,10 @@ function gitAdd(repoFullPath, comment) {
         destroyProcess(gitAddProcess);
         writeOutputPane(e);
     }
+}
+
+function onStartGitAdd() {
+    writeOutputPane("------------ A D D ------------\r\n");
 }
 
 function onStdOutReadAllGitAdd(outputText) {
@@ -170,6 +191,9 @@ function gitCommit(repoFullPath, comment) {
     if (!repoFullPath) {
         return;
     }
+
+	onStartGitCommit();
+
     try {
         var jsonComment = JSON.stringify(comment);
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
@@ -180,6 +204,10 @@ function gitCommit(repoFullPath, comment) {
         destroyProcess(gitCommitProcess);
         writeOutputPane(e);
     }
+}
+
+function onStartGitCommit() {
+    writeOutputPane("------------ C O M M I T ------------\r\n");
 }
 
 function onStdOutReadAllGitCommit(outputText) {
