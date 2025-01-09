@@ -1,14 +1,9 @@
-﻿/*
- * HmOpenVSCodeFromHidemaru v 1.2.0.9
- * Copyright (C) 2021-2024 Akitsugu Komiyama
- * under the MIT License
- */ 
-
-hidemaruversion "9.25.99";
+﻿hidemaruversion "9.25.99";
 
 $launch_mode = getarg(0);
 
-jsmode "JScript\\" + currentmacrofilename;
+jsmode @"JScript\HmGitWatcherVSCode";
+
 js {
 
 // VSCodeの絶対パスの設定。code.exe (もしくはcode.cmd)の場所を設定する。設定していない場合は一応自動で探す。例：@"C:\usr\vscode\code.exe"
