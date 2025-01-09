@@ -65,11 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.command-button').forEach(button => {
         button.addEventListener('click', () => { handleButtonClick(button.id) });
     });
-
-    const bgColor = urlParams.get('bgColor');
-    if (bgColor) {
-        document.body.style.backgroundColor = "#" + bgColor;
-    }
 });
 </script>
 </head>
@@ -88,5 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="./icon/icon_vsc.png" alt="VSCodeを起動">
     </button>
 </body>
-
+<script>
+function setBgColor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const bgColor = urlParams.get('bgColor');
+    if (bgColor) {
+        document.body.style.backgroundColor = "#" + bgColor;
+    }
+}
+setBgColor();
+</script>
 </html>

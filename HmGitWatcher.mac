@@ -36,8 +36,10 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
 
+console.log("OK");
     // リポジトリに所属していないならば、
-    if (repoFullPath == "") {
+    if (!repoFullPath) {
+console.log("OK2");
         // レンダリングペインは消してしまう
         closeRenderPane();
         return;
