@@ -15,7 +15,7 @@ function onButtonPushed(command_label) {
             }
         }
         if (command_label == "open_vscode") {
-            openVSCode();
+            openVSCode(gRepoFullPathAtPushButton);
         }
 
     } catch (e) {
@@ -257,6 +257,6 @@ function pushPostExecMacroFile(command, arg) {
 
 // VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
 // カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
-function openVSCode() {
-    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmOpenVSCodeFromHidemaru.mac"', "scm");
+function openVSCode(repoFullPath) {
+    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmOpenVSCodeFromHidemaru.mac"', repoFullPath);
 }

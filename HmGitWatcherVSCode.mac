@@ -18,7 +18,9 @@ var vscodeAbsolutePath = @"";
 
 var fso = createobject("Scripting.FileSystemObject");
 
-var openMode = getarg(0);
+var gitRootDir = getarg(0);
+
+var openMode = "scm";
 
 // postExecMacroMemory中でも利用するため、このマクロのディレクトリを控えておく
 // (※ postExecMacroMemory中はcurrentmacrodirectoryは消失するため)
@@ -72,102 +74,30 @@ function getVSCodeAbsolutePath() {
 }
 
 
-var gitRootDir = ""; // ちょっと格好悪いが、syncOpenVSCodeは同期で伝えるので、gitRootDirはグローバルにしておく。
-var gitProcess = null;
 
-findGitDir();
+try {
+    // VSCodeは、PCにちゃんと入っとるんか？
+    vscodeAbsolutePath = getVSCodeAbsolutePath();
 
-function findGitDir() {
-    try {
-        // VSCodeは、PCにちゃんと入っとるんか？
-        vscodeAbsolutePath = getVSCodeAbsolutePath();
-
-        // vscodeのパス自体が見つかってないか、パスは見つかったがそこにファイルが存在しない
-        if (!vscodeAbsolutePath || !fso.FileExists(vscodeAbsolutePath)) {
-            throw "Visual Studio Codeが発見できませんでした。\nマクロ「HmOpenVSCodeFromHidemaru.mac」を編集し、変数「VSCodeAbsoluePath」にVisual Studio Codeのパスを設定してください。";
-        }
-
-        if (currentFileFullPath) {
-
-            // gitのコマンドを発行して、対象のファイルがどこかのローカルリポジトリに所得しているのかを探す
-            var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
-            gitProcess = hidemaru.runProcess("git rev-parse --absolute-git-dir", currentFileDir, "stdio", "utf8");
-
-            // gitが無いんですが!!
-            if (!gitProcess) {
-                throw "git コマンドにパスが通っていません";
-
-            // 非同期用の標準出力・標準エラーのコールバック関数の設定
-            } else {
-                gitProcess.stdOut.onReadAll(readStdOutAsync);
-                gitProcess.stdErr.onReadAll(readStdErrAsync);
-                gitProcess.onClose(onCloseGitProcess);
-            }
-
-        // ファイル開いてないなら、そのままVSCodeを(ファイルを開かずに)起動。
-        } else {
-            openVSCodeNoArgs();
-        }
-
-    } catch (e) {
-        message(e);
+    // vscodeのパス自体が見つかってないか、パスは見つかったがそこにファイルが存在しない
+    if (!vscodeAbsolutePath || !fso.FileExists(vscodeAbsolutePath)) {
+        throw "Visual Studio Codeが発見できませんでした。\nマクロ「HmOpenVSCodeFromHidemaru.mac」を編集し、変数「VSCodeAbsoluePath」にVisual Studio Codeのパスを設定してください。";
     }
-}
 
+    // ファイル開いている場合は、いろいろとややこしい計算もしてオープン
+    if (currentFileFullPath) {
+        openVSCode();
 
-
-function readStdOutAsync(outputText) {
-    // C:/bbbb/cccc/.git みたいな形で出てくる
-    var gitDir = outputText;
-    gitDir = gitDir.replace(/\//g, "\\");
-    gitDir = fso.GetParentFolderName(gitDir);
-
-    // フォルダは確かにあります。採用
-    if (fso.FolderExists(gitDir)) {
-        gitRootDir = gitDir;
-
-    // そんなフォルダはねぇぞ！
+    // ファイル開いてないなら、VSCodeを本当に起動するだけ
     } else {
-        gitRootDir = ""; // 得体のしれないもの。不採用
+        openVSCodeNoArgs();
     }
-    syncOpenVSCode();
+
+} catch (e) {
+    message(e);
 }
 
-function readStdErrAsync(outputText) {
-    syncOpenVSCode();
-}
 
-
-function onCloseGitProcess() {
-    gitProcess.kill();
-    gitProcess = null;
-}
-
-// 非同期だと使えない関数等があるので同期で。非同期から同期にするための関数
-function syncOpenVSCode() {
-
-    var command = "js {openVSCode()}";
-
-    // 予約という形にすることで、postExecMacroMemoryでのスケジュールが被ったとしても、リトライできるように。
-    var isScheduled = 0;
-
-    // まずは軽くジャブ(99.98％くらいはこれだけで実行できるだろう)
-    hidemaru.setTimeout(
-        function () {
-            isScheduled = hidemaru.postExecMacroMemory(command)
-        }
-        , 0
-    );
-
-    // 「他のマクロのpostExecMacroMemory」と「このマクロのpostExecMacroMemory」の実行が「ジャスト衝突」することで、予約が被り、
-    // 秀丸側から「こちらのpostExecMacroMemoryの実行」が「キャンセル」された場合に備えたカバーリトライ。0.3秒間隔で成功するまで。
-    var peRetry = hidemaru.setInterval( function() {
-        if (isScheduled === 0) {
-            isScheduled = hidemaru.postExecMacroMemory(command);
-        }
-        if (isScheduled !==0 ) { hidemaru.clearInterval(peRetry); }
-    }, 300);
-}
 
 // 何も引数なしでVSCodeを実行するだけ
 function openVSCodeNoArgs() {
