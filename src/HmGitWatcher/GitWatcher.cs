@@ -344,7 +344,25 @@ public partial class HmGitWatcher
                 }
 
                 string repoPath = GetAbsoluteGitDir(filePath);
-                if (repoPath != null)
+                if (String.IsNullOrEmpty(repoPath))
+                {
+                    try
+                    {
+                        callBackFunc("", "", "");
+                    }
+                    catch (Exception ex)
+                    {
+                        Stop();
+                        break;
+                    }
+                    prevStatus = "";
+                    prevPorchain = "";
+                    prevCherry = "";
+                    prevRepoPath = "";
+                    prevFilePath = "";
+                }
+
+                else 
                 {
                     if (prevRepoPath != repoPath)
                     {
