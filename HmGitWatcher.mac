@@ -9,6 +9,8 @@ jsmode @"JScript\HmGitWatcher";
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 
+execjs currentmacrodirectory + "\\HmGitWatcher100MBLimit.js";
+
 js {
 
 debuginfo(2);
@@ -76,6 +78,8 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     } else {
         gitCherry = 0;
     }
+
+    create100MBLimitPreCommitFile(repoFullPath);
 
     function HtmlUpdate() {
         var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
