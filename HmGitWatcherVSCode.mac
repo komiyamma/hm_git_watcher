@@ -18,9 +18,10 @@ var vscodeAbsolutePath = @"";
 
 var fso = createobject("Scripting.FileSystemObject");
 
-var gitRootDir = getarg(0);
+var openMode = getarg(0);
 
-var openMode = "scm";
+var gitRootDir = getarg(1);
+
 
 // postExecMacroMemory中でも利用するため、このマクロのディレクトリを控えておく
 // (※ postExecMacroMemory中はcurrentmacrodirectoryは消失するため)
