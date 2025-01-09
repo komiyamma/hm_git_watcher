@@ -79,7 +79,9 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         gitCherry = 0;
     }
 
-    create100MBLimitPreCommitFile(repoFullPath);
+    hidemaru.setTimeout( function() {
+        create100MBLimitPreCommitFile(repoFullPath);
+    }, 200);
 
     function HtmlUpdate() {
         var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
