@@ -40,10 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const callFuncId = Number(urlParams.get('callFuncId'));
 
-    const openVscodeButton = document.getElementById('open_vscode');
     const pullButton = document.getElementById('pull_all');
     const commitButton = document.getElementById('commit_all');
     const pushButton = document.getElementById('push_all');
+    const openVscodeButton = document.getElementById('open_vscode');
 
     function HmGitWatcher_sendMessageToWebView(message) {
         window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
