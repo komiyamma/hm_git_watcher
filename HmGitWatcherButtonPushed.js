@@ -172,7 +172,7 @@ function gitAdd(repoFullPath, comment) {
 }
 
 function onStartGitAdd() {
-    writeOutputPane("------------ A D D ------------\r\n");
+    // writeOutputPane("------------ A D D ------------\r\n");
 }
 
 function onStdOutReadAllGitAdd(outputText) {
