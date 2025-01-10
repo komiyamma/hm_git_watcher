@@ -31,8 +31,9 @@ if (typeof gitWatcherComponent !== 'undefined') {
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 function onGitReposFound(repoFullPath) {
-    // なぜかここに必要な模様。
-    hidemaruversion("9.25.99");
+    
+    hidemaruversion("9.25.99"); // なぜかここに必要な模様。
+
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
 
@@ -48,8 +49,9 @@ function onGitReposFound(repoFullPath) {
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
-    // なぜかここに必要な模様。
-    hidemaruversion("9.25.99");
+
+    hidemaruversion("9.25.99"); // なぜかここに必要な模様。
+
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
 

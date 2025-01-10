@@ -1,26 +1,19 @@
 ﻿hidemaruversion "9.25.99";
 
-$launch_mode = getarg(0);
-
 jsmode @"JScript\HmGitWatcherVSCode";
 
 js {
+
 // VSCodeの絶対パスの設定。code.exe (もしくはcode.cmd)の場所を設定する。設定していない場合は一応自動で探す。例：@"C:\usr\vscode\code.exe"
 var vscodeAbsolutePath = @"";
 
 
+var currentMacroDirectory = currentmacrodirectory();
 
 var fso = createobject("Scripting.FileSystemObject");
 
 var gitRootDir = getarg(0);
 
-
-// postExecMacroMemory中でも利用するため、このマクロのディレクトリを控えておく
-// (※ postExecMacroMemory中はcurrentmacrodirectoryは消失するため)
-var currentMacroDirectory = currentmacrodirectory();
-
-// 非同期なのでファイルパスが変更になってしまう可能性が僅かにあるため、控えておく
-var currentFileFullPath = hidemaru.getFileFullPath();
 
 // VSCodeのパスを探す
 function getVSCodeAbsolutePath() {
@@ -69,6 +62,7 @@ function getVSCodeAbsolutePath() {
 
 
 try {
+
     // VSCodeは、PCにちゃんと入っとるんか？
     vscodeAbsolutePath = getVSCodeAbsolutePath();
 
@@ -77,16 +71,17 @@ try {
         throw "Visual Studio Codeが発見できませんでした。\nマクロ「HmOpenVSCodeFromHidemaru.mac」を編集し、変数「VSCodeAbsoluePath」にVisual Studio Codeのパスを設定してください。";
     }
 
-    // ファイル開いている場合は、いろいろとややこしい計算もしてオープン
+	var currentFileFullPath = hidemaru.getFileFullPath();
+
     if (currentFileFullPath) {
 
 	    // VSCodeで開くカーソルポジションの取得
 	    var cursorPos = calcCenterPosition();
 
-        openVSCode(cursorPos);
+        openVSCode(currentFileFullPath, cursorPos, gitRootDir);
 
-    // ファイル開いてないなら、VSCodeを本当に起動するだけ
     } else {
+        // ファイル開いてないなら、VSCodeを本当に起動するだけ
         openVSCodeNoArgs();
     }
 
@@ -103,27 +98,34 @@ function openVSCodeNoArgs() {
     openVSCodeCommand(command);
 }
 
+
+function getWorkSpaceDir(currentFileFullPath, gitRootDir) {
+    var workSpaceDir = gitRootDir;
+
+    // リポジトリが見つかっていなければ、現在のファイルのディレクトリをワークスペースとする
+    if (!workSpaceDir) {
+        var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
+        workSpaceDir = currentFileDir;
+    }
+
+    // 謎だが最後が「\」で終わっている場合、１つ「\」を付け加える必要がある。VSCodeの解釈の問題だろう
+    if (workSpaceDir[workSpaceDir.length-1] == "\\") {
+        workSpaceDir = workSpaceDir + "\\";
+    }
+
+    return workSpaceDir;
+}
+
 // 同期関数。VSCodeを指定のファイル、指定のディレクトリ(ワークスペース想定)、指定のポジションで開く
-function openVSCode(cursorPos) {
+function openVSCode(currentFileFullPath, cursorPos, gitRootDir) {
 
     if (!vscodeAbsolutePath) { return; }
 
     // ファイルなし
     if (!currentFileFullPath) { return; }
 
-    var workSpaceDir = gitRootDir;
-	{
-	    // リポジトリが見つかっていなければ、現在のファイルのディレクトリをワークスペースとする
-	    if (!workSpaceDir) {
-	        var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
-	        workSpaceDir = currentFileDir;
-	    }
 
-	    // 謎だが最後が「\」で終わっている場合、１つ「\」を付け加える必要がある。VSCodeの解釈の問題だろう
-	    if (workSpaceDir[workSpaceDir.length-1] == "\\") {
-	        workSpaceDir = workSpaceDir + "\\";
-	    }
-	}
+    var workSpaceDir = getWorkSpaceDir(currentFileFullPath, gitRootDir);
 
     // gitRootDirが存在したのなら、gitビューモードへの移行が原則可能なハズ
     if (gitRootDir) {
@@ -181,11 +183,6 @@ function calcCenterPosition() {
     return { "column": columnWCS, "lineno": linenoWCS }
 }
 
-// エラーメッセージ用
-function writeOutputPane(err) {
-    var dll = loaddll("HmOutputPane.dll");
-    dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), err + "\r\n");
-}
 
 
 } // js
