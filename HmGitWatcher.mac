@@ -184,22 +184,15 @@ function getBGColor() {
 
 function getHtmlUrl() {
 
-    // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
-    function filePathToUrl(fileFullPath) {
-        if (gitWatcherComponent) {
-            return gitWatcherComponent.ConvertToUrl(fileFullPath);
-        }
-
-        return fileFullPath;
-    }
-
-
     // HmGitWatcher.htmlを使ってボタンをレンダリング
     var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
     if (!existfile(urlFullPath)) {
         message(urlFullPath + "が存在しません")
     }
-    urlFullPath = filePathToUrl(urlFullPath);
+    // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
+    if (gitWatcherComponent) {
+    	urlFullPath = gitWatcherComponent.ConvertToUrl(urlFullPath);
+    }
 
     return urlFullPath;
 }
