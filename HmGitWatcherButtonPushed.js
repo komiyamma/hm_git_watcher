@@ -252,7 +252,7 @@ function pushPostExecMacroFile(command, arg) {
             if (isScheduled !== 0) { isScheduled = 1; }
         }
         if (isScheduled) { hidemaru.clearInterval(peRetry); }
-    }, 100);
+    }, 250);
 }
 
 // VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
