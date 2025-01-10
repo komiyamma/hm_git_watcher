@@ -5,7 +5,8 @@ $launch_mode = getarg(0);
 jsmode @"JScript\HmGitWatcherVSCode";
 
 js {
-
+debuginfo(2);
+console.log("vscode\r\n");
 // VSCodeの絶対パスの設定。code.exe (もしくはcode.cmd)の場所を設定する。設定していない場合は一応自動で探す。例：@"C:\usr\vscode\code.exe"
 var vscodeAbsolutePath = @"";
 
