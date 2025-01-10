@@ -43,6 +43,12 @@ public GitCommitForm(dynamic func)
         Text = "コミットのコメント";
 
         Resize += Form1_Resize;
+        Shown += Form1_Shown;
+    }
+
+    private void Form1_Shown(object sender, EventArgs e)
+    {
+        commentTextBox?.Focus();
     }
 
     private void InitSubmitButton()
