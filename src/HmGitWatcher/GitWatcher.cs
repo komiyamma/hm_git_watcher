@@ -306,13 +306,13 @@ public partial class HmGitWatcher
 
     private bool isChangeNotify = false;
 
-    private async Task CheckInternal(dynamic callBackFunc, CancellationToken cancellationToken)
+    private async Task CheckInternal(dynamic callBackFoundRepos, dynamic callBackStatusChange, CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                if (callBackFunc == null)
+                if (callBackStatusChange == null)
                 {
                     Hm.OutputPane.Output("コールバック関数が指定されていません。");
                     return;
@@ -348,7 +348,7 @@ public partial class HmGitWatcher
                 {
                     try
                     {
-                        callBackFunc("", "", "");
+                        callBackStatusChange("", "", "");
                     }
                     catch (Exception ex)
                     {
@@ -366,6 +366,15 @@ public partial class HmGitWatcher
                 {
                     if (prevRepoPath != repoPath)
                     {
+                        try
+                        {
+                            callBackFoundRepos(repoPath);
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+
+
                         ReCreateFileWatcher(repoPath);
                     }
                     GetGitFetch(repoPath);
@@ -391,7 +400,7 @@ public partial class HmGitWatcher
                             try
                             {
                                 // 実行先が存在しないことが考えられる。
-                                callBackFunc(repoPath, status, porchain, cherry);
+                                callBackStatusChange(repoPath, status, porchain, cherry);
                             }
                             catch (Exception ex)
                             {
@@ -425,7 +434,7 @@ public partial class HmGitWatcher
 
     }
     private CancellationTokenSource _cancellationTokenSource;
-    private void StartCheck(dynamic callBackFunc)
+    private void StartCheck(dynamic callBackFoundRepos, dynamic callBackStatusChange)
     {
         prevFilePath = Hm.Edit.FilePath;
 
@@ -433,17 +442,17 @@ public partial class HmGitWatcher
         var cancellationToken = _cancellationTokenSource.Token;
 
         // 非同期処理を開始
-        Task.Run(async () => await CheckInternal(callBackFunc, cancellationToken));
+        Task.Run(async () => await CheckInternal(callBackFoundRepos, callBackStatusChange, cancellationToken));
 
         // Hm.OutputPane.Output("Git監視を開始しました。\r\n");
     }
 
 
-    public void ReStart(dynamic callBackFunc)
+    public void ReStart(dynamic callBackFoundRepos, dynamic callBackStatusChange)
     {
         // すでに監視を開始している場合は停止する
         Stop();
-        StartCheck(callBackFunc);
+        StartCheck(callBackFoundRepos, callBackStatusChange);
     }
 
     public void Stop()

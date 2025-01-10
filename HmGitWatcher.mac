@@ -79,10 +79,6 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         gitCherry = 0;
     }
 
-    hidemaru.setTimeout( function() {
-        create100MBLimitPreCommitFile(repoFullPath);
-    }, 200);
-
     function HtmlUpdate() {
         var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
 
@@ -128,8 +124,19 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     );
 }
 
+function onGitReposFound(repoFullPath) {
+    // なぜかここに必要な模様。
+    hidemaruversion("9.25.99");
+    repoFullPath = repoFullPath.replace(/\//g, '\\');
+    gRepoFullPath = repoFullPath;
+
+    hidemaru.setTimeout( function() {
+        create100MBLimitPreCommitFile(repoFullPath);
+    }, 0);
+}
+
 // 監視コンポーネント・リスタート。変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
-gitWatcherComponent.ReStart(onGitStatusChange);
+gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
 
 
