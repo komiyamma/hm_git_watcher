@@ -197,6 +197,7 @@ function gitCommit(repoFullPath, comment) {
     try {
         var jsonComment = JSON.stringify(comment);
         jsonComment = jsonComment.replace(/\\r\\n/g, "\n");
+        jsonComment = jsonComment.replace(/\\n/g, "\n");
         gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
         gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitCommit);
         gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitCommit);
