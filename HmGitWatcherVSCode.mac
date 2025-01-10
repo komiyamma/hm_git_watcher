@@ -12,11 +12,7 @@ var vscodeAbsolutePath = @"";
 
 var fso = createobject("Scripting.FileSystemObject");
 
-var argJSON = JSON.parse(getarg(0));
-
-var openMode = argJSON.openMode;
-
-var gitRootDir = argJSON.gitRootDir;
+var gitRootDir = getarg(0);
 
 
 // postExecMacroMemory中でも利用するため、このマクロのディレクトリを控えておく
@@ -83,7 +79,11 @@ try {
 
     // ファイル開いている場合は、いろいろとややこしい計算もしてオープン
     if (currentFileFullPath) {
-        openVSCode();
+
+	    // VSCodeで開くカーソルポジションの取得
+	    var cursorPos = calcCenterPosition();
+
+        openVSCode(cursorPos);
 
     // ファイル開いてないなら、VSCodeを本当に起動するだけ
     } else {
@@ -104,7 +104,7 @@ function openVSCodeNoArgs() {
 }
 
 // 同期関数。VSCodeを指定のファイル、指定のディレクトリ(ワークスペース想定)、指定のポジションで開く
-function openVSCode() {
+function openVSCode(cursorPos) {
 
     if (!vscodeAbsolutePath) { return; }
 
@@ -112,27 +112,21 @@ function openVSCode() {
     if (!currentFileFullPath) { return; }
 
     var workSpaceDir = gitRootDir;
+	{
+	    // リポジトリが見つかっていなければ、現在のファイルのディレクトリをワークスペースとする
+	    if (!workSpaceDir) {
+	        var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
+	        workSpaceDir = currentFileDir;
+	    }
 
-    // リポジトリが見つかっていなければ、現在のファイルのディレクトリをワークスペースとする
-    if (gitRootDir == "") {
-        var currentFileDir = fso.GetParentFolderName(currentFileFullPath);
-        workSpaceDir = currentFileDir;
+	    // 謎だが最後が「\」で終わっている場合、１つ「\」を付け加える必要がある。VSCodeの解釈の問題だろう
+	    if (workSpaceDir[workSpaceDir.length-1] == "\\") {
+	        workSpaceDir = workSpaceDir + "\\";
+	    }
+	}
 
-        // 自動的にリポジトリへと移動するモードなら、リポジトリ発見できてないのでscm取りやめ
-        if (openMode == "scm") { openMode = ""; }
-    }
-
-    // 謎だが最後が「\」で終わっている場合、１つ「\」を付け加える必要がある。VSCodeの解釈の問題だろう
-    if (workSpaceDir[workSpaceDir.length-1] == "\\") {
-        workSpaceDir = workSpaceDir + "\\";
-    }
-
-    // VSCodeで開くカーソルポジションの取得
-    var cursorPos = calcCenterPosition();
-
-
-    // ソースビューを最初からオープンに
-    if (openMode == "scm") {
+    // gitRootDirが存在したのなら、gitビューモードへの移行が原則可能なハズ
+    if (gitRootDir) {
 
         // ソースビューへと自動で移行。対象のリポジトリを作業場として、対象のファイルをunicodeベース換算でのlinenoとcolumn
         var command = sprintf("""

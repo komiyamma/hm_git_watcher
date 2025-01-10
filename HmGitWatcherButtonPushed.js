@@ -258,5 +258,5 @@ function pushPostExecMacroFile(command, arg) {
 // VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
 // カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
 function openVSCode(repoFullPath) {
-    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmGitWatcherVSCode.mac"', JSON.stringify({"openMode":"scm", "gitRootDir":repoFullPath}));
+    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmGitWatcherVSCode.mac"', repoFullPath);
 }
