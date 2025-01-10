@@ -38,8 +38,16 @@ function onGitReposFound(repoFullPath) {
     gRepoFullPath = repoFullPath;
 
     if (!repoFullPath) {
+        // レンダリングペインは消してしまう
+        closeRenderPane();
         return;
     }
+
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 1,
+        invisible: 0
+    });
 
     hidemaru.setTimeout( function() {
         create100MBLimitPreCommitFile(repoFullPath);
@@ -104,7 +112,8 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
             renderpanecommand({
                 target: strRanderPaneName,
                 uri: jscommand,
-                show: 1
+                show: 1,
+                invisible: 0
             });
 
             return true;
@@ -152,7 +161,7 @@ gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 function closeRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
-        show: 0
+        invisible: 1
     });
 }
 
@@ -212,6 +221,7 @@ function openRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,
+        invisible: 1,
         uri: targetUrl,
         place: "overlay",
         align: "right",
