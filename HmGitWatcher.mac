@@ -161,7 +161,8 @@ gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 function closeRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
-        invisible: 1
+        invisible: 1,
+        show: 0
     });
 }
 
