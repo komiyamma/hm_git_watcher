@@ -5,7 +5,7 @@ jsmode @"JScript\HmGitWatcherVSCode";
 js {
 
 // VSCodeの絶対パスの設定。code.exe (もしくはcode.cmd)の場所を設定する。設定していない場合は一応自動で探す。例：@"C:\usr\vscode\code.exe"
-var vscodeAbsolutePath = @"";
+var vscodeAbsolutePath = "";
 
 
 var currentMacroDirectory = currentmacrodirectory();
@@ -19,7 +19,7 @@ var gitRootDir = getarg(0);
 function getVSCodeAbsolutePath() {
     if (!vscodeAbsolutePath) {
         try {
-            var success = openreg("CLASSESROOT", @"Applications\Code.exe\shell\open");
+            var success = openreg("CLASSESROOT", "Applications\\Code.exe\\shell\\open");
             if (success) {
                 vscodeAbsolutePath = getregstr("Icon");
                 vscodeAbsolutePath = vscodeAbsolutePath.replace(/"/g, '');
@@ -30,7 +30,7 @@ function getVSCodeAbsolutePath() {
     }
     if (!vscodeAbsolutePath) {
         try {
-            var success = openreg("CURRENTUSER", @"SOFTWARE\Classes\Applications\Code.exe\shell\open");
+            var success = openreg("CURRENTUSER", "SOFTWARE\\Classes\\Applications\\Code.exe\\shell\\open");
             if (success) {
                 vscodeAbsolutePath = getregstr("Icon");
                 vscodeAbsolutePath = vscodeAbsolutePath.replace(/"/g, '');
@@ -94,7 +94,7 @@ try {
 // 何も引数なしでVSCodeを実行するだけ
 function openVSCodeNoArgs() {
     // 対象のファイルなし
-    var command = sprintf(@"""%s"" ", vscodeAbsolutePath);
+    var command = sprintf('"%s"', vscodeAbsolutePath);
     openVSCodeCommand(command);
 }
 
@@ -131,16 +131,12 @@ function openVSCode(currentFileFullPath, cursorPos, gitRootDir) {
     if (gitRootDir) {
 
         // ソースビューへと自動で移行。対象のリポジトリを作業場として、対象のファイルをunicodeベース換算でのlinenoとcolumn
-        var command = sprintf("""
-                              "%s" -n -g "%s" "%s:%d:%d" --extensionDevelopmentPath="%s"
-                              """,
+        var command = sprintf('"%s" -n -g "%s" "%s:%d:%d" --extensionDevelopmentPath="%s"',
                               vscodeAbsolutePath, workSpaceDir, currentFileFullPath, cursorPos.lineno, cursorPos.column + 1, currentMacroDirectory + "\\vscode_extension");
     } else {
 
         // 対象のディレクトリを作業場として、対象のファイルをunicodeベース換算でのlinenoとcolumn
-        var command = sprintf("""
-                              "%s" -n -g "%s" "%s:%d:%d"
-                              """,
+        var command = sprintf('"%s" -n -g "%s" "%s:%d:%d"',
                               vscodeAbsolutePath, workSpaceDir, currentFileFullPath, cursorPos.lineno, cursorPos.column + 1);
     }
 
