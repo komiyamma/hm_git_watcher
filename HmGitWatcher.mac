@@ -30,6 +30,21 @@ if (typeof gitWatcherComponent !== 'undefined') {
 // 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
+function onGitReposFound(repoFullPath) {
+    // なぜかここに必要な模様。
+    hidemaruversion("9.25.99");
+    repoFullPath = repoFullPath.replace(/\//g, '\\');
+    gRepoFullPath = repoFullPath;
+
+    if (!repoFullPath) {
+        return;
+    }
+
+    hidemaru.setTimeout( function() {
+        create100MBLimitPreCommitFile(repoFullPath);
+    }, 0);
+}
+
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
@@ -124,18 +139,9 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     );
 }
 
-function onGitReposFound(repoFullPath) {
-    // なぜかここに必要な模様。
-    hidemaruversion("9.25.99");
-    repoFullPath = repoFullPath.replace(/\//g, '\\');
-    gRepoFullPath = repoFullPath;
-
-    hidemaru.setTimeout( function() {
-        create100MBLimitPreCommitFile(repoFullPath);
-    }, 0);
-}
-
-// 監視コンポーネント・リスタート。変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
+// 監視コンポーネント・リスタート。
+// リポジトリを発見したら「onGitReposFound」を呼び出す。  
+// 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
 gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
 
