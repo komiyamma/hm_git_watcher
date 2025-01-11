@@ -146,8 +146,7 @@ function openVSCode(currentFileFullPath, cursorPos, gitRootDir) {
 function openVSCodeCommand(command) {
     runex(command
         , 0     //sync   0:async, 1:sync
-        , 0, "" //stdin  0:none, 1:auto, 2:<file, 3:(reserved),
-        //       4:current content, 5:selection
+        , 0, "" //stdin  0:none, 1:auto, 2:<file, 3:(reserved),   4:current content, 5:selection
         , 0, "" //stdout 0:none, 1:auto, 2:>file 3:>>file, 4:new window,
         //       5:insert, 6:replace, 7:>output pane, 8:>>output pane
         , 0, "" //stderr 0:none, 1:auto or >>stdout, 2-8:same as stdout's param

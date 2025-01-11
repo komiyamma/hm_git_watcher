@@ -1,4 +1,11 @@
-﻿hidemaruversion "9.25.99";
+﻿/*
+ * HmGitWatcher v1.0.0.1
+ *
+ * Copyright (c) 2024 Akitsugu Komiyama
+ * under the MIT License
+ */
+
+hidemaruversion "9.25.99";
 
 // 無題スタートは対象外
 if (filename2 == "") {
