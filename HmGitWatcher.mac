@@ -41,7 +41,7 @@ if (typeof gitWatcherComponent !== 'undefined') {
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 function onGitReposFound(repoFullPath) {
-    
+
     hidemaruversion("9.25.99"); // なぜかここに必要な模様。
 
     repoFullPath = repoFullPath.replace(/\//g, '\\');
