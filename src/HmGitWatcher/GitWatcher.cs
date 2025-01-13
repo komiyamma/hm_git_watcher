@@ -416,13 +416,13 @@ public partial class HmGitWatcher
                 Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 8; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
                     break;
                 }
-                await Task.Delay(1000, cancellationToken); // 1秒間隔
+                await Task.Delay(500, cancellationToken); // 1秒間隔
                 if (isChangeNotify)
                 {
                     // Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
