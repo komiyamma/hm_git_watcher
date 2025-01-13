@@ -1,9 +1,10 @@
 ﻿/*
- * HmGitWatcher v1.0.0.1b
+ * HmGitWatcher v1.0.0.1
  *
  * Copyright (c) 2024 Akitsugu Komiyama
  * under the MIT License
  */
+
 
 hidemaruversion "9.25.99";
 
@@ -19,6 +20,8 @@ execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 execjs currentmacrodirectory + "\\HmGitWatcher100MBLimit.js";
 
 js {
+
+var use100MBLimitPreCommitFile = true;
 
 debuginfo(2);
 
@@ -56,9 +59,11 @@ function onGitReposFound(repoFullPath) {
         invisible: 0
     });
 
-    hidemaru.setTimeout( function() {
-        create100MBLimitPreCommitFile(repoFullPath);
-    }, 0);
+    if (use100MBLimitPreCommitFile) {
+	    hidemaru.setTimeout( function() {
+	        create100MBLimitPreCommitFile(repoFullPath);
+	    }, 0);
+    }
 }
 
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
