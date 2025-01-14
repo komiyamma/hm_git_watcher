@@ -8,6 +8,18 @@
 
 hidemaruversion "9.25.99";
 
+
+
+// 保存直前と直後
+if (event == 3) {
+    if (getstaticvariable("HmGitWatcherLastFile", 2) == filename2) {
+        // 前回HmGitWatcher開始時と同じファイルなのでパス
+        endmacro;
+    }
+}
+
+setstaticvariable "HmGitWatcherLastFile", filename2, 2; // プロセス内のみでの保持。マクロ終了後も維持。
+
 // 無題スタートは対象外
 if (filename2 == "") {
     endmacro;
@@ -23,7 +35,6 @@ js {
 
 var use100MBLimitPreCommitFile = true;
 
-debuginfo(2);
 
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
 var currentMacroDirectory = currentmacrodirectory();
@@ -60,9 +71,9 @@ function onGitReposFound(repoFullPath) {
     });
 
     if (use100MBLimitPreCommitFile) {
-	    hidemaru.setTimeout( function() {
-	        create100MBLimitPreCommitFile(repoFullPath);
-	    }, 0);
+        hidemaru.setTimeout( function() {
+            create100MBLimitPreCommitFile(repoFullPath);
+        }, 0);
     }
 }
 
@@ -204,7 +215,7 @@ function getHtmlUrl() {
     }
     // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
     if (gitWatcherComponent) {
-    	urlFullPath = gitWatcherComponent.ConvertToUrl(urlFullPath);
+        urlFullPath = gitWatcherComponent.ConvertToUrl(urlFullPath);
     }
 
     return urlFullPath;
