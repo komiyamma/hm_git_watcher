@@ -8,10 +8,13 @@
 
 hidemaruversion "9.25.99";
 
-
-// 「ファイルを保存時」以降のevent番号に対応する自動起動マクロから呼ばれている際は、
+// 「ファイルを保存時」の自動起動マクロから呼ばれている際は、
 // 前回チェック時と同じファイル名なら何もしない。
-if (event >= 3) {
+if (event == 3) {
+    // 保存直前からの呼び出しは対象外。保存直後｛ event==3 && geteventparam(0)==1 ｝から呼び出すこと
+    if (geteventparam(0) == 0) {
+        endmacro;
+    }
     if (getstaticvariable("HmGitWatcherLastFile", 2) == filename2) {
         // 前回HmGitWatcher開始時と同じファイルなのでパス
         endmacro;
@@ -154,6 +157,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
             if (retryCounter > 5) {
                 writeOutputPane("レンダリングペイン更新時に不明なエラーが発生しました");
+                hidemaru.clearInterval(updateRetry);
                 return;
             }
 
