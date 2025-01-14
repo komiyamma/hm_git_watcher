@@ -9,21 +9,26 @@
 hidemaruversion "9.25.99";
 
 
-
-// 保存直前と直後
-if (event == 3) {
+// 「ファイルを保存時」以降のevent番号に対応する自動起動マクロから呼ばれている際は、
+// 前回チェック時と同じファイル名なら何もしない。
+if (event >= 3) {
     if (getstaticvariable("HmGitWatcherLastFile", 2) == filename2) {
         // 前回HmGitWatcher開始時と同じファイルなのでパス
         endmacro;
     }
 }
 
-setstaticvariable "HmGitWatcherLastFile", filename2, 2; // プロセス内のみでの保持。マクロ終了後も維持。
+setstaticvariable "HmGitWatcherLastFile", filename2, 2; // 最後の解析ファイルフルパスを保持(不要なHmGitWatcher駆動を避ける)
 
 // 無題スタートは対象外
 if (filename2 == "") {
     endmacro;
 }
+
+
+
+
+
 
 jsmode @"JScript\HmGitWatcher";
 
@@ -48,12 +53,10 @@ if (typeof gitWatcherComponent !== 'undefined') {
     gitWatcherComponent.Stop();
 }
 
-// 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を呼び出す。
+// 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を非同期で呼び出す。
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 function onGitReposFound(repoFullPath) {
-
-    hidemaruversion("9.25.99"); // なぜかここに必要な模様。
 
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
@@ -64,11 +67,7 @@ function onGitReposFound(repoFullPath) {
         return;
     }
 
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,
-        invisible: 0
-    });
+    showRenderPane();
 
     if (use100MBLimitPreCommitFile) {
         hidemaru.setTimeout( function() {
@@ -80,8 +79,6 @@ function onGitReposFound(repoFullPath) {
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
-
-    hidemaruversion("9.25.99"); // なぜかここに必要な模様。
 
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
@@ -179,6 +176,14 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
 
+function showRenderPane() {
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 1,
+        invisible: 0
+    });
+}
+
 
 // レンダリングを閉じる
 function closeRenderPane() {
@@ -234,7 +239,7 @@ function openRenderPane() {
     // funcIDとbgcolorを伝えながら、URLを開く
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
-    //実行の順番(1)
+    // invisibleな状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,
