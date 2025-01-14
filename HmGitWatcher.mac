@@ -16,7 +16,7 @@ var use100MBLimitPreCommitFile = true;
 
 }
 
-execjs currentmacrodirectory + "\\HmGitWatcherCheckMacroReExecute.js";
+execjs currentmacrodirectory + "\\HmGitWatcherIsMacroReExecute.js";
 if (!#IsMacroReExecute) { endmacro; }
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
