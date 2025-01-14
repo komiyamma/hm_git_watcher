@@ -128,13 +128,8 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
 
         if (readyState == "complete") {
-            var jscommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
-            renderpanecommand({
-                target: strRanderPaneName,
-                uri: jscommand,
-                show: 1,
-                invisible: 0
-            });
+            var jsCommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
+            updateRenderPane(jsCommand);
 
             return true;
         }
@@ -193,6 +188,16 @@ function closeRenderPane() {
         show: 0
     });
 }
+
+function updateRenderPane(jsCommand) {
+    renderpanecommand({
+        target: strRanderPaneName,
+        uri: jsCommand,
+        show: 1,
+        invisible: 0
+    });
+}
+
 
 function getBGColor() {
     // BGR順 → RGB順とする。
