@@ -125,9 +125,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     }
 
     function HtmlUpdate() {
-        var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
-
-        if (readyState == "complete") {
+        if (isRenderPaneReadyStateComplete()) {
             var jsCommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
             updateRenderPane(jsCommand);
 
@@ -171,21 +169,26 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
 
-function showRenderPane() {
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,
-        invisible: 0
-    });
-}
 
+function isRenderPaneReadyStateComplete() {
+    var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
+    return readyState == "complete";
+}
 
 // レンダリングを閉じる
 function closeRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
-        invisible: 1,
-        show: 0
+        show: 0,      // コンポーネント破棄
+        invisible: 1  // 隠す
+    });
+}
+
+function showRenderPane() {
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
+        invisible: 0 // 表示する
     });
 }
 
@@ -193,8 +196,8 @@ function updateRenderPane(jsCommand) {
     renderpanecommand({
         target: strRanderPaneName,
         uri: jsCommand,
-        show: 1,
-        invisible: 0
+        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
+        invisible: 0  // 表示する
     });
 }
 
@@ -244,11 +247,11 @@ function openRenderPane() {
     // funcIDとbgcolorを伝えながら、URLを開く
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
-    // invisibleな状態で配置しておく
+    // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,
-        show: 1,
-        invisible: 1,
+        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
+        invisible: 1, // 隠した状態での配置
         uri: targetUrl,
         place: "overlay",
         align: "right",
