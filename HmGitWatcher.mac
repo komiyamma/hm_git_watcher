@@ -15,9 +15,10 @@ js {
 var use100MBLimitPreCommitFile = true;
 
 }
+// ◯◯するべき、というフラグ名はプログラムではどんな名前になるべきですか？
 
-execjs currentmacrodirectory + "\\HmGitWatcherIsMacroReExecute.js";
-if (!#IsMacroReExecute) { endmacro; }
+execjs currentmacrodirectory + "\\HmGitWatcherMacroReExecute.js";
+if (!#ShouldMacroReExecute) { endmacro; }
 
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
 

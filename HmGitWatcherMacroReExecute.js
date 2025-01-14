@@ -1,4 +1,4 @@
-function checkIfMacroReExecute() {
+function shouldMacroReExecute() {
     // 「ファイルを保存時」の自動起動マクロから呼ばれている際は、
     // 前回チェック時と同じファイル名なら何もしない。
     if (event() == 3) {
@@ -22,5 +22,5 @@ function checkIfMacroReExecute() {
     return 1;
 }
 
-setVar("#IsMacroReExecute", checkIfMacroReExecute());
+setVar("#ShouldMacroReExecute", shouldMacroReExecute());
 
