@@ -106,6 +106,7 @@ public partial class HmGitWatcher
                     if (!string.IsNullOrEmpty(args.Data))
                     {
                         Hm.OutputPane.Output(args.Data + "\r\n");
+                        Stop();
                     }
                 };
 
@@ -121,6 +122,7 @@ public partial class HmGitWatcher
         catch (Exception ex)
         {
             Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            Stop();
             return null; // エラー発生時もnullを返す
         }
     }
