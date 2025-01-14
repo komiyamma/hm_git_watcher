@@ -430,7 +430,7 @@ public partial class HmGitWatcher
                     isChangeNotify = false;
                     break;
                 }
-                await Task.Delay(500, cancellationToken); // 1秒間隔
+                await Task.Delay(500, cancellationToken); // 0.5秒間隔
             }
         }
 
