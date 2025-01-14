@@ -8,41 +8,24 @@
 
 hidemaruversion "9.25.99";
 
-// 「ファイルを保存時」の自動起動マクロから呼ばれている際は、
-// 前回チェック時と同じファイル名なら何もしない。
-if (event == 3) {
-    // 保存直前からの呼び出しは対象外。保存直後｛ event==3 && geteventparam(0)==1 ｝から呼び出すこと
-    if (geteventparam(0) == 0) {
-        endmacro;
-    }
-    if (getstaticvariable("HmGitWatcherLastFile", 2) == filename2) {
-        // 前回HmGitWatcher開始時と同じファイルなのでパス
-        endmacro;
-    }
-}
-
-setstaticvariable "HmGitWatcherLastFile", filename2, 2; // 最後の解析ファイルフルパスを保持(不要なHmGitWatcher駆動を避ける)
-
-// 無題スタートは対象外
-if (filename2 == "") {
-    endmacro;
-}
-
-
-
-
-
-
 jsmode @"JScript\HmGitWatcher";
 
+js {
+
+var use100MBLimitPreCommitFile = true;
+
+}
+
+execjs currentmacrodirectory + "\\HmGitWatcherCheckMacroReExecute.js";
+if (!#IsMacroReExecute) { endmacro; }
+
 execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
+
+execjs currentmacrodirectory + "\\HmGitWatcherRenderPane.js";
 
 execjs currentmacrodirectory + "\\HmGitWatcher100MBLimit.js";
 
 js {
-debuginfo(2);
-debuginfo("スタート");
-var use100MBLimitPreCommitFile = true;
 
 
 // カレントマクロディレクトリはpostExecMacroMemoryなどしてしまうと拾うことが出来なくなるので、控えておく。
@@ -61,6 +44,7 @@ if (typeof gitWatcherComponent !== 'undefined') {
 var gitWatcherComponent = createobject(currentMacroDirectory + "\\HmGitWatcher.comhost.dll", "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
 
 function onGitReposFound(repoFullPath) {
+    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
@@ -83,6 +67,7 @@ function onGitReposFound(repoFullPath) {
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
+    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     repoFullPath = repoFullPath.replace(/\//g, '\\');
     gRepoFullPath = repoFullPath;
@@ -173,101 +158,6 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
 gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
-
-
-function isRenderPaneReadyStateComplete() {
-    var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
-    return readyState == "complete";
-}
-
-// レンダリングを閉じる
-function closeRenderPane() {
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 0,      // コンポーネント破棄
-        invisible: 1  // 隠す
-    });
-}
-
-function showRenderPane() {
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0 // 表示する
-    });
-}
-
-function updateRenderPane(jsCommand) {
-    renderpanecommand({
-        target: strRanderPaneName,
-        uri: jsCommand,
-        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0  // 表示する
-    });
-}
-
-
-function getBGColor() {
-    // BGR順 → RGB順とする。
-    function convertBGRtoRGB(bgrColor) {
-        var red = (bgrColor & 0xFF);         // 下位8ビットが青
-        var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
-        var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
-
-        return (red << 16) | (green << 8) | blue; // RGBの順番で結合
-    }
-
-    // 背景色を文字列化する
-    var numBGColor = getconfigcolor(0, 1);
-    numBGColor = convertBGRtoRGB(numBGColor);
-
-    return sprintf("%06x", numBGColor);
-}
-
-function getHtmlUrl() {
-
-    // HmGitWatcher.htmlを使ってボタンをレンダリング
-    var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
-    if (!existfile(urlFullPath)) {
-        message(urlFullPath + "が存在しません")
-    }
-    // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
-    if (gitWatcherComponent) {
-        urlFullPath = gitWatcherComponent.ConvertToUrl(urlFullPath);
-    }
-
-    return urlFullPath;
-}
-
-
-function openRenderPane() {
-
-    var bgColor = getBGColor();
-
-    var htmlUrl = getHtmlUrl();
-
-    // ボタンが押された時の関数
-    var callFuncId = hidemaru.getFunctionId(onButtonPushed);
-
-    // funcIDとbgcolorを伝えながら、URLを開く
-    var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
-
-    // invisibleな隠した状態で配置しておく
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0, // 隠した状態での配置
-        uri: targetUrl,
-        place: "overlay",
-        align: "right",
-        initialize: "async",
-        x: 32,
-        y: 26,
-        cx: 36,
-        cy: 140,
-    });
-
-}
 
 
 openRenderPane();
