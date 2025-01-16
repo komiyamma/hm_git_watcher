@@ -9,6 +9,11 @@ public partial class HmGitWatcher
     Form form;
     public void ShowGitCommitForm(dynamic func)
     {
+        if (form != null)
+        {
+            form.Close();
+            form = null;
+        }
         form = new GitCommitForm(func);
         form.Show();
     }
@@ -16,12 +21,12 @@ public partial class HmGitWatcher
 
 internal class GitCommitForm : Form
 {
-TextBox commentTextBox;
-Button submitButton;
+    TextBox commentTextBox;
+    Button submitButton;
 
-dynamic jsCallBackFunc = null;
+    dynamic jsCallBackFunc = null;
 
-public GitCommitForm(dynamic func)
+    public GitCommitForm(dynamic func)
     {
         jsCallBackFunc = func;
 
@@ -93,57 +98,57 @@ public GitCommitForm(dynamic func)
                 BtnSubmit_Click(null, e);
             }
         }
-    }   
+    }
 
     private void BtnSubmit_Click(object sender, EventArgs e)
-{
-    if (jsCallBackFunc != null)
     {
-        try
+        if (jsCallBackFunc != null)
         {
-            jsCallBackFunc(commentTextBox.Text);
-        }
-        catch (Exception ex)
-        {
-            // Hm.OutputPane.Output(ex.Message + "\r\n");
-        }
-        finally
-        {
-            commentTextBox.Text = "";
-            this.Close();
+            try
+            {
+                jsCallBackFunc(commentTextBox.Text);
+            }
+            catch (Exception ex)
+            {
+                // Hm.OutputPane.Output(ex.Message + "\r\n");
+            }
+            finally
+            {
+                commentTextBox.Text = "";
+                this.Close();
+            }
         }
     }
-}
 
-private void Form1_Resize(object sender, EventArgs e)
-{
-    // フォームリサイズ時にTextBoxの位置とサイズを調整
-    AdjustTextBoxPositionAndSize();
-    AdjustButtonPositionAndSize();
-}
+    private void Form1_Resize(object sender, EventArgs e)
+    {
+        // フォームリサイズ時にTextBoxの位置とサイズを調整
+        AdjustTextBoxPositionAndSize();
+        AdjustButtonPositionAndSize();
+    }
 
-private void AdjustTextBoxPositionAndSize()
-{
-    // パディング値
-    int padding = 10;
+    private void AdjustTextBoxPositionAndSize()
+    {
+        // パディング値
+        int padding = 10;
 
-    // TextBoxの新しい位置とサイズを計算
-    int x = padding;
-    int y = padding;
-    int width = this.ClientSize.Width - 2 * padding;
-    int height = this.ClientSize.Height - 2 * padding - 40;
+        // TextBoxの新しい位置とサイズを計算
+        int x = padding;
+        int y = padding;
+        int width = this.ClientSize.Width - 2 * padding;
+        int height = this.ClientSize.Height - 2 * padding - 40;
 
-    // TextBoxの位置とサイズを設定
-    this.commentTextBox.Location = new Point(x, y);
-    this.commentTextBox.Size = new Size(width, height);
-}
+        // TextBoxの位置とサイズを設定
+        this.commentTextBox.Location = new Point(x, y);
+        this.commentTextBox.Size = new Size(width, height);
+    }
 
-private void AdjustButtonPositionAndSize()
-{
-    // ボタンの位置を計算
-    int x = (this.ClientSize.Width - submitButton.Width) / 2;
-    int y = this.ClientSize.Height - submitButton.Height - 10; // 下部からのマージンを10とする
+    private void AdjustButtonPositionAndSize()
+    {
+        // ボタンの位置を計算
+        int x = (this.ClientSize.Width - submitButton.Width) / 2;
+        int y = this.ClientSize.Height - submitButton.Height - 10; // 下部からのマージンを10とする
 
-    this.submitButton.Location = new Point(x, y);
-}
+        this.submitButton.Location = new Point(x, y);
+    }
 }
