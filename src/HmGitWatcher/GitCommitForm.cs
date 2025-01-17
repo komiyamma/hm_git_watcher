@@ -20,19 +20,10 @@ public partial class HmGitWatcher
     }
 }
 
-internal class GitCommitForm : Form
+internal partial class GitCommitForm : Form
 {
-    TextBox commentTextBox;
-    Button submitButton;
+    // GetWindowRect用。hidemaru.getCurrentWindowHandle() 相当のRECT取得用
 
-    dynamic jsCallBackFunc = null;
-
-    // P/Invoke declaration for GetWindowRect
-    [DllImport("user32.dll")]
-    [return: MarshalAs(UnmanagedType.Bool)]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-    // RECT structure definition
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT
     {
@@ -42,27 +33,46 @@ internal class GitCommitForm : Form
         public int Bottom;
     }
 
-    double dpiScale = 1.0;
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
+
+
+    // GetDpiForWindow用。hidemaru.getCurrentWindowHandle() 相当のDPI取得用
     [DllImport("user32.dll", SetLastError = true)]
     private static extern int GetDpiForWindow(IntPtr hWnd);
 
-    private int GetDpiFromWindowHandle(long hWnd)
+    private double GetDpiScaleFromWindowHandle(long hWnd)
     {
         if ((IntPtr)hWnd == IntPtr.Zero)
         {
             // throw new ArgumentException("ウィンドウハンドルが無効です。", "hWnd");
-            return 0;
+            return 1;
         }
 
         int dpi = GetDpiForWindow((IntPtr)hWnd);
         if (dpi == 0)
         {
-            throw new Exception("DPIの取得に失敗しました");
+            // throw new Exception("DPIの取得に失敗しました");
+            return 1;
         }
-        return dpi; // XとYは同じ値になるはずです
+
+        // 正しく取れたようだ
+        return dpi / 96;
     }
 
+};
+
+
+internal partial class GitCommitForm : Form
+{
+    TextBox commentTextBox;
+    Button submitButton;
+
+    dynamic jsCallBackFunc = null;
+
+    double dpiScale = 1.0;
 
     public GitCommitForm(dynamic func)
     {
@@ -81,8 +91,7 @@ internal class GitCommitForm : Form
     private void InitDPIScale()
     {
         // DPIスケールを取得
-        int dpi = GetDpiFromWindowHandle((long)Hm.WindowHandle);
-        dpiScale = dpi / 96.0;
+        dpiScale = GetDpiScaleFromWindowHandle((long)Hm.WindowHandle);
     }
 
     private void InitForm()
