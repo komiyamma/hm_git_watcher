@@ -79,7 +79,7 @@ function openRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0, // 隠した状態での配置
+        invisible: 1, // 隠した状態での配置
         uri: targetUrl,
         place: "overlay",
         align: "right",
