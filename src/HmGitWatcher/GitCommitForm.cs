@@ -145,12 +145,6 @@ internal partial class GitCommitForm : Form
             this.StartPosition = FormStartPosition.Manual;
             this.Left = rect.Left + (rect.Right - rect.Left - this.Width) / 2;
             this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
-
-            if (IsFormOutOfScreen())
-            {
-                // 画面外に出てしまう場合は、画面中央に表示
-                this.StartPosition = FormStartPosition.CenterScreen;
-            }
         }
 
         // 編集エリアのハンドルを取得(これは理論上はハズだが、絶対とまでは言えないかもしれない。またウィンドウは非表示かも？)
@@ -164,26 +158,11 @@ internal partial class GitCommitForm : Form
             this.StartPosition = FormStartPosition.Manual;
             this.Left = rect.Left + (rect.Right - rect.Left - this.Width) / 2;
             this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
-
-            if (IsFormOutOfScreen())
-            {
-                // 画面外に出てしまう場合は、画面中央に表示
-                this.StartPosition = FormStartPosition.CenterScreen;
-            }
         }
 
         Resize += Form1_Resize;
         Shown += Form1_Shown;
     }
-
-    private bool IsFormOutOfScreen()
-    {
-        Rectangle bounds = this.Bounds;
-        Rectangle screen = Screen.FromControl(this).Bounds;
-
-        return !screen.IntersectsWith(bounds);
-    }
-
 
     private void Form1_Shown(object sender, EventArgs e)
     {
