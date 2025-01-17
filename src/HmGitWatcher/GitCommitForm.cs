@@ -22,8 +22,9 @@ public partial class HmGitWatcher
 
 internal partial class GitCommitForm : Form
 {
+    // ----------------------------------------------------------------
     // GetWindowRect用。hidemaru.getCurrentWindowHandle() 相当のRECT取得用
-
+    // ----------------------------------------------------------------
     [StructLayout(LayoutKind.Sequential)]
     private struct RECT
     {
@@ -39,11 +40,13 @@ internal partial class GitCommitForm : Form
 
 
 
+    // ----------------------------------------------------------------
     // GetDpiForWindow用。hidemaru.getCurrentWindowHandle() 相当のDPI取得用
+    // ----------------------------------------------------------------
     [DllImport("user32.dll", SetLastError = true)]
     private static extern int GetDpiForWindow(IntPtr hWnd);
 
-    private double GetDpiScaleFromWindowHandle(long hWnd)
+    private static double GetDpiScaleFromWindowHandle(long hWnd)
     {
         if ((IntPtr)hWnd == IntPtr.Zero)
         {
@@ -62,6 +65,33 @@ internal partial class GitCommitForm : Form
         return dpi / 96;
     }
 
+    // ----------------------------------------------------------------
+    // エディタ編集のハンドルを取得する。
+    // ----------------------------------------------------------------
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, string lpszWindow);
+
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool IsWindow(IntPtr hWnd);
+
+    private static IntPtr GetChildWindowHandleByClassName(IntPtr parentHandle, string className)
+    {
+        IntPtr childHandle = IntPtr.Zero;
+        IntPtr foundHandle = IntPtr.Zero;
+
+        // 子ウィンドウを順に検索し、指定されたクラス名を持つウィンドウを探す
+        while ((foundHandle = FindWindowEx(parentHandle, childHandle, className, null)) != IntPtr.Zero)
+        {
+            if (IsWindow(foundHandle))
+            {
+                return foundHandle; // 見つかったら返す
+            }
+            childHandle = foundHandle; // 次の検索のため更新
+        }
+
+        return IntPtr.Zero; // 見つからなかったら IntPtr.Zero を返す
+    }
 };
 
 
@@ -103,7 +133,7 @@ internal partial class GitCommitForm : Form
         Name = "コミットのコメント";
         Text = "コミットのコメント";
 
-        // 親ウィンドウのハンドルを取得
+        // 親ウィンドウのハンドルを取得(これは絶対にある。ただしウィンドウは非表示かも？)
         IntPtr hParentWindow = (IntPtr)Hm.WindowHandle;
         if (hParentWindow != IntPtr.Zero)
         {
@@ -111,24 +141,34 @@ internal partial class GitCommitForm : Form
             RECT rect = new RECT();
             GetWindowRect(hParentWindow, out rect);
 
-            // rectが画面外にある。
-            if (rect.Left < 0 || rect.Top < 0)
+            // 親ウィンドウの中央に表示
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = rect.Left + (rect.Right - rect.Left - this.Width) / 2;
+            this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
+
+            if (IsFormOutOfScreen())
             {
-                // 親ウィンドウが画面外にある場合は、画面中央に表示
+                // 画面外に出てしまう場合は、画面中央に表示
                 this.StartPosition = FormStartPosition.CenterScreen;
             }
-            else
-            {
-                // 親ウィンドウの中央に表示
-                this.StartPosition = FormStartPosition.Manual;
-                this.Left = rect.Left + (rect.Right - rect.Left - this.Width) / 2;
-                this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
+        }
 
-                if (IsFormOutOfScreen())
-                {
-                    // 画面外に出てしまう場合は、画面中央に表示
-                    this.StartPosition = FormStartPosition.CenterScreen;
-                }
+        // 編集エリアのハンドルを取得(これは理論上はハズだが、絶対とまでは言えないかもしれない。またウィンドウは非表示かも？)
+        IntPtr hEditWindow = GetChildWindowHandleByClassName(hParentWindow, "HM32CLIENT");
+        if (hEditWindow != IntPtr.Zero)
+        {
+            // 親ウィンドウの座標を取得
+            RECT rect = new RECT();
+            GetWindowRect(hEditWindow, out rect);
+            // rectが画面外にある。
+            this.StartPosition = FormStartPosition.Manual;
+            this.Left = rect.Left + (rect.Right - rect.Left - this.Width) / 2;
+            this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
+
+            if (IsFormOutOfScreen())
+            {
+                // 画面外に出てしまう場合は、画面中央に表示
+                this.StartPosition = FormStartPosition.CenterScreen;
             }
         }
 
