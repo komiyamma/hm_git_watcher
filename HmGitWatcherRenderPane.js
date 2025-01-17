@@ -61,7 +61,7 @@ function getHtmlUrl() {
 
     return urlFullPath;
 }
-
+debuginfo(2);
 
 function openRenderPane() {
 
@@ -75,6 +75,20 @@ function openRenderPane() {
     // funcIDとbgcolorを伝えながら、URLを開く
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
+    var defaultDpi = 96; // デフォルト
+    var coef = 1;
+    if (gitWatcherComponent) {
+        var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
+        if (currentWindowDpi > 0) {
+            coef = currentWindowDpi/defaultDpi;
+        }
+    }
+
+    var xDPI = Math.ceil(32 * coef);
+    var yDPI = Math.ceil(26 * coef);
+    var cxDPI = Math.ceil(36 * coef);
+    var cyDPI = Math.ceil(140 * coef);
+    
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,
@@ -84,10 +98,10 @@ function openRenderPane() {
         place: "overlay",
         align: "right",
         initialize: "async",
-        x: 32,
-        y: 26,
-        cx: 36,
-        cy: 140,
+        x: xDPI,
+        y: yDPI,
+        cx: cxDPI,
+        cy: cyDPI,
     });
 
 }
