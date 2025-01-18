@@ -63,10 +63,6 @@ function gitPullAll(repoFullPath) {
         return;
     }
 
-    if (gitPullProcess) {
-        return;
-    }
-
 	onStartGitPull();
 
     try {
@@ -105,10 +101,6 @@ var gitPushProcess;  // 初期化しないこと。再実行の際に、非同�
 function gitPushAll(repoFullPath) {
 
     if (!repoFullPath) {
-        return;
-    }
-
-    if (gitPushProcess) {
         return;
     }
 
@@ -170,10 +162,6 @@ var gitAddProcess;  // 初期化しないこと。再実行の際に、非同期
 function gitAdd(repoFullPath, comment) {
 
     if (!repoFullPath) {
-        return;
-    }
-
-    if (gitAddProcess || gitCommitProcess) {
         return;
     }
 
