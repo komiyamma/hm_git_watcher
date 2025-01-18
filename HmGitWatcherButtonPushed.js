@@ -49,8 +49,6 @@ function destroyProcess(process) {
             process.kill();
         }
     } catch (e) {
-    } finally {
-        process = null;
     }
 }
 
@@ -63,6 +61,10 @@ function gitPullAll(repoFullPath) {
         return;
     }
 
+    if (gitPullProcess) {
+        return;
+	}
+
 	onStartGitPull();
 
     try {
@@ -72,6 +74,7 @@ function gitPullAll(repoFullPath) {
         gitPullProcess.onClose(onCloseGitPull);
     } catch (e) {
         destroyProcess(gitPullProcess);
+        gitPullProcess = null;
         writeOutputPane(e);
     }
 }
@@ -91,6 +94,7 @@ function onStdErrReadAllGitPull(outputText) {
 function onCloseGitPull() {
     changeNotify();
     destroyProcess(gitPullProcess);
+    gitPullProcess = null;
 }
 
 
@@ -104,6 +108,10 @@ function gitPushAll(repoFullPath) {
         return;
     }
 
+    if (gitPushProcess) {
+        return;
+	}
+
 	onStartGitPush();
 
     try {
@@ -113,6 +121,7 @@ function gitPushAll(repoFullPath) {
         gitPushProcess.onClose(onCloseGitPush);
     } catch (e) {
         destroyProcess(gitPushProcess);
+        gitPushProcess = null;
         writeOutputPane(e);
     }
 }
@@ -133,6 +142,7 @@ function onStdErrReadAllGitPush(outputText) {
 function onCloseGitPush() {
     changeNotify();
     destroyProcess(gitPushProcess);
+    gitPushProcess = null;
 }
 
 
@@ -165,6 +175,10 @@ function gitAdd(repoFullPath, comment) {
         return;
     }
 
+    if (gitAddProcess || gitCommitProcess) {
+        return;
+	}
+
     onStartGitAdd();
 
     try {
@@ -173,10 +187,12 @@ function gitAdd(repoFullPath, comment) {
         gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
         gitAddProcess.onClose = function () {
             destroyProcess(gitAddProcess);
+            gitAddProcess = null;
             gitCommit(repoFullPath, comment);
         }
     } catch (e) {
         destroyProcess(gitAddProcess);
+        gitAddProcess = null;
         writeOutputPane(e);
     }
 }
@@ -217,6 +233,7 @@ function gitCommit(repoFullPath, comment) {
         gitCommitProcess.onClose(onCloseGitCommit);
     } catch (e) {
         destroyProcess(gitCommitProcess);
+        gitCommitProcess = null;
         writeOutputPane(e);
     }
 }
@@ -236,6 +253,7 @@ function onStdErrReadAllGitCommit(outputText) {
 function onCloseGitCommit() {
     changeNotify();
     destroyProcess(gitCommitProcess);
+	gitCommitProcess = null;
 }
 
 
