@@ -19,6 +19,7 @@ function shouldMacroReExecute() {
 		    return currentFileFullPath ? 1 : 0;
 	    }
 
+        // 保存直後、かつ、コンポーネントの残っている状態で、かつ、ファイル名が前回と同じであるならば、改めてマクロの続きを実行する必要はない。切り上げる。
         if (getstaticvariable("HmGitWatcherLastFile", 2) == currentFileFullPath) {
             // 前回HmGitWatcher開始時と同じファイルなのでパス
             return 0;
