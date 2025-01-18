@@ -249,7 +249,7 @@ public partial class HmGitWatcher
         ProcessStartInfo startInfo = new ProcessStartInfo
         {
             FileName = "git",
-            Arguments = "status --porcelain",
+            Arguments = "status --porcelain -z",
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             WorkingDirectory = workingDirectory,
@@ -264,15 +264,25 @@ public partial class HmGitWatcher
             string stdOutSum = "";
             string stdErrSum = "";
 
+
             using (Process process = new Process())
             {
+
                 process.StartInfo = startInfo;
 
                 process.OutputDataReceived += (sender, args) =>
                 {
                     if (!string.IsNullOrEmpty(args.Data))
                     {
-                        stdOutSum += args.Data;
+                        // ナル文字('\0')で分割
+                        string[] parts = args.Data.Split('\0');
+                        foreach(var part in parts)
+                        {
+                            if (part.Length > 0)
+                            {
+                                stdOutSum += part + "\r\n";
+                            }
+                        }
                     }
                 };
 
