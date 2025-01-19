@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openVscodeButton?.classList.add('active');
     }
 
-    window.HmGitWatcher_Update = updateButtonState;
+    window.HmGitWatcher_Update = HmGitWatcher_updateButtonState;
 
     function handleButtonClick(buttonId) {
         sendMessageToWebView(buttonId);
