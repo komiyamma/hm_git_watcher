@@ -147,7 +147,7 @@ internal partial class GitCommitForm : Form
             this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
         }
 
-        // 編集エリアのハンドルを取得(これは理論上はハズだが、絶対とまでは言えないかもしれない。またウィンドウは非表示かも？)
+        // 編集エリアのハンドルを取得(これは理論上はあるハズだが、絶対とまでは言えないかもしれない。またウィンドウは非表示かも？)
         IntPtr hEditWindow = GetChildWindowHandleByClassName(hParentWindow, "HM32CLIENT");
         if (hEditWindow != IntPtr.Zero)
         {
@@ -160,7 +160,7 @@ internal partial class GitCommitForm : Form
             this.Top = rect.Top + (rect.Bottom - rect.Top - this.Height) / 2;
         }
 
-        Resize += Form1_Resize;
+        Resize += Form_OnResize;
         Shown += Form1_Shown;
     }
 
@@ -195,12 +195,12 @@ internal partial class GitCommitForm : Form
             Font = new Font("MS UI Gothic", 16F, FontStyle.Regular, GraphicsUnit.Point, 128)
         };
         commentTextBox.Focus();
-        commentTextBox.KeyDown += TextBox_KeyEventHandler;
+        commentTextBox.KeyDown += TextBox_OnKeyDown;
 
         Controls.Add(commentTextBox);
     }
 
-    private void TextBox_KeyEventHandler(object sender, KeyEventArgs e)
+    private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
     {
         // リターンキーが押されていて
         if (e.KeyCode == Keys.Return)
@@ -233,7 +233,7 @@ internal partial class GitCommitForm : Form
         }
     }
 
-    private void Form1_Resize(object sender, EventArgs e)
+    private void Form_OnResize(object sender, EventArgs e)
     {
         // フォームリサイズ時にTextBoxの位置とサイズを調整
         AdjustTextBoxPositionAndSize();
