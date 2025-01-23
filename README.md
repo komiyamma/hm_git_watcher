@@ -7,4 +7,4 @@
 
 「秀丸エディタ」で「git」「github」を扱うためのコンポーネント
 
-https://秀丸マクロ.net/?page=nobu_tool_hm_git
+https://秀丸マクロ.net/?page=nobu_tool_hm_git_watcher
