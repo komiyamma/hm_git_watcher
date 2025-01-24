@@ -156,8 +156,8 @@ function gitCommentDialog(repoFullPath) {
         // 承認相当行為を押した時だけ「gitCommitAllCallBack」が実行される。
         gitWatcherComponent.ShowGitCommitForm(
             function (comment) {
-                 if (comment == "") comment = "コミット";
-                 // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「コミット」というコメントにする。
+                 if (comment == "") comment = "...";
+                 // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「...」という「続く」ということを意味するコメントにする。
 
                  // git add . へと移行
                  gitAdd(repoFullPath, comment);
