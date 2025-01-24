@@ -4,7 +4,7 @@ function shouldMacroReExecute() {
 
     // 「手動実行」か「ファイルを開いた直後」もしくは「ファイルを保存時」の場合に処理を継続
     if (eventId != 0 && eventId != 1 && eventId != 3) {
-        return false;
+        return 0;
     }
 
     var currentFileFullPath = filename2() || "";
