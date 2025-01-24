@@ -63,7 +63,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
             return null;
         }
     }
