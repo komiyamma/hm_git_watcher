@@ -17,10 +17,12 @@ body {
     height: 34px;
     padding: 0;
     border: none;
+    margin: 0;
     background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: all 0.1s ease-in-out; /* アニメーションを滑らかにする */
 }
 
 .command-button img {
@@ -32,10 +34,18 @@ body {
 .command-button.active {
     opacity: 1.0; /* アクティブ時の透明度 */
     cursor: pointer;
-    
 }
+.command-button.active:active {
+    padding-top: 1px;
+    padding-left: 1px;
+}
+
 </style>
 <script>
+// ドラッグ・アンド・ドロップは許可しない。画像をドラッグして秀丸の編集エリアなどにもっていくと妙な挙動になるので防止
+document.addEventListener('dragstart', (event) => {
+    event.preventDefault();
+});
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const callFuncId = Number(urlParams.get('callFuncId'));

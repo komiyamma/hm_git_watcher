@@ -41,7 +41,7 @@ body {
 
 </style>
 <script>
-// ドラッグ・アンド・ドロップは許可しない。
+// ドラッグ・アンド・ドロップは許可しない。画像をドラッグして秀丸の編集エリアなどにもっていくと妙な挙動になるので防止
 document.addEventListener('dragstart', (event) => {
     event.preventDefault();
 });
