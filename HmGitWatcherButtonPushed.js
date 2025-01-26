@@ -63,9 +63,9 @@ function gitPullAll(repoFullPath) {
 
     if (gitPullProcess) {
         return;
-	}
+    }
 
-	onStartGitPull();
+    onStartGitPull();
 
     try {
         gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
@@ -110,9 +110,9 @@ function gitPushAll(repoFullPath) {
 
     if (gitPushProcess) {
         return;
-	}
+    }
 
-	onStartGitPush();
+    onStartGitPush();
 
     try {
         gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
@@ -177,7 +177,7 @@ function gitAdd(repoFullPath, comment) {
 
     if (gitAddProcess || gitCommitProcess) {
         return;
-	}
+    }
 
     onStartGitAdd();
 
@@ -218,7 +218,7 @@ function gitCommit(repoFullPath, comment) {
         return;
     }
 
-	onStartGitCommit();
+    onStartGitCommit();
 
     try {
         // JSONエスケープでとりあえず安全にした後、
@@ -253,7 +253,7 @@ function onStdErrReadAllGitCommit(outputText) {
 function onCloseGitCommit() {
     changeNotify();
     destroyProcess(gitCommitProcess);
-	gitCommitProcess = null;
+    gitCommitProcess = null;
 }
 
 

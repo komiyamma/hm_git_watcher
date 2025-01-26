@@ -90,6 +90,10 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     else if (gitStatus.indexOf('use "git pull" to update') !== -1) {
         gitStatus = 1;
     }
+    // 未知だが、まぁ新たな同士
+    else if (gitStatus.indexOf('use "git pull" to ') !== -1) {
+        gitStatus = 1;
+    }
     // プルする必要はない
     else {
         gitStatus = 0;

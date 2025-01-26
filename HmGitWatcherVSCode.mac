@@ -71,12 +71,12 @@ try {
         throw "Visual Studio Codeが発見できませんでした。\nマクロ「HmOpenVSCodeFromHidemaru.mac」を編集し、変数「VSCodeAbsoluePath」にVisual Studio Codeのパスを設定してください。";
     }
 
-	var currentFileFullPath = hidemaru.getFileFullPath();
+    var currentFileFullPath = hidemaru.getFileFullPath();
 
     if (currentFileFullPath) {
 
-	    // VSCodeで開くカーソルポジションの取得
-	    var cursorPos = calcCenterPosition();
+        // VSCodeで開くカーソルポジションの取得
+        var cursorPos = calcCenterPosition();
 
         openVSCode(currentFileFullPath, cursorPos, gitRootDir);
 
