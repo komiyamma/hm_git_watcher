@@ -161,20 +161,27 @@ function openVSCodeCommand(command) {
 // 秀丸上のカーソルが画面内ならば、そこと同じ場所をVSCodeでもカーソルの位置とする
 // カーソルが画面外ならば、今秀丸で見えてる場所あたりをVSCodeで開く
 function calcCenterPosition() {
-    // 秀丸内で映っている画面の最初の行は、lineno換算（エディタ的）では何行目？
-    var screenTopLineNo = ytolineno(0, screentopy());
-    var linenoWCS = lineno();
-    var columnWCS = column_wcs();
+    try {
+        // 秀丸内で映っている画面の最初の行は、lineno換算（エディタ的）では何行目？
+        var screenTopLineNo = ytolineno(0, screentopy());
+        var linenoWCS = lineno();
+        var columnWCS = column_wcs();
 
-    // カーソルが画面からはみ出ているか？ （正確な判定をするにはあまりに迂遠なので、簡易判定）
-    if (linenoWCS < screenTopLineNo || screenTopLineNo + windowheight() < linenoWCS) {
-        // 画面外のカーソルの位置に移動するのは今ひとつなので、今秀丸で見てる場所に近しい画面になるように、当たりをつける。
-        // 「13」は完全にマニュアルなマジックナンバーであるが、概ね今秀丸で見ているトップの行の「13行くらい下の行」を開くように Visual Studio Code に伝えると、そこを画面中央に配置しようとするのでいい感じになる。
-        linenoWCS = screenTopLineNo + 13;
-        columnWCS = 0;
+        // カーソルが画面からはみ出ているか？ （正確な判定をするにはあまりに迂遠なので、簡易判定）
+        if (linenoWCS < screenTopLineNo || screenTopLineNo + windowheight() < linenoWCS) {
+            // 画面外のカーソルの位置に移動するのは今ひとつなので、今秀丸で見てる場所に近しい画面になるように、当たりをつける。
+            // 「13」は完全にマニュアルなマジックナンバーであるが、概ね今秀丸で見ているトップの行の「13行くらい下の行」を開くように Visual Studio Code に伝えると、そこを画面中央に配置しようとするのでいい感じになる。
+            linenoWCS = screenTopLineNo + 13;
+            columnWCS = 0;
+        }
+
+        if (columnWCS==null) {columnWCS = 0;}
+        if (linenoWCS==null) {linenoWCS = 1;}
+
+        return { "column": columnWCS, "lineno": linenoWCS }
+    } catch(e) {
     }
-
-    return { "column": columnWCS, "lineno": linenoWCS }
+    return { "column": 0, "lineno": 1 }
 }
 
 
