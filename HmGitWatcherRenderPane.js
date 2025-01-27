@@ -33,18 +33,19 @@ function updateRenderPane(jsCommand) {
 function getBGColor() {
     // BGR順 → RGB順とする。
     function convertBGRtoRGB(bgrColor) {
-        var red = (bgrColor & 0xFF);         // 下位8ビットが青
-        var green = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
-        var blue = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
+        var color_r = (bgrColor & 0xFF);         // 下位8ビットが青
+        var color_g = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
+        var color_b = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
 
-        return (red << 16) | (green << 8) | blue; // RGBの順番で結合
+        return (color_r << 16) | (color_g << 8) | color_b; // RGBの順番で結合
     }
 
-    // 背景色を文字列化する
-    var numBGColor = getconfigcolor(0, 1);
-    numBGColor = convertBGRtoRGB(numBGColor);
+    // BGRの順番の値なので、RGBにする
+    var numBGColorBGR = getconfigcolor(0, 1);
+    var numBGColorRGB = convertBGRtoRGB(numBGColorBGR);
 
-    return sprintf("%06x", numBGColor);
+    // 背景色を文字列化する
+    return sprintf("%06x", numBGColorRGB);
 }
 
 function getHtmlUrl() {
