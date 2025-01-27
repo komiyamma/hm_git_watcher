@@ -87,7 +87,7 @@ function openRenderPane() {
     var yDPI = Math.ceil(26 * dpiScale);
     var cxDPI = Math.ceil(36 * dpiScale);
     var cyDPI = Math.ceil(140 * dpiScale);
-    
+
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,
