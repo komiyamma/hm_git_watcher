@@ -44,7 +44,7 @@ internal partial class GitCommitForm : Form
     // GetDpiForWindow用。hidemaru.getCurrentWindowHandle() 相当のDPI取得用
     // ----------------------------------------------------------------
     [DllImport("user32.dll", SetLastError = true)]
-    private static extern int GetDpiForWindow(IntPtr hWnd);
+    private static extern uint GetDpiForWindow(IntPtr hWnd);
 
     private static double GetDpiScaleFromWindowHandle(long hWnd)
     {
@@ -54,7 +54,7 @@ internal partial class GitCommitForm : Form
             return 1;
         }
 
-        int dpi = GetDpiForWindow((IntPtr)hWnd);
+        uint dpi = GetDpiForWindow((IntPtr)hWnd);
         if (dpi == 0)
         {
             // throw new Exception("DPIの取得に失敗しました");
