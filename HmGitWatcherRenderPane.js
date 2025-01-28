@@ -63,6 +63,17 @@ function getHtmlUrl() {
     return urlFullPath;
 }
 
+function getDpiScale() {
+    var dpiScale = 1;
+    if (gitWatcherComponent) {
+        var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
+        if (currentWindowDpi > 0) {
+            dpiScale = currentWindowDpi / 96;
+        }
+    }
+    return dpiScale;
+}
+
 function openRenderPane() {
 
     var bgColor = getBGColor();
@@ -75,13 +86,7 @@ function openRenderPane() {
     // funcIDとbgcolorを伝えながら、URLを開く
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
-    var dpiScale = 1;
-    if (gitWatcherComponent) {
-        var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
-        if (currentWindowDpi > 0) {
-            dpiScale = currentWindowDpi/96;
-        }
-    }
+    var dpiScale = getDpiScale();
 
     var xDPI = Math.ceil(32 * dpiScale);
     var yDPI = Math.ceil(26 * dpiScale);
