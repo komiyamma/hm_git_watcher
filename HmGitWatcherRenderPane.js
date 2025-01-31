@@ -85,7 +85,6 @@ function startBGColorInterval() {
 }
 
 function stopBGColorInterval() {
-    // 背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
     if (typeof (colorTickInterval) != "undefined") {
         hidemaru.clearInterval(colorTickInterval);
     }
