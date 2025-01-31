@@ -5,7 +5,7 @@ namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
-    Form messagebox_form;
+    static Form messagebox_form;
     public void ShowAsyncMessageBoxForm(dynamic func, string title, string message, string button_text)
     {
         if (messagebox_form != null)

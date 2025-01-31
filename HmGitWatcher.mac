@@ -64,7 +64,8 @@ function onGitReposFound(repoFullPath) {
     }
 }
 
-var renderPaneUpdateRetry = 0;
+var renderPaneUpdateRetry; // 初期化しないこと。
+
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {

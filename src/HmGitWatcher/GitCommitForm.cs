@@ -7,7 +7,7 @@ namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
-    Form gitcomment_form;
+    static Form gitcomment_form;
     public void ShowGitCommitForm(dynamic func)
     {
         if (gitcomment_form != null)
