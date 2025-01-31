@@ -15,6 +15,7 @@ function isRenderPaneShowAndVisible() {
     return true;
 }
 
+
 // レンダリングを閉じる
 function closeRenderPane() {
     renderpanecommand({
@@ -45,7 +46,7 @@ function updateRenderPane(jsCommand) {
     });
 }
 
-// ----------- 編集ペインの背景をレンダリングペインへと伝える。nullを返す時は、改めて伝える必要がないということ ----------
+// ----------- 編集ペインの背景を取得する。nullを返す時は、取得しなおす必要がないということ ----------
 var lastBGColor = "";
 function getBGColor() {
     try {
@@ -77,6 +78,7 @@ function getBGColor() {
     return null;
 }
 
+// ---- 設定の変更などで、背景色を変更したら、それを反映される。同じファイルに対して背景を変更する結構かなりまれな行為なのでゆっくり反映で良いだろう。
 var bgColorTickInterval; // 初期化してはならない
 
 function startBGColorInterval() {
