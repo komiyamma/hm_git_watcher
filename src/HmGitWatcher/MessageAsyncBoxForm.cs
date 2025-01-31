@@ -1,26 +1,24 @@
-﻿using System;
-using System.Drawing;
+﻿using HmNetCOM;
 using System.Runtime.InteropServices;
-using HmNetCOM;
 
 namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
-    Form gitcomment_form;
-    public void ShowGitCommitForm(dynamic func)
+    Form messagebox_form;
+    public void ShowAsyncMessageBoxForm(dynamic func, string title, string message, string button_text)
     {
-        if (gitcomment_form != null)
+        if (messagebox_form != null)
         {
-            gitcomment_form.Close();
-            gitcomment_form = null;
+            messagebox_form.Close();
+            messagebox_form = null;
         }
-        gitcomment_form = new GitCommitForm(func);
-        gitcomment_form.Show();
+        messagebox_form = new AsyncMessageBoxForm(func, title, message, button_text);
+        messagebox_form.Show();
     }
 }
 
-internal partial class GitCommitForm : Form
+internal partial class AsyncMessageBoxForm : Form
 {
     // ----------------------------------------------------------------
     // GetWindowRect用。hidemaru.getCurrentWindowHandle() 相当のRECT取得用
@@ -95,26 +93,29 @@ internal partial class GitCommitForm : Form
 };
 
 
-internal partial class GitCommitForm : Form
+internal partial class AsyncMessageBoxForm : Form
 {
-    TextBox commentTextBox;
+    Label label;
+
     Button submitButton;
 
     dynamic jsCallBackFunc = null;
 
     double dpiScale = 1.0;
 
-    public GitCommitForm(dynamic func)
+    public AsyncMessageBoxForm(dynamic func, string title, string message, string button_text)
     {
+        this.Text = title;
+
         jsCallBackFunc = func;
         InitDPIScale();
 
         InitForm();
 
-        InitSubmitButton();
-        InitCommentTextBox();
+        InitSubmitButton(button_text);
+        InitLabel(message);
 
-        AdjustTextBoxPositionAndSize();
+        AdjustLabelPositionAndSize();
         AdjustButtonPositionAndSize();
     }
 
@@ -166,52 +167,46 @@ internal partial class GitCommitForm : Form
 
     private void Form1_Shown(object sender, EventArgs e)
     {
-        commentTextBox?.Focus();
+        label?.Focus();
     }
 
-    private void InitSubmitButton()
+    private void InitSubmitButton(string button_text)
     {
+        if (String.IsNullOrEmpty(button_text))
+        {
+            button_text = "OK";
+        }
+
         submitButton = new Button
         {
             Location = new System.Drawing.Point((int)(12 * dpiScale), (int)(220 * dpiScale)),
             Size = new System.Drawing.Size((int)(60 * dpiScale), (int)(32 * dpiScale)),
+            TabIndex = 0,
             Name = "コミット",
-            Text = "コミット"
+            Text = button_text
         };
+
+        submitButton.Focus();
+
         submitButton.Click += BtnSubmit_Click;
 
         Controls.Add(submitButton);
     }
 
-    private void InitCommentTextBox()
+    private void InitLabel(string message)
     {
-        commentTextBox = new TextBox
+        label = new Label
         {
             Location = new System.Drawing.Point((int)(12 * dpiScale), (int)(12 * dpiScale)),
-            Multiline = true,
-            Name = "textBox1",
+            Name = "label1",
+            Text = message,
             Size = new System.Drawing.Size((int)(260 * dpiScale), (int)(200 * dpiScale)),
-            TabIndex = 0,
             Font = new Font("MS UI Gothic", 16F, FontStyle.Regular, GraphicsUnit.Point, 128)
         };
-        commentTextBox.Focus();
-        commentTextBox.KeyDown += TextBox_OnKeyDown;
 
-        Controls.Add(commentTextBox);
+        Controls.Add(label);
     }
 
-    private void TextBox_OnKeyDown(object sender, KeyEventArgs e)
-    {
-        // リターンキーが押されていて
-        if (e.KeyCode == Keys.Return)
-        {
-            // CTRLキーも押されている時だけ、送信ボタンを押した相当にする。
-            if ((Control.ModifierKeys & Keys.Control) == Keys.Control)
-            {
-                BtnSubmit_Click(null, e);
-            }
-        }
-    }
 
     private void BtnSubmit_Click(object sender, EventArgs e)
     {
@@ -219,7 +214,7 @@ internal partial class GitCommitForm : Form
         {
             try
             {
-                jsCallBackFunc(commentTextBox.Text);
+                jsCallBackFunc();
             }
             catch (Exception ex)
             {
@@ -227,7 +222,6 @@ internal partial class GitCommitForm : Form
             }
             finally
             {
-                commentTextBox.Text = "";
                 this.Close();
             }
         }
@@ -236,11 +230,11 @@ internal partial class GitCommitForm : Form
     private void Form_OnResize(object sender, EventArgs e)
     {
         // フォームリサイズ時にTextBoxの位置とサイズを調整
-        AdjustTextBoxPositionAndSize();
+        AdjustLabelPositionAndSize();
         AdjustButtonPositionAndSize();
     }
 
-    private void AdjustTextBoxPositionAndSize()
+    private void AdjustLabelPositionAndSize()
     {
         // パディング値
         int padding = (int)(10 * dpiScale);
@@ -252,8 +246,8 @@ internal partial class GitCommitForm : Form
         int height = this.ClientSize.Height - 2 * padding - (int)(40 * dpiScale);
 
         // TextBoxの位置とサイズを設定
-        this.commentTextBox.Location = new Point(x, y);
-        this.commentTextBox.Size = new Size(width, height);
+        this.label.Location = new Point(x, y);
+        this.label.Size = new Size(width, height);
     }
 
     private void AdjustButtonPositionAndSize()
@@ -264,4 +258,5 @@ internal partial class GitCommitForm : Form
 
         this.submitButton.Location = new Point(x, y);
     }
+
 }

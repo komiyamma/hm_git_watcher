@@ -470,20 +470,46 @@ public partial class HmGitWatcher
 
     public void Stop()
     {
-        DesposeFileWatcher();
-
-        if (_cancellationTokenSource != null)
+        try
         {
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
-            _cancellationTokenSource = null;
-            // Hm.OutputPane.Output("Git監視を停止しました。\r\n");
+            DesposeFileWatcher();
+        }
+        catch (Exception ex)
+        {
+        }
+        try {
+            if (_cancellationTokenSource != null)
+            {
+                _cancellationTokenSource.Cancel();
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = null;
+                // Hm.OutputPane.Output("Git監視を停止しました。\r\n");
+            }
+        }
+        catch (Exception ex)
+        {
         }
 
-        if (form != null)
+        try {
+            if (gitcomment_form != null)
+            {
+                gitcomment_form.Close();
+                gitcomment_form = null;
+            }
+        }
+        catch (Exception ex)
         {
-            form.Close();
-            form = null;
+        }
+
+        try {
+            if (messagebox_form != null)
+            {
+                messagebox_form.Close();
+                messagebox_form = null;
+            }
+        }
+        catch (Exception ex)
+        {
         }
     }
 
