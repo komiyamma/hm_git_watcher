@@ -90,8 +90,8 @@ function openRenderPane() {
 
     var xDPI = Math.ceil(32 * dpiScale);
     var yDPI = Math.ceil(26 * dpiScale);
-    var cxDPI = Math.ceil(32 * dpiScale);
-    var cyDPI = Math.ceil(128 * dpiScale);
+    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
+    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
 
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
