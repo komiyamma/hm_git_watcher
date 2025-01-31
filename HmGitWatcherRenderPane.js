@@ -15,7 +15,6 @@ function isRenderPaneShowAndVisible() {
     return true;
 }
 
-
 // レンダリングを閉じる
 function closeRenderPane() {
     renderpanecommand({
@@ -49,44 +48,48 @@ function updateRenderPane(jsCommand) {
 // ----------- 編集ペインの背景をレンダリングペインへと伝える。nullを返す時は、改めて伝える必要がないということ ----------
 var lastBGColor = "";
 function getBGColor() {
-    var curNormalColorJson = getconfigcolor({ "normal": "*" });
+    try {
+        var curNormalColorJson = getconfigcolor({ "normal": "*" });
 
-    if (!curNormalColorJson) {
-        return null;
-    }
+        if (!curNormalColorJson) {
+            return null;
+        }
 
-    var bgColor = curNormalColorJson.normal.back;
+        var bgColor = curNormalColorJson.normal.back;
 
-    if (bgColor == lastBGColor) {
-        return null;
-    }
+        if (bgColor == lastBGColor) {
+            return null;
+        }
 
-    lastBGColor = bgColor;
+        lastBGColor = bgColor;
 
-    if (gitWatcherComponent) {
-        try {
+        if (gitWatcherComponent) {
             bgColor = gitWatcherComponent.ConvertSystemColorNameToRGB(curNormalColorJson.normal.back);
-        } catch (e) { }
+        }
+
+        bgColor = bgColor.replace("#", "");
+
+        return bgColor;
+
+    } catch (e) {
     }
 
-    bgColor = bgColor.replace("#", "");
-
-    return bgColor;
+    return null;
 }
 
-var colorTickInterval; // 初期化してはならない
+var bgColorTickInterval; // 初期化してはならない
 
 function startBGColorInterval() {
     // 同一ファイルに対して背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
-    if (typeof (colorTickInterval) != "undefined") {
-        hidemaru.clearInterval(colorTickInterval);
+    if (typeof (bgColorTickInterval) != "undefined") {
+        hidemaru.clearInterval(bgColorTickInterval);
     }
-    colorTickInterval = hidemaru.setInterval(checkBGColor, 5000);
+    bgColorTickInterval = hidemaru.setInterval(checkBGColor, 5000);
 }
 
 function stopBGColorInterval() {
-    if (typeof (colorTickInterval) != "undefined") {
-        hidemaru.clearInterval(colorTickInterval);
+    if (typeof (bgColorTickInterval) != "undefined") {
+        hidemaru.clearInterval(bgColorTickInterval);
     }
 }
 
@@ -103,7 +106,7 @@ function checkBGColor() {
             uri: jsCommand
         });
     } catch (e) {
-        hidemaru.clearInterval(colorTickInterval);
+        hidemaru.clearInterval(bgColorTickInterval);
     }
 }
 
