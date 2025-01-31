@@ -1,166 +1,301 @@
-function isRenderPaneReadyStateComplete() {
-    var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
-    return readyState == "complete";
+var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
+
+function onButtonPushed(command_label) {
+
+    gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
+    if (!gRepoFullPathAtPushButton) { return; }
+
+    try {
+        switch (command_label) {
+            /*
+            case "visible":
+                // 表示ペインを表示
+                showRenderPane();
+                break;
+            */
+            case "pull_all":
+                // 全ての変更をプル
+                gitPullAll(gRepoFullPathAtPushButton);
+                break;
+            case "push_all":
+                // 全ての変更をプッシュ
+                gitPushAll(gRepoFullPathAtPushButton);
+                break;
+            case "commit_all":
+                // コミットダイアログを表示
+                gitCommentDialog(gRepoFullPathAtPushButton);
+                break;
+              case "open_vscode":
+                // VSCodeを開く
+                openVSCode(gRepoFullPathAtPushButton);
+                break;
+            default:
+               // 対応するコマンドがない場合は何も処理しない
+               break;
+        }
+
+    } catch (error) {
+         // エラーが発生した場合は出力ペインにエラー内容を表示
+        writeOutputPane(error);
+    }}
+
+// 変化が起きたということを意図的に伝搬することによって、次の状態検知チェックまでの間隔を通常より速くする。
+function changeNotify() {
+    try {
+        if (gitWatcherComponent) {
+            gitWatcherComponent.ChangeNotify();
+        }
+    } catch (e) { }
 }
 
-function isRenderPaneShowAndVisible() {
-    var is_show = Number(renderpanecommand({ target: strRanderPaneName, get: "show" }));
-    var is_invisible = Number(renderpanecommand({ target: strRanderPaneName, get: "invisible" }));
-
-    // レンダリングペインを配置していない、もしくは、見えてない。
-    if (!is_show || is_invisible) {
-        return false;
+// プロセス明示的に閉じ。(どうも秀丸 hidemaru.runProcess は残るんじゃね？ 疑惑があるので意図して閉じる)
+function destroyProcess(process) {
+    try {
+        if (process) {
+            process.kill();
+        }
+    } catch (e) {
     }
-
-    return true;
 }
 
+// -------------------------- P U L L 用 -------------------------------------
 
-// レンダリングを閉じる
-function closeRenderPane() {
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 0,      // コンポーネント破棄
-        invisible: 1  // 隠す
-    });
-}
+var gitPullProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitPullAll(repoFullPath) {
 
-function showRenderPane() {
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0 // 表示する
-    });
-}
-
-// 背景が白なら、背景のミスマッチがないため、bgcolor伝達前に早めに表示をしてしまう。
-function checkAndShowBrowserPaneEarly() {
-    var bgcolor = getBGColor();
-    if (bgcolor == 0xFFFFFF) {
-        showRenderPane();
-    }
-}
-
-function updateRenderPane(jsCommand) {
-    renderpanecommand({
-        target: strRanderPaneName,
-        uri: jsCommand,
-        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 0  // 表示する
-    });
-}
-
-// ----------- 編集ペインの背景をレンダリングペインへと伝える。nullを返す時は、改めて伝える必要がないということ ----------
-var lastBGColor = "";
-function getBGColor() {
-    var curNormalColorJson = getconfigcolor({ "normal": "*" });
-
-    if (!curNormalColorJson) {
-        return null;
-    }
-
-    var bgColor = curNormalColorJson.normal.back;
-
-    if (bgColor == lastBGColor) {
-        return null;
-    }
-
-    lastBGColor = bgColor;
-
-    if (gitWatcherComponent) {
-        try {
-            bgColor = gitWatcherComponent.ConvertSystemColorNameToRGB(curNormalColorJson.normal.back);
-        } catch (e) { }
-    }
-
-    bgColor = bgColor.replace("#", "");
-
-    return bgColor;
-}
-
-/*
-// 背景色をチョクチョク変更することなどはないので、10秒に一度程度でよいだろう。
-if (typeof (colorTickInterval) != "undefined") {
-    hidemaru.clearInterval(colorTickInterval);
-}
-var colorTickInterval;
-colorTickInterval = hidemaru.setInterval(checkBGColor, 10000);
-
-function checkBGColor() {
-    var curBGColor = getBGColor();
-    if (!curBGColor) {
+    if (!repoFullPath) {
         return;
     }
 
-    if (isRenderPaneShowAndVisible() && isRenderPaneReadyStateComplete()) {
-        try {
-            var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
-            updateRenderPane(jsCommand);
-        } catch (e) {
-            hidemaru.clearInterval(colorTickInterval);
-        }
+    if (gitPullProcess) {
+        return;
+    }
+
+    onStartGitPull();
+
+    try {
+        gitPullProcess = hidemaru.runProcess("git pull", repoFullPath, "stdio", "utf8");
+        gitPullProcess.stdOut.onReadAll(onStdOutReadAllGitPull);
+        gitPullProcess.stdErr.onReadAll(onStdErrReadAllGitPull);
+        gitPullProcess.onClose(onCloseGitPull);
+    } catch (e) {
+        destroyProcess(gitPullProcess);
+        gitPullProcess = null;
+        writeOutputPane(e);
     }
 }
-*/
 
-function getHtmlUrl() {
+function onStartGitPull() {
+    writeOutputPane("------------ P U L L ------------");
+}
 
-    // HmGitWatcher.htmlを使ってボタンをレンダリング
-    var urlFullPath = currentMacroDirectory + "\\HmGitWatcher.html";
-    if (!existfile(urlFullPath)) {
-        message(urlFullPath + "が存在しません")
+function onStdOutReadAllGitPull(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onStdErrReadAllGitPull(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onCloseGitPull() {
+    changeNotify();
+    destroyProcess(gitPullProcess);
+    gitPullProcess = null;
+}
+
+
+
+// -------------------------- P U S H 用 -------------------------------------
+
+var gitPushProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitPushAll(repoFullPath) {
+
+    if (!repoFullPath) {
+        return;
     }
-    // Windowsタイプのファイルの絶対パスを、URLタイプに。(WebView2の方ならあるが)JScriptだとこれがないため、.NETから関数を借りてくる
+
+    if (gitPushProcess) {
+        return;
+    }
+
+    onStartGitPush();
+
+    try {
+        gitPushProcess = hidemaru.runProcess("git push", repoFullPath, "stdio", "utf8");
+        gitPushProcess.stdOut.onReadAll(onStdOutReadAllGitPush);
+        gitPushProcess.stdErr.onReadAll(onStdErrReadAllGitPush);
+        gitPushProcess.onClose(onCloseGitPush);
+    } catch (e) {
+        destroyProcess(gitPushProcess);
+        gitPushProcess = null;
+        writeOutputPane(e);
+    }
+}
+
+function onStartGitPush() {
+    writeOutputPane("------------ P U S H ------------");
+}
+
+
+function onStdOutReadAllGitPush(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onStdErrReadAllGitPush(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onCloseGitPush() {
+    changeNotify();
+    destroyProcess(gitPushProcess);
+    gitPushProcess = null;
+}
+
+
+
+// -------------------------- C O M M I T 用 -------------------------------------
+
+function gitCommentDialog(repoFullPath) {
     if (gitWatcherComponent) {
-        urlFullPath = gitWatcherComponent.ConvertToUrl(urlFullPath);
+
+        // 先にコミット用コメントの画面。閉じたら何もしないキャンセル相当になる。
+        // 承認相当行為を押した時だけ「gitCommitAllCallBack」が実行される。
+        gitWatcherComponent.ShowGitCommitForm(
+            function (comment) {
+                 if (comment == "") comment = "...";
+                 // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「...」という「続く」ということを意味するコメントにする。
+
+                 // git add . へと移行
+                 gitAdd(repoFullPath, comment);
+            }
+        );
     }
 
-    return urlFullPath;
 }
 
-function getDpiScale() {
-    var dpiScale = 1;
-    if (gitWatcherComponent) {
-        var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
-        if (currentWindowDpi > 0) {
-            dpiScale = currentWindowDpi / 96;
+
+var gitAddProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitAdd(repoFullPath, comment) {
+
+    if (!repoFullPath) {
+        return;
+    }
+
+    if (gitAddProcess || gitCommitProcess) {
+        return;
+    }
+
+    onStartGitAdd();
+
+    try {
+        gitAddProcess = hidemaru.runProcess("git add .", repoFullPath, "stdio", "utf8");
+        gitAddProcess.stdOut.onReadAll(onStdOutReadAllGitAdd);
+        gitAddProcess.stdErr.onReadAll(onStdErrReadAllGitAdd);
+        gitAddProcess.onClose = function () {
+            destroyProcess(gitAddProcess);
+            gitAddProcess = null;
+            gitCommit(repoFullPath, comment);
         }
+    } catch (e) {
+        destroyProcess(gitAddProcess);
+        gitAddProcess = null;
+        writeOutputPane(e);
     }
-    return dpiScale;
 }
 
-function openRenderPane() {
+function onStartGitAdd() {
+    // writeOutputPane("------------ A D D ------------");
+}
 
-    var bgColor = getBGColor();
+function onStdOutReadAllGitAdd(outputText) {
+    writeOutputPane(outputText);
+}
 
-    var htmlUrl = getHtmlUrl();
+function onStdErrReadAllGitAdd(outputText) {
+    writeOutputPane(outputText);
+}
 
-    // ボタンが押された時の関数
-    var callFuncId = hidemaru.getFunctionId(onButtonPushed);
 
-    // funcIDとbgcolorを伝えながら、URLを開く
-    var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
-    var dpiScale = getDpiScale();
+var gitCommitProcess;  // 初期化しないこと。再実行の際に、非同期でプロセスが動作していると初期化してはまずい。
+function gitCommit(repoFullPath, comment) {
 
-    var xDPI = Math.ceil(32 * dpiScale);
-    var yDPI = Math.ceil(26 * dpiScale);
-    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
-    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
+    if (!repoFullPath) {
+        return;
+    }
 
-    // invisibleな隠した状態で配置しておく
-    renderpanecommand({
-        target: strRanderPaneName,
-        show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 1, // 隠した状態での配置
-        uri: targetUrl,
-        place: "overlay",
-        align: "right",
-        initialize: "async",
-        x: xDPI,
-        y: yDPI,
-        cx: cxDPI,
-        cy: cyDPI,
-    });
+    onStartGitCommit();
 
+    try {
+        // JSONエスケープでとりあえず安全にした後、
+        var jsonComment = JSON.stringify(comment);
+        // 改行は、改行のままにする。
+        jsonComment = jsonComment.replace(/\\r\\n/g, "\n");
+        jsonComment = jsonComment.replace(/\\n/g, "\n");
+
+        gitCommitProcess = hidemaru.runProcess("git commit -m " + jsonComment, repoFullPath, "stdio", "utf8");
+        gitCommitProcess.stdOut.onReadAll(onStdOutReadAllGitCommit);
+        gitCommitProcess.stdErr.onReadAll(onStdErrReadAllGitCommit);
+        gitCommitProcess.onClose(onCloseGitCommit);
+    } catch (e) {
+        destroyProcess(gitCommitProcess);
+        gitCommitProcess = null;
+        writeOutputPane(e);
+    }
+}
+
+function onStartGitCommit() {
+    writeOutputPane("------------ C O M M I T ------------");
+}
+
+function onStdOutReadAllGitCommit(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onStdErrReadAllGitCommit(outputText) {
+    writeOutputPane(outputText);
+}
+
+function onCloseGitCommit() {
+    changeNotify();
+    destroyProcess(gitCommitProcess);
+    gitCommitProcess = null;
+}
+
+
+
+
+
+
+
+
+// -------------------------- V S C O D E 用 -------------------------------------
+
+
+// hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
+function pushPostExecMacroFile(command, arg) {
+    var isScheduled = 0;
+    // まずは0ディレイで実行を試みる。setTimeoutに乗せる。
+    hidemaru.setTimeout(function () {
+        if (!isScheduled) {
+            isScheduled = hidemaru.postExecMacroFile(command, arg);
+            if (isScheduled !== 0) { isScheduled = 1; }
+        }
+    }, 0);
+
+    // この下の処理が必要な理由は秀丸エディタv9.22～v9.34のバグのため。setTimeoutが同じフレーム(1秒60フレーム)内に
+    // ２回実行されると、一方が実行されないバグのため。このため、上の処理が本当に成功したのか？ の確認が必要になる。
+    var peRetry = hidemaru.setInterval(function () {
+        if (isScheduled === 0) {
+            isScheduled = hidemaru.postExecMacroFile(command, arg);
+            if (isScheduled !== 0) { isScheduled = 1; }
+        }
+        if (isScheduled) { hidemaru.clearInterval(peRetry); }
+    }, 250);
+}
+
+// VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
+// カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
+function openVSCode(repoFullPath) {
+    pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmGitWatcherVSCode.mac"', repoFullPath);
 }

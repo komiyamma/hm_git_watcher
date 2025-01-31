@@ -1,0 +1,11 @@
+﻿hidemaruversion "9.25.99";
+
+jsmode @"JScript\HmGitWatcher";
+
+js {
+
+if (onButtonPushed) {
+    onButtonPushed("commit_all");
+}
+
+}
