@@ -11,7 +11,7 @@ function isRenderPaneShowAndVisible() {
     if (!is_show || is_invisible) {
         return false;
     }
-    
+
     return true;
 }
 
@@ -35,8 +35,8 @@ function showRenderPane() {
 
 // 背景が白なら、背景のミスマッチがないため、bgcolor伝達前に早めに表示をしてしまう。
 function checkAndShowBrowserPaneEarly() {
-    var bgcolor=getBGColor();
-    if (bgcolor==0xFFFFFF) {
+    var bgcolor = getBGColor();
+    if (bgcolor == 0xFFFFFF) {
         showRenderPane();
     }
 }
@@ -50,28 +50,58 @@ function updateRenderPane(jsCommand) {
     });
 }
 
-
+// ----------- 編集ペインの背景をレンダリングペインへと伝える。nullを返す時は、改めて伝える必要がないということ ----------
+var lastBGColor = "";
 function getBGColor() {
-    if (getBGColor.color != null) {
-        return getBGColor.color;
-    }
-    // BGR順 → RGB順とする。
-    function convertBGRtoRGB(bgrColor) {
-        var color_r = (bgrColor & 0xFF);         // 下位8ビットが青
-        var color_g = (bgrColor >> 8) & 0xFF;  // 中位8ビットが緑
-        var color_b = (bgrColor >> 16) & 0xFF;  // 上位8ビットが赤
+    var curNormalColorJson = getconfigcolor({ "normal": "*" });
 
-        return (color_r << 16) | (color_g << 8) | color_b; // RGBの順番で結合
+    if (!curNormalColorJson) {
+        return null;
     }
 
-    // BGRの順番の値なので、RGBにする
-    var numBGColorBGR = getconfigcolor(0, 1);
-    var numBGColorRGB = convertBGRtoRGB(numBGColorBGR);
+    var bgColor = curNormalColorJson.normal.back;
 
-    getBGColor.color = numBGColorRGB;
-    // 背景色を文字列化する
-    return numBGColorRGB;
+    if (bgColor == lastBGColor) {
+        return null;
+    }
+
+    lastBGColor = bgColor;
+
+    if (gitWatcherComponent) {
+        try {
+            bgColor = gitWatcherComponent.ConvertSystemColorNameToRGB(curNormalColorJson.normal.back);
+        } catch (e) { }
+    }
+
+    bgColor = bgColor.replace("#", "");
+
+    return bgColor;
 }
+
+/*
+// 背景色をチョクチョク変更することなどはないので、10秒に一度程度でよいだろう。
+if (typeof (colorTickInterval) != "undefined") {
+    hidemaru.clearInterval(colorTickInterval);
+}
+var colorTickInterval;
+colorTickInterval = hidemaru.setInterval(checkBGColor, 10000);
+
+function checkBGColor() {
+    var curBGColor = getBGColor();
+    if (!curBGColor) {
+        return;
+    }
+
+    if (isRenderPaneShowAndVisible() && isRenderPaneReadyStateComplete()) {
+        try {
+            var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
+            updateRenderPane(jsCommand);
+        } catch (e) {
+            hidemaru.clearInterval(colorTickInterval);
+        }
+    }
+}
+*/
 
 function getHtmlUrl() {
 
@@ -101,8 +131,7 @@ function getDpiScale() {
 
 function openRenderPane() {
 
-    var numBGColorRGB = getBGColor();
-    var bgColor = sprintf("%06x", numBGColorRGB);
+    var bgColor = getBGColor();
 
     var htmlUrl = getHtmlUrl();
 

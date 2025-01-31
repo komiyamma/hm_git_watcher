@@ -66,6 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
         openVscodeButton?.classList.add('active');
     }
 
+    window.HmGitWatcher_UpdateBGColor = (bgColor) => {
+        document.body.style.backgroundColor = "#" + bgColor;
+    }
+
     function handleButtonClick(buttonId) {
         sendMessageToWebView(buttonId);
     }
