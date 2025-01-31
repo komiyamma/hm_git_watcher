@@ -144,6 +144,10 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
                 return;
             }
 
+            if (isNotDetectedOperation()) {
+                return;
+            }
+
             if (retryCounter > 5) {
                 writeOutputPane("レンダリングペイン更新時に不明なエラーが発生しました");
                 hidemaru.clearInterval(updateRetry);
@@ -156,6 +160,53 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         1000
     );
 }
+
+function isNotDetectedOperation() {
+    /*
+    ○ 0x00000002 ウィンドウ移動/サイズ変更中
+    × 0x00000004 メニュー操作中
+    × 0x00000008 システムメニュー操作中
+    × 0x00000010 ポップアップメニュー操作中
+    ○ 0x00000100 IME入力中
+    × 0x00000200 何らかのダイアログ表示中
+    × 0x00000400 ウィンドウがDisable状態
+    × 0x00000800 非アクティブなタブまたは非表示のウィンドウ
+    × 0x00001000 検索ダイアログの疑似モードレス状態
+    ○ 0x00002000 なめらかスクロール中
+    ○ 0x00004000 中ボタンによるオートスクロール中
+    ○ 0x00008000 キーやマウスの操作直後
+    ○ 0x00010000 何かマウスのボタンを押している
+    × 0x00020000 マウスキャプチャ状態(ドラッグ状態)
+    ○ 0x00040000 Hidemaru_CheckQueueStatus相当
+    */
+    var s = hidemaru.getInputStates();
+    if (s & 0x00000004) {
+        return true;
+    }
+    if (s & 0x00000008) {
+        return true;
+    }
+    if (s & 0x00000010) {
+        return true;
+    }
+    if (s & 0x00000200) {
+        return true;
+    }
+    if (s & 0x00000400) {
+        return true;
+    }
+    if (s & 0x00000800) {
+        return true;
+    }
+    if (s & 0x00001000) {
+        return true;
+    }
+    if (s & 0x00020000) {
+        return true;
+    }
+    return false;
+}
+
 
 // 監視コンポーネント・リスタート。
 // リポジトリを発見したら「onGitReposFound」を呼び出す。  
