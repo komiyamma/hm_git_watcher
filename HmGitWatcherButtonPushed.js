@@ -15,19 +15,19 @@ function onButtonPushed(command_label) {
             */
             case "pull_all":
                 // 全ての変更をプル
-                gitPullAll(gRepoFullPath);
+                gitPullAll(gRepoFullPathAtPushButton);
                 break;
             case "push_all":
                 // 全ての変更をプッシュ
-                gitPushAll(gRepoFullPath);
+                gitPushAll(gRepoFullPathAtPushButton);
                 break;
             case "commit_all":
                 // コミットダイアログを表示
-                gitCommentDialog(gRepoFullPath);
+                gitCommentDialog(gRepoFullPathAtPushButton);
                 break;
               case "open_vscode":
                 // VSCodeを開く
-                openVSCode(gRepoFullPath);
+                openVSCode(gRepoFullPathAtPushButton);
                 break;
             default:
                // 対応するコマンドがない場合は何も処理しない
