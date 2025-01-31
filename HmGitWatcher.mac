@@ -55,10 +55,7 @@ function onGitReposFound(repoFullPath) {
         return;
     }
 
-    var bgcolor=getBGColor();
-    if (bgcolor==0xFFFFFF) {
-        showRenderPane();
-    }
+    showRenderPane();
 
     if (use100MBLimitPreCommitFile) {
         hidemaru.setTimeout( function() {

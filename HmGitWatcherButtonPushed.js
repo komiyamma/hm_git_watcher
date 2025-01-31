@@ -2,31 +2,42 @@ var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジ�
 
 function onButtonPushed(command_label) {
 
-    if (command_label == "visible") {
-        showRenderPane();
-    }
-
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
+    if (!gRepoFullPathAtPushButton) { return; }
+
     try {
-        if (gRepoFullPathAtPushButton) {
-            if (command_label == "pull_all") {
-                gitPullAll(gRepoFullPathAtPushButton);
-            }
-            else if (command_label == "push_all") {
-                gitPushAll(gRepoFullPathAtPushButton);
-            }
-            else if (command_label == "commit_all") {
-                gitCommentDialog(gRepoFullPathAtPushButton);
-            }
-        }
-        if (command_label == "open_vscode") {
-            openVSCode(gRepoFullPathAtPushButton);
+        switch (command_label) {
+            /*
+            case "visible":
+                // 表示ペインを表示
+                showRenderPane();
+                break;
+            */
+            case "pull_all":
+                // 全ての変更をプル
+                gitPullAll(repoPath);
+                break;
+            case "push_all":
+                // 全ての変更をプッシュ
+                gitPushAll(repoPath);
+                break;
+            case "commit_all":
+                // コミットダイアログを表示
+                gitCommentDialog(repoPath);
+                break;
+              case "open_vscode":
+                // VSCodeを開く
+                openVSCode(repoPath);
+                break;
+            default:
+               // 対応するコマンドがない場合は何も処理しない
+               break;
         }
 
-    } catch (e) {
-        writeOutputPane(e);
-    }
-}
+    } catch (error) {
+         // エラーが発生した場合は出力ペインにエラー内容を表示
+        writeOutputPane(error);
+    }}
 
 // 変化が起きたということを意図的に伝搬することによって、次の状態検知チェックまでの間隔を通常より速くする。
 function changeNotify() {

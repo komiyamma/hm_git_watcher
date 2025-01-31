@@ -33,6 +33,14 @@ function showRenderPane() {
     });
 }
 
+// 背景が白なら、背景のミスマッチがないため、bgcolor伝達前に早めに表示をしてしまう。
+function checkAndShowBrowserPaneEarly() {
+    var bgcolor=getBGColor();
+    if (bgcolor==0xFFFFFF) {
+        showRenderPane();
+    }
+}
+
 function updateRenderPane(jsCommand) {
     renderpanecommand({
         target: strRanderPaneName,
