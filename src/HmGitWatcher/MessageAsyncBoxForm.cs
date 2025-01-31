@@ -214,6 +214,7 @@ internal partial class AsyncMessageBoxForm : Form
         {
             try
             {
+                Hm.OutputPane.Output(jsCallBackFunc + "\r\n");
                 jsCallBackFunc();
             }
             catch (Exception ex)
@@ -225,6 +226,7 @@ internal partial class AsyncMessageBoxForm : Form
                 this.Close();
             }
         }
+
     }
 
     private void Form_OnResize(object sender, EventArgs e)

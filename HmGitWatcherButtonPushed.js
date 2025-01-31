@@ -2,6 +2,10 @@ var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジ�
 
 function onButtonPushed(command_label) {
 
+    if (!isRenderPaneShowAndVisible()) {
+        return;
+    }
+
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     if (!gRepoFullPathAtPushButton) { return; }
 
@@ -294,8 +298,10 @@ function pushPostExecMacroFile(command, arg) {
     }, 250);
 }
 
+
 // VSCodeを「ソースビューモード」でオープンする。リポイトリに帰属していない場合は、通常モードでオープンする。
 // カーソルの位置（もしくは秀丸上で見えてるもの）なども大いに考慮され、可能な限り引き継がれる。
 function openVSCode(repoFullPath) {
     pushPostExecMacroFile('"' + currentMacroDirectory + '\\HmGitWatcherVSCode.mac"', repoFullPath);
 }
+
