@@ -3,6 +3,19 @@ function isRenderPaneReadyStateComplete() {
     return readyState == "complete";
 }
 
+function isRenderPaneShowAndVisible() {
+    var is_show = Number(renderpanecommand({ target: strRanderPaneName, get: "show" }));
+    var is_invisible = Number(renderpanecommand({ target: strRanderPaneName, get: "invisible" }));
+
+    // レンダリングペインを配置していない、もしくは、見えてない。
+    if (!is_show || is_invisible) {
+        return false;
+    }
+    
+    return true;
+}
+
+
 // レンダリングを閉じる
 function closeRenderPane() {
     renderpanecommand({
@@ -31,6 +44,9 @@ function updateRenderPane(jsCommand) {
 
 
 function getBGColor() {
+    if (getBGColor.color != null) {
+        return getBGColor.color;
+    }
     // BGR順 → RGB順とする。
     function convertBGRtoRGB(bgrColor) {
         var color_r = (bgrColor & 0xFF);         // 下位8ビットが青
@@ -44,8 +60,9 @@ function getBGColor() {
     var numBGColorBGR = getconfigcolor(0, 1);
     var numBGColorRGB = convertBGRtoRGB(numBGColorBGR);
 
+    getBGColor.color = numBGColorRGB;
     // 背景色を文字列化する
-    return sprintf("%06x", numBGColorRGB);
+    return numBGColorRGB;
 }
 
 function getHtmlUrl() {
@@ -76,7 +93,8 @@ function getDpiScale() {
 
 function openRenderPane() {
 
-    var bgColor = getBGColor();
+    var numBGColorRGB = getBGColor();
+    var bgColor = sprintf("%06x", numBGColorRGB);
 
     var htmlUrl = getHtmlUrl();
 

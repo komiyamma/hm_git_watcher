@@ -1,15 +1,10 @@
 var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
 function onButtonPushed(command_label) {
-    /*
-    var is_show = Number(renderpanecommand({ target: strRanderPaneName, get: "show" }));
-    var is_invisible = Number(renderpanecommand({ target: strRanderPaneName, get: "invisible" }));
 
-    // レンダリングペインを配置していない、もしくは、見えてない。
-    if (!is_show || is_invisible) {
-        return; 
+    if (command_label == "visible") {
+        showRenderPane();
     }
-    */
 
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     try {

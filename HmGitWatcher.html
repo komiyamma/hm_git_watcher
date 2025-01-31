@@ -9,7 +9,7 @@
 body {
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow: hidden; // スクロールバーが絶対に出ないように
 }
 
 .command-button {
@@ -43,7 +43,7 @@ body {
 </style>
 <script>
 // ドラッグ・アンド・ドロップは許可しない。画像をドラッグして秀丸の編集エリアなどにもっていくと妙な挙動になるので防止
-document.addEventListener('dragstart', (event) => {
+document.addEventListener('dragstart', event => {
     event.preventDefault();
 });
 document.addEventListener('DOMContentLoaded', () => {
@@ -97,6 +97,7 @@ function setBgColor() {
     const bgColor = urlParams.get('bgColor');
     if (bgColor) {
         document.body.style.backgroundColor = "#" + bgColor;
+        window.chrome.webview.postMessage({ funcid: callFuncId, message: "visible" });
     }
 }
 setBgColor();
