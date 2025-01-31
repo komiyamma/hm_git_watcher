@@ -149,7 +149,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
             }
 
             if (retryCounter > 5) {
-                writeOutputPane("レンダリングペイン更新時に不明なエラーが発生しました");
+                writeOutputPane("レンダリングペイン更新失敗");
                 hidemaru.clearInterval(updateRetry);
                 return;
             }
