@@ -11,12 +11,6 @@ function onButtonPushed(command_label) {
 
     try {
         switch (command_label) {
-            /*
-            case "visible":
-                // 表示ペインを表示
-                showRenderPane();
-                break;
-            */
             case "pull_all":
                 // 全ての変更をプル
                 gitPullAll(gRepoFullPathAtPushButton);

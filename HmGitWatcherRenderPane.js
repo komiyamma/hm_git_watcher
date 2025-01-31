@@ -23,6 +23,8 @@ function closeRenderPane() {
         show: 0,      // コンポーネント破棄
         invisible: 1  // 隠す
     });
+
+    stopBGColorInterval();
 }
 
 function showRenderPane() {
@@ -31,14 +33,8 @@ function showRenderPane() {
         show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
         invisible: 0 // 表示する
     });
-}
 
-// 背景が白なら、背景のミスマッチがないため、bgcolor伝達前に早めに表示をしてしまう。
-function checkAndShowBrowserPaneEarly() {
-    var bgcolor = getBGColor();
-    if (bgcolor == 0xFFFFFF) {
-        showRenderPane();
-    }
+    startBGColorInterval();
 }
 
 function updateRenderPane(jsCommand) {
@@ -78,13 +74,22 @@ function getBGColor() {
     return bgColor;
 }
 
-/*
-// 背景色をチョクチョク変更することなどはないので、10秒に一度程度でよいだろう。
-if (typeof (colorTickInterval) != "undefined") {
-    hidemaru.clearInterval(colorTickInterval);
+var colorTickInterval; // 初期化してはならない
+
+function startBGColorInterval() {
+    // 背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
+    if (typeof (colorTickInterval) != "undefined") {
+        hidemaru.clearInterval(colorTickInterval);
+    }
+    colorTickInterval = hidemaru.setInterval(checkBGColor, 5000);
 }
-var colorTickInterval;
-colorTickInterval = hidemaru.setInterval(checkBGColor, 10000);
+
+function stopBGColorInterval() {
+    // 背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
+    if (typeof (colorTickInterval) != "undefined") {
+        hidemaru.clearInterval(colorTickInterval);
+    }
+}
 
 function checkBGColor() {
     var curBGColor = getBGColor();
@@ -92,16 +97,16 @@ function checkBGColor() {
         return;
     }
 
-    if (isRenderPaneShowAndVisible() && isRenderPaneReadyStateComplete()) {
-        try {
-            var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
-            updateRenderPane(jsCommand);
-        } catch (e) {
-            hidemaru.clearInterval(colorTickInterval);
-        }
+    try {
+        var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
+        renderpanecommand({
+            target: strRanderPaneName,
+            uri: jsCommand
+        });
+    } catch (e) {
+        hidemaru.clearInterval(colorTickInterval);
     }
 }
-*/
 
 function getHtmlUrl() {
 
