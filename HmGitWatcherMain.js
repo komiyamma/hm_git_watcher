@@ -36,7 +36,15 @@ function onGitReposFound(repoFullPath) {
     }
 }
 
-var renderPaneUpdateRetry; // 初期化しないこと。
+var updatedRenderPaneStatusRetry; // 初期化しないこと。
+
+function stopUpdatedRenderPaneStatusRetry() {
+    if (typeof(updatedRenderPaneStatusRetry) != "undefined") {
+        hidemaru.clearInterval(updatedRenderPaneStatusRetry);
+    }
+}
+
+stopUpdatedRenderPaneStatusRetry();
 
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
@@ -91,7 +99,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         gitCherry = 0;
     }
 
-    function HtmlUpdate() {
+    function updateRenderPaneButton() {
         if (isRenderPaneReadyStateComplete()) {
             var jsCommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
             updateRenderPane(jsCommand);
@@ -101,21 +109,20 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return false;
     }
 
-    var htmlUpdated = HtmlUpdate();
-    if (htmlUpdated) {
+    var updatedRenderPaneStatus = updateRenderPaneButton();
+    if (updatedRenderPaneStatus) {
         return;
     }
 
-    if (typeof (renderPaneUpdateRetry) != "undefined") {
-        hidemaru.clearInterval(renderPaneUpdateRetry);
-    }
+    stopUpdatedRenderPaneStatusRetry();
+
     // アップデートに失敗している。レンダリングペインが何かの事情でComplete出来ていないのかもしれない。
     var retryCounter = 0; // リトライ回数。何かの事情でずっと更新できない場合に備えて、１秒おきで５回やってもダメだったら諦める。
 
-    renderPaneUpdateRetry = hidemaru.setInterval(
+    updatedRenderPaneStatusRetry = hidemaru.setInterval(
         function () {
-            if (htmlUpdated) {
-                hidemaru.clearInterval(renderPaneUpdateRetry);
+            if (updatedRenderPaneStatus) {
+                hidemaru.clearInterval(updatedRenderPaneStatusRetry);
                 return;
             }
 
@@ -125,11 +132,11 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
             if (retryCounter > 5) {
                 writeOutputPane("レンダリングペイン更新失敗");
-                hidemaru.clearInterval(renderPaneUpdateRetry);
+                hidemaru.clearInterval(updatedRenderPaneStatusRetry);
                 return;
             }
 
-            htmlUpdated = HtmlUpdate();
+            updatedRenderPaneStatus = updateRenderPaneButton();
             retryCounter++;
         },
         1000
