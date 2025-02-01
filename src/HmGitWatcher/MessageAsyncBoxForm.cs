@@ -105,12 +105,10 @@ internal partial class AsyncMessageBoxForm : Form
 
     public AsyncMessageBoxForm(dynamic func, string title, string message, string button_text)
     {
-        this.Text = title;
-
         jsCallBackFunc = func;
         InitDPIScale();
 
-        InitForm();
+        InitForm(title);
 
         InitSubmitButton(button_text);
         InitLabel(message);
@@ -125,14 +123,14 @@ internal partial class AsyncMessageBoxForm : Form
         dpiScale = GetDpiScaleFromWindowHandle((long)Hm.WindowHandle);
     }
 
-    private void InitForm()
+    private void InitForm(String title)
     {
 
         // AutoScaleDimensions = new SizeF(7F, 15F);
         // AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size((int)(400 * dpiScale), (int)(200 * dpiScale));
-        Name = "コミットのコメント";
-        Text = "コミットのコメント";
+        Name = "タイトル";
+        Text = title;
 
         // 親ウィンドウのハンドルを取得(これは絶対にある。ただしウィンドウは非表示かも？)
         IntPtr hParentWindow = (IntPtr)Hm.WindowHandle;
@@ -214,8 +212,8 @@ internal partial class AsyncMessageBoxForm : Form
         {
             try
             {
-                Hm.OutputPane.Output(jsCallBackFunc + "\r\n");
-                jsCallBackFunc();
+                // Hm.OutputPane.Output(jsCallBackFunc + "\r\n");
+                jsCallBackFunc(this.Text, label.Text, submitButton.Text);
             }
             catch (Exception ex)
             {
@@ -223,6 +221,8 @@ internal partial class AsyncMessageBoxForm : Form
             }
             finally
             {
+                label.Text = "";
+                submitButton.Text = "OK";
                 this.Close();
             }
         }
