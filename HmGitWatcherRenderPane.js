@@ -80,37 +80,68 @@ function getBGColor() {
 }
 
 // ---- 設定の変更などで、背景色を変更したら、それを反映される。同じファイルに対して背景を変更する結構かなりまれな行為なのでゆっくり反映で良いだろう。
-var bgColorTickInterval; // 初期化してはならない
+var bgColorIntervalHandle; // 初期化してはならない
+var bgColorIntervalTime = 5000; // チック間隔
 
-function startBGColorInterval() {
-    // 同一ファイルに対して背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
-    if (typeof (bgColorTickInterval) != "undefined") {
-        hidemaru.clearInterval(bgColorTickInterval);
+function startBGColorInterval(intervalTime) {
+
+    if (!intervalTime) {
+        intervalTime = bgColorIntervalTime;
     }
-    bgColorTickInterval = hidemaru.setInterval(checkBGColor, 5000);
+
+    // 同一ファイルに対して背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
+    if (typeof (bgColorIntervalHandle) != "undefined") {
+        hidemaru.clearInterval(bgColorIntervalHandle);
+    }
+    bgColorIntervalHandle = hidemaru.setTimeout(tickBGColor, intervalTime);
 }
 
 function stopBGColorInterval() {
-    if (typeof (bgColorTickInterval) != "undefined") {
-        hidemaru.clearInterval(bgColorTickInterval);
+    if (typeof (bgColorIntervalHandle) != "undefined") {
+        hidemaru.clearInterval(bgColorIntervalHandle);
     }
 }
 
-function checkBGColor() {
-    var curBGColor = getBGColor();
-    if (!curBGColor) {
-        return;
-    }
-
+function tickBGColor() {
+    var hasError = false;
     try {
+        var curBGColor = getBGColor();
+        if (!curBGColor) {
+            return;
+        }
+
         var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
         renderpanecommand({
             target: strRanderPaneName,
             uri: jsCommand
         });
     } catch (e) {
-        hidemaru.clearInterval(bgColorTickInterval);
+        stopBGColorInterval();
+        hasError = true;
+    } finally {
+        if (!hasError) {
+            // 背景カラーを変更しているとすればほとんどダイアログだろう。この時Tick間隔を狭める
+            if (isDialogOperation()) {
+                var overrideIntervalTime = Math.floor(bgColorIntervalTime/5);
+                startBGColorInterval(overrideIntervalTime);
+            } else {
+                startBGColorInterval(bgColorIntervalTime);
+            }
+        }
     }
+}
+
+function isDialogOperation() {
+    /*
+    × 0x00000200 何らかのダイアログ表示中
+    × 0x00000400 ウィンドウがDisable状態
+    */
+    var s = hidemaru.getInputStates();
+    if (s & 0x00000200) {
+        return true;
+    }
+
+    return false;
 }
 
 function getHtmlUrl() {
