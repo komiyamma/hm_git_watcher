@@ -477,7 +477,8 @@ public partial class HmGitWatcher
         catch (Exception ex)
         {
         }
-        try {
+        try
+        {
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
@@ -490,7 +491,8 @@ public partial class HmGitWatcher
         {
         }
 
-        try {
+        try
+        {
             if (gitcomment_form != null)
             {
                 gitcomment_form.Close();
@@ -501,11 +503,24 @@ public partial class HmGitWatcher
         {
         }
 
-        try {
+        try
+        {
             if (messagebox_form != null)
             {
                 messagebox_form.Close();
                 messagebox_form = null;
+            }
+        }
+        catch (Exception ex)
+        {
+        }
+
+        try
+        {
+            if (popup_menu != null)
+            {
+                popup_menu.Dispose();
+                popup_menu = null;
             }
         }
         catch (Exception ex)
