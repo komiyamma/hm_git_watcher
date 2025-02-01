@@ -62,7 +62,7 @@ internal partial class GitCommitForm : Form
         }
 
         // 正しく取れたようだ
-        return dpi / 96;
+        return (double)dpi / (double)96;
     }
 
     // ----------------------------------------------------------------
