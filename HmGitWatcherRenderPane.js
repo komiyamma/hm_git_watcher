@@ -25,6 +25,7 @@ function closeRenderPane() {
     });
 
     stopBGColorInterval();
+    stopUpdatedRenderPaneStatusRetry();
 }
 
 function showRenderPane() {
