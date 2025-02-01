@@ -114,15 +114,17 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return;
     }
 
-    stopUpdatedRenderPaneStatusRetry();
-
     // アップデートに失敗している。レンダリングペインが何かの事情でComplete出来ていないのかもしれない。
+
+
     var retryCounter = 0; // リトライ回数。何かの事情でずっと更新できない場合に備えて、１秒おきで５回やってもダメだったら諦める。
+
+    stopUpdatedRenderPaneStatusRetry();
 
     updatedRenderPaneStatusRetry = hidemaru.setInterval(
         function () {
             if (updatedRenderPaneStatus) {
-                hidemaru.clearInterval(updatedRenderPaneStatusRetry);
+                stopUpdatedRenderPaneStatusRetry();
                 return;
             }
 
@@ -132,7 +134,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
             if (retryCounter > 5) {
                 writeOutputPane("レンダリングペイン更新失敗");
-                hidemaru.clearInterval(updatedRenderPaneStatusRetry);
+                stopUpdatedRenderPaneStatusRetry();
                 return;
             }
 
