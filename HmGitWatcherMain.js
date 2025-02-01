@@ -30,7 +30,7 @@ function onGitReposFound(repoFullPath) {
     showRenderPane();
 
     if (use100MBLimitPreCommitFile) {
-        hidemaru.setTimeout( function() {
+        hidemaru.setTimeout(function () {
             create100MBLimitPreCommitFile(repoFullPath);
         }, 0);
     }
@@ -106,7 +106,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return;
     }
 
-    if (typeof(renderPaneUpdateRetry) != "undefined") {
+    if (typeof (renderPaneUpdateRetry) != "undefined") {
         hidemaru.clearInterval(renderPaneUpdateRetry);
     }
     // アップデートに失敗している。レンダリングペインが何かの事情でComplete出来ていないのかもしれない。

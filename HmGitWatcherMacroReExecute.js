@@ -20,7 +20,7 @@ function shouldMacroReExecute() {
         }
 
         // コンポーネントが解放されてしまっているなら、jsmodeの実行空間がクリアされてしまっている。改めて実行する必要がある。
-        if (typeof(gitWatcherComponent) == "undefined") {
+        if (typeof (gitWatcherComponent) == "undefined") {
             setstaticvariable("HmGitWatcherLastFile", currentFileFullPath, 2); // 最後の解析ファイルフルパスを保持(不要なHmGitWatcher駆動を避ける)
 
             return currentFileFullPath ? 1 : 0;

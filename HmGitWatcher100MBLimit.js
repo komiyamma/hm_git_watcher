@@ -2,7 +2,7 @@ var create100MBLimitPreCommitFileDone = false;
 function create100MBLimitPreCommitFile(repoPath) {
 
     if (create100MBLimitPreCommitFileDone) {
-         return;
+        return;
     }
     create100MBLimitPreCommitFileDone = true;
 
@@ -31,11 +31,11 @@ function create100MBLimitPreCommitFile(repoPath) {
             return false;
         }
 
-        var scriptContent = hidemaru.loadTextFile( currentMacroDirectory + "\\HmGitWatcher100MBLimit.v1.pre-commit");
+        var scriptContent = hidemaru.loadTextFile(currentMacroDirectory + "\\HmGitWatcher100MBLimit.v1.pre-commit");
         hidemaru.saveTextFile(preCommitFilePath, scriptContent, "utf8");
 
         writeOutputPane("このリポジトリに100MB以上のファイルをコミットしようとすると自動的にキャンセルする仕組みを導入しました。");
-    } catch(e) {
+    } catch (e) {
     }
-    
+
 }

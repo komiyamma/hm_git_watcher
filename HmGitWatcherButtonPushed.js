@@ -23,19 +23,20 @@ function onButtonPushed(command_label) {
                 // コミットダイアログを表示
                 gitCommentDialog(gRepoFullPathAtPushButton);
                 break;
-              case "open_vscode":
+            case "open_vscode":
                 // VSCodeを開く
                 openVSCode(gRepoFullPathAtPushButton);
                 break;
             default:
-               // 対応するコマンドがない場合は何も処理しない
-               break;
+                // 対応するコマンドがない場合は何も処理しない
+                break;
         }
 
     } catch (error) {
-         // エラーが発生した場合は出力ペインにエラー内容を表示
+        // エラーが発生した場合は出力ペインにエラー内容を表示
         writeOutputPane(error);
-    }}
+    }
+}
 
 // 変化が起きたということを意図的に伝搬することによって、次の状態検知チェックまでの間隔を通常より速くする。
 function changeNotify() {
@@ -160,11 +161,11 @@ function gitCommentDialog(repoFullPath) {
         // 承認相当行為を押した時だけ「gitCommitAllCallBack」が実行される。
         gitWatcherComponent.ShowGitCommitForm(
             function (comment) {
-                 if (comment == "") comment = "...";
-                 // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「...」という「続く」ということを意味するコメントにする。
+                if (comment == "") comment = "...";
+                // コミットコメントが何もないと「Aborting commit due to empty commit message.」となるので、「...」という「続く」ということを意味するコメントにする。
 
-                 // git add . へと移行
-                 gitAdd(repoFullPath, comment);
+                // git add . へと移行
+                gitAdd(repoFullPath, comment);
             }
         );
     }
