@@ -164,33 +164,12 @@ function isNotDetectedOperation() {
     ○ 0x00040000 Hidemaru_CheckQueueStatus相当
     */
     var s = hidemaru.getInputStates();
-    if (s & 0x00000004) {
-        return true;
-    }
-    if (s & 0x00000008) {
-        return true;
-    }
-    if (s & 0x00000010) {
-        return true;
-    }
-    if (s & 0x00000200) {
-        return true;
-    }
-    if (s & 0x00000400) {
-        return true;
-    }
-    if (s & 0x00000800) {
-        return true;
-    }
-    if (s & 0x00001000) {
-        return true;
-    }
-    if (s & 0x00020000) {
-        return true;
-    }
-    return false;
+    var notAllowedMask = 
+          0x00000004 | 0x00000008 | 0x00000010 | 
+          0x00000200 | 0x00000400 | 0x00000800 | 
+          0x00001000 | 0x00020000;
+    return (s & notAllowedMask) != 0; 
 }
-
 
 // 監視コンポーネント・リスタート。
 // リポジトリを発見したら「onGitReposFound」を呼び出す。  
