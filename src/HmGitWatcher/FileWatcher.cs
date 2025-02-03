@@ -30,15 +30,51 @@ public partial class HmGitWatcher
         watcher.EnableRaisingEvents = true;
     }
 
-    private void OnFileChanged(object sender, FileSystemEventArgs e)
+    private static bool IsUnderHiddenDirectory(string path)
     {
-        if (e?.FullPath?.Contains(".git") == true)
+        try
         {
-            return;
+            if (File.Exists(path))
+            {
+                var fileInfo = new FileInfo(path);
+                return (fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+            }
+
+            else if (Directory.Exists(path))
+            {
+                var dirInfo = new DirectoryInfo(path);
+                return (dirInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+            }
+
+        }
+        catch (Exception)
+        {
         }
 
-        // イベントが発生した場合は変更フラグを立てる
-        isChangeNotify = true;
+        return false;
+    }
+
+
+    private void OnFileChanged(object sender, FileSystemEventArgs e)
+    {
+        try
+        {
+            if (e.FullPath.Contains("\\.git\\") || e.FullPath.EndsWith("\\.git"))
+            {
+                return;
+            }
+
+            if (IsUnderHiddenDirectory(e.FullPath))
+            {
+                return;
+            }
+
+            // イベントが発生した場合は変更フラグを立てる
+            isChangeNotify = true;
+        }
+        catch (Exception ex)
+        {
+        }
 
         // Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // Hm.OutputPane.Output("OnFileChanged" + "\r\n");
@@ -46,13 +82,25 @@ public partial class HmGitWatcher
 
     private void OnFileChanged(object sender, RenamedEventArgs e)
     {
-        if (e?.FullPath?.Contains(".git") == true)
+        try
         {
-            return;
-        }
+            if (e.FullPath.Contains("\\.git\\") || e.FullPath.EndsWith("\\.git"))
+            {
+                return;
+            }
 
-        // イベントが発生した場合は変更フラグを立てる
-        isChangeNotify = true;
+            if (IsUnderHiddenDirectory(e.FullPath))
+            {
+                return;
+            }
+
+            // イベントが発生した場合は変更フラグを立てる
+            isChangeNotify = true;
+
+        }
+        catch (Exception ex)
+        {
+        }
 
         // Hm.OutputPane.Output(e?.FullPath + "\r\n");
         // Hm.OutputPane.Output("OnFileChanged" + "\r\n");
