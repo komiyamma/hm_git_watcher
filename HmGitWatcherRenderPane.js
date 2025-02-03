@@ -139,8 +139,7 @@ function tickBGColor() {
 
 function isDialogOperation() {
     /*
-    × 0x00000200 何らかのダイアログ表示中
-    × 0x00000400 ウィンドウがDisable状態
+    ◯ 0x00000200 何らかのダイアログ表示中
     */
     var s = hidemaru.getInputStates();
     if (s & 0x00000200) {
