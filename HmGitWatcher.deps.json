@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "HmGitWatcher/1.1.1.0": {
+      "HmGitWatcher/1.1.0.0": {
         "runtime": {
           "HmGitWatcher.dll": {}
         }
@@ -14,7 +14,7 @@
     }
   },
   "libraries": {
-    "HmGitWatcher/1.1.1.0": {
+    "HmGitWatcher/1.1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
