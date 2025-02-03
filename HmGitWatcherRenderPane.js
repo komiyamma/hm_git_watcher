@@ -128,7 +128,7 @@ function tickBGColor() {
         if (!hasError) {
             // 背景カラーを変更しているとすればほとんどダイアログだろう。この時Tick間隔を狭める
             if (isDialogOperation()) {
-                var overrideIntervalTime = Math.floor(bgColorIntervalTime/5);
+                var overrideIntervalTime = Math.floor(bgColorIntervalTime / 5);
                 startBGColorInterval(overrideIntervalTime);
             } else {
                 startBGColorInterval(bgColorIntervalTime);
@@ -179,7 +179,7 @@ function getWindowRect(dpiScale) {
     var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
     var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
 
-    return {"x": xDPI, "y": yDPI, "cx": cxDPI, "cy": cyDPI };
+    return { "x": xDPI, "y": yDPI, "cx": cxDPI, "cy": cyDPI };
 
 }
 
@@ -192,14 +192,14 @@ function getDpiScale() {
             if (currentWindowDpi > 0) {
                 dpiScale = currentWindowDpi / 96;
             }
-        } catch(e) {}
+        } catch (e) { }
     }
 
     if (lastDPIScale != dpiScale) {
         lastDPIScale = dpiScale;
-        return {dpi:dpiScale, update:true};
+        return { dpi: dpiScale, update: true };
     }
-    return {dpi:dpiScale, update:false};
+    return { dpi: dpiScale, update: false };
 }
 
 function tickDPI() {
@@ -209,7 +209,7 @@ function tickDPI() {
         if (!dpiObj.update) {
             return;
         }
-        
+
         var dpiScale = dpiObj.dpi;
 
         var windowRect = getWindowRect(dpiScale);
