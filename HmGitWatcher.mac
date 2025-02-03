@@ -16,14 +16,14 @@ var use100MBLimitPreCommitFile = true;
 
 }
 
-execjs currentmacrodirectory + "\\HmGitWatcherMacroReExecute.js";
+execjs currentmacrodirectory + @"\HmGitWatcherMacroReExecute.js";
 if (!#ShouldMacroReExecute) { endmacro; }
 
-execjs currentmacrodirectory + "\\HmGitWatcherButtonPushed.js";
+execjs currentmacrodirectory + @"\HmGitWatcherButtonPushed.js";
 
-execjs currentmacrodirectory + "\\HmGitWatcherRenderPane.js";
+execjs currentmacrodirectory + @"\HmGitWatcherRenderPane.js";
 
-execjs currentmacrodirectory + "\\HmGitWatcher100MBLimit.js";
+execjs currentmacrodirectory + @"\HmGitWatcher100MBLimit.js";
 
-execjs currentmacrodirectory + "\\HmGitWatcherMain.js";
+execjs currentmacrodirectory + @"\HmGitWatcherMain.js";
 
