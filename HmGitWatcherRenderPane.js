@@ -1,8 +1,10 @@
+// レンダリングペインの表示状態は全て完了
 function isRenderPaneReadyStateComplete() {
     var readyState = renderpanecommand({ target: strRanderPaneName, get: "readyState" });
     return readyState == "complete";
 }
 
+// レンダリングペインは「インスタンス」があり、かつ「表示」されている。
 function isRenderPaneShowAndVisible() {
     var is_show = Number(renderpanecommand({ target: strRanderPaneName, get: "show" }));
     var is_invisible = Number(renderpanecommand({ target: strRanderPaneName, get: "invisible" }));
@@ -16,7 +18,7 @@ function isRenderPaneShowAndVisible() {
 }
 
 
-// レンダリングを閉じる
+// レンダリングを閉じる。インスタンスも破棄
 function closeRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
@@ -29,6 +31,7 @@ function closeRenderPane() {
     stopUpdatedRenderPaneStatusRetry();
 }
 
+// レンダリングペインの表示。インスタンス確立と実際の表示。
 function showRenderPane() {
     renderpanecommand({
         target: strRanderPaneName,
@@ -40,6 +43,7 @@ function showRenderPane() {
     startDPIInterval();
 }
 
+// レンダリングペインにjsコマンドを送る
 function updateRenderPane(jsCommand) {
     renderpanecommand({
         target: strRanderPaneName,
@@ -147,7 +151,7 @@ function isDialogOperation() {
 }
 
 
-// ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わった。
+// ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、それに応じて、レンダリングペインの位置やサイズを変更する。
 var dpiIntervalHandle; // 初期化してはならない
 var dpiIntervalTime = 2000; // チック間隔
 
@@ -253,9 +257,10 @@ function openRenderPane() {
     // ボタンが押された時の関数
     var callFuncId = hidemaru.getFunctionId(onButtonPushed);
 
-    // funcIDとbgcolorを伝えながら、URLを開く
+    // funcIDとbgcolorを伝える、URLを確立
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
+    // overlayは、DPIの影響をもろうけするため、DPIを考慮する必要がある。
     var dpiObj = getDpiScale();
     var dpiScale = dpiObj.dpi;
 
