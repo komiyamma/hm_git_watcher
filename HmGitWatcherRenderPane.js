@@ -183,7 +183,7 @@ function getWindowRect(dpiScale) {
 
 }
 
-var lastDPIScale = 0;
+var lastDPIScale = 1;
 function getDpiScale() {
     var dpiScale = 1;
     if (gitWatcherComponent) {
