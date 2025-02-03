@@ -30,22 +30,41 @@ public partial class HmGitWatcher
         watcher.EnableRaisingEvents = true;
     }
 
-    private static bool IsUnderHiddenDirectory(string path)
+    private bool IsUnderHiddenDirectory(string path)
     {
         try
         {
             if (File.Exists(path))
             {
                 var fileInfo = new FileInfo(path);
-                return (fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                if ((fileInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    return true;
+                }
             }
 
-            else if (Directory.Exists(path))
+            if (Directory.Exists(path))
             {
                 var dirInfo = new DirectoryInfo(path);
-                return (dirInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+                if ((dirInfo.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    return true;
+                }
             }
 
+            var parent = new DirectoryInfo(Path.GetDirectoryName(path));
+            while (parent != null)
+            {
+                if (parent.FullName == watcher.Path)
+                {
+                    break;
+                }
+                if ((parent.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden)
+                {
+                    return true;
+                }
+                parent = parent.Parent;
+            }
         }
         catch (Exception)
         {
