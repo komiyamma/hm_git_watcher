@@ -25,6 +25,7 @@ function closeRenderPane() {
     });
 
     stopBGColorInterval();
+    stopDPIInterval();
     stopUpdatedRenderPaneStatusRetry();
 }
 
@@ -36,6 +37,7 @@ function showRenderPane() {
     });
 
     startBGColorInterval();
+    startDPIInterval();
 }
 
 function updateRenderPane(jsCommand) {
@@ -144,6 +146,88 @@ function isDialogOperation() {
     return false;
 }
 
+
+// ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わった。
+var dpiIntervalHandle; // 初期化してはならない
+var dpiIntervalTime = 2000; // チック間隔
+
+function startDPIInterval(intervalTime) {
+
+    if (!intervalTime) {
+        intervalTime = dpiIntervalTime;
+    }
+
+    if (typeof (dpiIntervalHandle) != "undefined") {
+        hidemaru.clearInterval(dpiIntervalHandle);
+    }
+    dpiIntervalHandle = hidemaru.setTimeout(tickDPI, intervalTime);
+}
+
+function stopDPIInterval() {
+    if (typeof (dpiIntervalHandle) != "undefined") {
+        hidemaru.clearInterval(dpiIntervalHandle);
+    }
+}
+
+function getWindowRect(dpiScale) {
+    var xDPI = Math.ceil(32 * dpiScale);
+    var yDPI = Math.ceil(26 * dpiScale);
+    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
+    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
+
+    return {"x": xDPI, "y": yDPI, "cx": cxDPI, "cy": cyDPI };
+
+}
+
+var lastDPIScale = 0;
+function getDpiScale() {
+    var dpiScale = 1;
+    if (gitWatcherComponent) {
+        try {
+            var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
+            if (currentWindowDpi > 0) {
+                dpiScale = currentWindowDpi / 96;
+            }
+        } catch(e) {}
+    }
+
+    if (lastDPIScale != dpiScale) {
+        lastDPIScale = dpiScale;
+        return {dpi:dpiScale, update:true};
+    }
+    return {dpi:dpiScale, update:false};
+}
+
+function tickDPI() {
+    var hasError = false;
+    try {
+        var dpiObj = getDpiScale();
+        if (!dpiObj.update) {
+            return;
+        }
+        
+        var dpiScale = dpiObj.dpi;
+
+        var windowRect = getWindowRect(dpiScale);
+
+        renderpanecommand({
+            target: strRanderPaneName,
+            place: "overlay",
+            x: windowRect.x,
+            y: windowRect.y,
+            cx: windowRect.cx,
+            cy: windowRect.cy
+        });
+    } catch (e) {
+        stopDPIInterval();
+        hasError = true;
+    } finally {
+        startDPIInterval();
+    }
+}
+
+
+// ---- レンダリングペインのURL
 function getHtmlUrl() {
 
     // HmGitWatcher.htmlを使ってボタンをレンダリング
@@ -159,17 +243,7 @@ function getHtmlUrl() {
     return urlFullPath;
 }
 
-function getDpiScale() {
-    var dpiScale = 1;
-    if (gitWatcherComponent) {
-        var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
-        if (currentWindowDpi > 0) {
-            dpiScale = currentWindowDpi / 96;
-        }
-    }
-    return dpiScale;
-}
-
+// ---- レンダリングペインを開く（この段階ではまだ目に見えない。インスタンス確立だけ。実際に目に見えるのは、リポジトリに帰属することが決定してから）
 function openRenderPane() {
 
     var bgColor = getBGColor();
@@ -182,12 +256,10 @@ function openRenderPane() {
     // funcIDとbgcolorを伝えながら、URLを開く
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
-    var dpiScale = getDpiScale();
+    var dpiObj = getDpiScale();
+    var dpiScale = dpiObj.dpi;
 
-    var xDPI = Math.ceil(32 * dpiScale);
-    var yDPI = Math.ceil(26 * dpiScale);
-    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
-    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
+    var windowRect = getWindowRect(dpiScale);
 
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
@@ -198,10 +270,10 @@ function openRenderPane() {
         place: "overlay",
         align: "right",
         initialize: "async",
-        x: xDPI,
-        y: yDPI,
-        cx: cxDPI,
-        cy: cyDPI,
+        x: windowRect.x,
+        y: windowRect.y,
+        cx: windowRect.cx,
+        cy: windowRect.cy
     });
 
 }
