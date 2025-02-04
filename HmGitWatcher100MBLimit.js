@@ -1,3 +1,12 @@
+/*
+ * 「gitのpre-commitファイル」の機能を使って、100MB以上のファイルのコミットを防止する
+ * 「Python由来のpre-commit」を使っている場合は、同様の機能があるので、不要だが
+ * いちいち、個々のリポジトリにコマンドで導入する必要すらないので、手軽。
+ *  すでに pre-commit ファイル が存在する場合は何もしないので、
+ * Pythonのpre-commit導入済みの場合は何もしない。
+ * 状況証拠的に、Git LFS になっているリポジトリの場合は、100MB以上であってもキャンセルされない。
+ */
+
 var create100MBLimitPreCommitFileDone = false;
 function create100MBLimitPreCommitFile(repoPath) {
 
