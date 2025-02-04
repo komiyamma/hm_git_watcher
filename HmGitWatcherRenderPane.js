@@ -172,35 +172,6 @@ function stopDPIInterval() {
     }
 }
 
-function getWindowRect(dpiScale) {
-    var xDPI = Math.ceil(32 * dpiScale);
-    var yDPI = Math.ceil(26 * dpiScale);
-    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
-    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
-
-    return { "x": xDPI, "y": yDPI, "cx": cxDPI, "cy": cyDPI };
-
-}
-
-var lastDPIScale = 1;
-function getDpiScale() {
-    var dpiScale = 1;
-    if (gitWatcherComponent) {
-        try {
-            var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
-            if (currentWindowDpi > 0) {
-                dpiScale = currentWindowDpi / 96;
-            }
-        } catch (e) { }
-    }
-
-    if (lastDPIScale != dpiScale) {
-        lastDPIScale = dpiScale;
-        return { dpi: dpiScale, update: true };
-    }
-    return { dpi: dpiScale, update: false };
-}
-
 function tickDPI() {
     var hasError = false;
     try {
@@ -229,6 +200,34 @@ function tickDPI() {
     }
 }
 
+var lastDPIScale = 1;
+function getDpiScale() {
+    var dpiScale = 1;
+    if (gitWatcherComponent) {
+        try {
+            var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
+            if (currentWindowDpi > 0) {
+                dpiScale = currentWindowDpi / 96;
+            }
+        } catch (e) { }
+    }
+
+    if (lastDPIScale != dpiScale) {
+        lastDPIScale = dpiScale;
+        return { dpi: dpiScale, update: true };
+    }
+    return { dpi: dpiScale, update: false };
+}
+
+function getWindowRect(dpiScale) {
+    var xDPI = Math.ceil(32 * dpiScale);
+    var yDPI = Math.ceil(26 * dpiScale);
+    var cxDPI = Math.ceil(32 * dpiScale);     // 横には１つずつ並べる
+    var cyDPI = Math.ceil(32 * 4 * dpiScale); // 縦に４つのボタン
+
+    return { "x": xDPI, "y": yDPI, "cx": cxDPI, "cy": cyDPI };
+
+}
 
 // ---- レンダリングペインのURL
 function getHtmlUrl() {
