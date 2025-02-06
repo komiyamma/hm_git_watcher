@@ -2,85 +2,87 @@
 <html lang="ja">
 
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>HmGitWatcher</title>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden; // スクロールバーが絶対に出ないように
-}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HmGitWatcher</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden; // スクロールバーが絶対に出ないように
+        }
 
-.command-button {
-    opacity: 0.2; /* デフォルトの透明度 */
-    width: 32px;
-    height: 32px;
-    padding: 0;
-    border: none;
-    margin: 0;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        .command-button {
+            opacity: 0.2;
+            /* デフォルトの透明度 */
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: none;
+            margin: 0;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.command-button img {
-    width: 30px;
-    height: 30px;
-    display: block;
-}
+        .command-button img {
+            width: 30px;
+            height: 30px;
+            display: block;
+        }
 
-.command-button.active {
-    opacity: 1.0; /* アクティブ時の透明度 */
-    cursor: pointer;
-}
-.command-button.active:active {
-    padding-top: 1px;
-    padding-left: 1px;
-}
+        .command-button.active {
+            opacity: 1.0;
+            /* アクティブ時の透明度 */
+            cursor: pointer;
+        }
 
-</style>
-<script>
-// ドラッグ・アンド・ドロップは許可しない。画像をドラッグして秀丸の編集エリアなどにもっていくと妙な挙動になるので防止
-document.addEventListener('dragstart', event => {
-    event.preventDefault();
-});
-document.addEventListener('DOMContentLoaded', () => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const callFuncId = Number(urlParams.get('callFuncId'));
+        .command-button.active:active {
+            padding-top: 1px;
+            padding-left: 1px;
+        }
+    </style>
+    <script>
+        // ドラッグ・アンド・ドロップは許可しない。画像をドラッグして秀丸の編集エリアなどにもっていくと妙な挙動になるので防止
+        document.addEventListener('dragstart', event => {
+            event.preventDefault();
+        });
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const callFuncId = Number(urlParams.get('callFuncId'));
 
-    const pullButton = document.getElementById('pull_all');
-    const commitButton = document.getElementById('commit_all');
-    const pushButton = document.getElementById('push_all');
-    const openVscodeButton = document.getElementById('open_vscode');
+            const pullButton = document.getElementById('pull_all');
+            const commitButton = document.getElementById('commit_all');
+            const pushButton = document.getElementById('push_all');
+            const openVscodeButton = document.getElementById('open_vscode');
 
-    function sendMessageToWebView(command_label) {
-        let jsonObj = {command:command_label};
-        let jsonString = JSON.stringify(jsonObj)
-        window.chrome.webview.postMessage({ funcid: callFuncId, message:jsonString  });
-    }
+            function sendMessageToWebView(command_label) {
+                let jsonObj = { command: command_label };
+                let jsonString = JSON.stringify(jsonObj)
+                window.chrome.webview.postMessage({ funcid: callFuncId, message: jsonString });
+            }
 
-    window.HmGitWatcher_Update = (gitStatus, gitStatusPorchain, gitCherry) => {
-        pullButton?.classList.toggle('active', gitStatus > 0);
-        commitButton?.classList.toggle('active', gitStatusPorchain > 0);
-        pushButton?.classList.toggle('active', gitCherry > 0);
-        openVscodeButton?.classList.add('active');
-    }
+            window.HmGitWatcher_Update = (gitStatus, gitStatusPorchain, gitCherry) => {
+                pullButton?.classList.toggle('active', gitStatus > 0);
+                commitButton?.classList.toggle('active', gitStatusPorchain > 0);
+                pushButton?.classList.toggle('active', gitCherry > 0);
+                openVscodeButton?.classList.add('active');
+            }
 
-    window.HmGitWatcher_UpdateBGColor = (bgColor) => {
-        document.body.style.backgroundColor = "#" + bgColor;
-    }
+            window.HmGitWatcher_UpdateBGColor = (bgColor) => {
+                document.body.style.backgroundColor = "#" + bgColor;
+            }
 
-    function handleButtonClick(buttonId) {
-        sendMessageToWebView(buttonId);
-    }
+            function handleButtonClick(buttonId) {
+                sendMessageToWebView(buttonId);
+            }
 
-    document.querySelectorAll('.command-button').forEach(button => {
-        button.addEventListener('click', () => { handleButtonClick(button.id) });
-    });
-});
-</script>
+            document.querySelectorAll('.command-button').forEach(button => {
+                button.addEventListener('click', () => { handleButtonClick(button.id) });
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -98,14 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
     </button>
 </body>
 <script>
-function setBgColor() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const bgColor = urlParams.get('bgColor');
-    if (bgColor) {
-        document.body.style.backgroundColor = "#" + bgColor;
-        // window.chrome.webview.postMessage({ funcid: callFuncId, message: "visible" });
+    function setBgColor() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bgColor = urlParams.get('bgColor');
+        if (bgColor) {
+            document.body.style.backgroundColor = "#" + bgColor;
+            // window.chrome.webview.postMessage({ funcid: callFuncId, message: "visible" });
+        }
     }
-}
-setBgColor();
+    setBgColor();
 </script>
+
 </html>

@@ -40,7 +40,7 @@ function onGitReposFound(repoFullPath) {
 var updatedRenderPaneStatusRetry; // 初期化しないこと。
 
 function stopUpdatedRenderPaneStatusRetry() {
-    if (typeof(updatedRenderPaneStatusRetry) != "undefined") {
+    if (typeof (updatedRenderPaneStatusRetry) != "undefined") {
         hidemaru.clearInterval(updatedRenderPaneStatusRetry);
     }
 }
@@ -165,11 +165,11 @@ function isNotDetectedOperation() {
     ○ 0x00040000 Hidemaru_CheckQueueStatus相当
     */
     var s = hidemaru.getInputStates();
-    var notAllowedMask = 
-          0x00000004 | 0x00000008 | 0x00000010 | 
-          0x00000200 | 0x00000400 | 0x00000800 | 
-          0x00001000 | 0x00020000;
-    return (s & notAllowedMask) != 0; 
+    var notAllowedMask =
+        0x00000004 | 0x00000008 | 0x00000010 |
+        0x00000200 | 0x00000400 | 0x00000800 |
+        0x00001000 | 0x00020000;
+    return (s & notAllowedMask) != 0;
 }
 
 // 監視コンポーネント・リスタート。

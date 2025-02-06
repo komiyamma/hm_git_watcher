@@ -9,6 +9,9 @@
 
 var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
+// ボタンを押した時の処理。
+// { command: "pull_all } みたいなオブジェクトをJSON文字列にした形で、引数として降ってくる。
+// 外部マクロからこれを呼び出すことも考慮している、この時は、JSON文字列ではなく、そのままオブジェクト
 function onButtonPushed(command_obj) {
 
     if (!isRenderPaneShowAndVisible()) {
@@ -19,10 +22,10 @@ function onButtonPushed(command_obj) {
 
     // commandラベルを取得。command_obj.command に入っている
     // string なら オブジェクトではなく、JSON文字列だろう。
-    if (typeof(command_obj) == "string") {
+    if (typeof (command_obj) == "string") {
         try {
             command_obj = JSON.parse(command_obj);
-        } catch(e) {}
+        } catch (e) { }
     }
 
     if (!command_obj.command) {
