@@ -21,6 +21,8 @@ if (!#ShouldMacroReExecute) { endmacro; }
 
 execjs currentmacrodirectory + @"\HmGitWatcherButtonPushed.js";
 
+execjs currentmacrodirectory + @"\HmGitWatcherRenderPaneBgColor.js";
+
 execjs currentmacrodirectory + @"\HmGitWatcherRenderPane.js";
 
 execjs currentmacrodirectory + @"\HmGitWatcher100MBLimit.js";
