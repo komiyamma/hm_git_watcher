@@ -147,22 +147,27 @@ function isDialogOperation() {
     return false;
 }
 
-// ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、それに応じて、レンダリングペインの位置やサイズを変更する。
+// ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、この関数が非同期でdllから呼ばれる
+//      それに応じて、レンダリングペインの位置やスケールを変更する。
 function onDPIChange(currentWindowDPI) {
+    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+
+    var dpiScale = 1;
     try {
         if (currentWindowDPI > 0) {
-            var dpiScale = currentWindowDPI / 96;
-            var windowRect = getWindowRect(dpiScale);
-
-            renderpanecommand({
-                target: strRanderPaneName,
-                place: "overlay",
-                x: windowRect.x,
-                y: windowRect.y,
-                cx: windowRect.cx,
-                cy: windowRect.cy
-            });
+            dpiScale = currentWindowDPI / 96;
         }
+
+        var windowRect = getWindowRect(dpiScale);
+
+        renderpanecommand({
+            target: strRanderPaneName,
+            place: "overlay",
+            x: windowRect.x,
+            y: windowRect.y,
+            cx: windowRect.cx,
+            cy: windowRect.cy
+        });
     } catch (e) {
     }
 }
