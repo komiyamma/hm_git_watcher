@@ -429,7 +429,8 @@ public partial class HmGitWatcher
                 Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
             }
 
-            for (int i = 0; i < 8; i++)
+            // 何もなければ、8秒に１回の間隔でチェック
+            for (int i = 0; i < 16; i++)
             {
                 if (cancellationToken.IsCancellationRequested)
                 {
