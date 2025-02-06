@@ -55,8 +55,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pushButton = document.getElementById('push_all');
     const openVscodeButton = document.getElementById('open_vscode');
 
-    function sendMessageToWebView(message) {
-        window.chrome.webview.postMessage({ funcid: callFuncId, message: message });
+    function sendMessageToWebView(command_label) {
+        let jsonObj = {command:command_label};
+        let jsonString = JSON.stringify(jsonObj)
+        window.chrome.webview.postMessage({ funcid: callFuncId, message:jsonString  });
     }
 
     window.HmGitWatcher_Update = (gitStatus, gitStatusPorchain, gitCherry) => {

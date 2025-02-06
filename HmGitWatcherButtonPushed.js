@@ -15,7 +15,23 @@ function onButtonPushed(command_obj) {
         return;
     }
 
-    var command_label = command_obj.command
+    if (!command_obj) { return; }
+
+    // commandラベルを取得。command_obj.command に入っている
+    // string なら オブジェクトではなく、JSON文字列だろう。
+    if (typeof(command_obj) == "string") {
+        try {
+            command_obj = JSON.parse(command_obj);
+        } catch(e) {}
+    }
+
+    if (!command_obj.command) {
+        writeOutputPane("指定のコマンドオブジェクトが不正です。");
+        return;
+    }
+
+    var command_label = command_obj.command;
+
 
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     if (!gRepoFullPathAtPushButton) { return; }
