@@ -11,7 +11,7 @@ namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
-    private FileSystemWatcher watcher;
+    private static FileSystemWatcher watcher;
 
     private void ReCreateFileWatcher(string targetPath)
     {
