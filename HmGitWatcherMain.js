@@ -32,9 +32,7 @@ function onGitReposFound(repoFullPath) {
     startDPIWatcher();
 
     if (use100MBLimitPreCommitFile) {
-        hidemaru.setTimeout(function () {
-            create100MBLimitPreCommitFile(repoFullPath);
-        }, 0);
+        create100MBLimitPreCommitFile(repoFullPath);
     }
 }
 
