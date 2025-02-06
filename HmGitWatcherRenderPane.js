@@ -148,10 +148,10 @@ function isDialogOperation() {
 }
 
 // ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、それに応じて、レンダリングペインの位置やサイズを変更する。
-function onDPIChange(currentWindowDpi) {
+function onDPIChange(currentWindowDPI) {
     try {
-        if (currentWindowDpi > 0) {
-            var dpiScale = currentWindowDpi / 96;
+        if (currentWindowDPI > 0) {
+            var dpiScale = currentWindowDPI / 96;
             var windowRect = getWindowRect(dpiScale);
 
             renderpanecommand({
@@ -167,13 +167,13 @@ function onDPIChange(currentWindowDpi) {
     }
 }
 
-function getDpiScale() {
+function getDPIScale() {
     var dpiScale = 1;
     if (gitWatcherComponent) {
         try {
-            var currentWindowDpi = gitWatcherComponent.GetHidemaruDpi();
-            if (currentWindowDpi > 0) {
-                dpiScale = currentWindowDpi / 96;
+            var currentWindowDPI = gitWatcherComponent.GetHidemaruDPI();
+            if (currentWindowDPI > 0) {
+                dpiScale = currentWindowDPI / 96;
             }
         } catch (e) { }
     }
@@ -221,7 +221,7 @@ function openRenderPane() {
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
     // overlayは、DPIの影響をもろうけするため、DPIを考慮する必要がある。
-    var dpiScale = getDpiScale();
+    var dpiScale = getDPIScale();
     var windowRect = getWindowRect(dpiScale);
 
     // invisibleな隠した状態で配置しておく

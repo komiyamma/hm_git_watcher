@@ -16,9 +16,9 @@ public partial class HmGitWatcher
 
     static private int lastDpi = 96;
 
-    public int GetHidemaruDpi()
+    public int GetHidemaruDPI()
     {
-        int curDPI = GetDpi(); // XとYは同じ値になるはずです
+        int curDPI = GetDPI(); // XとYは同じ値になるはずです
         if (curDPI > 0)
         {
             lastDpi = curDPI;
@@ -27,7 +27,7 @@ public partial class HmGitWatcher
     }
 
 
-    static public int GetDpi()
+    static public int GetDPI()
     {
         var hWnd = Hm.WindowHandle;
 
@@ -136,7 +136,7 @@ public partial class HmGitWatcher
                     }
 
 
-                    var curDPI = GetDpi();
+                    var curDPI = GetDPI();
 
                     if (curDPI != lastDpi)
                     {
