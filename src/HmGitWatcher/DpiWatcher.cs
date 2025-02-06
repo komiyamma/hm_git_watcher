@@ -16,7 +16,7 @@ public partial class HmGitWatcher
 
     static private int lastDpi = 96;
 
-    public int GetHidemaruDPI()
+    public int GetStartDPI()
     {
         int curDPI = GetDPI(); // XとYは同じ値になるはずです
         if (curDPI > 0)
@@ -48,7 +48,7 @@ public partial class HmGitWatcher
 
 
 
-    DpiWatcher dpiWatcher;
+    static DpiWatcher dpiWatcher;
     public void ReCreateDPIWatcher(dynamic func)
     {
         if (dpiWatcher != null)

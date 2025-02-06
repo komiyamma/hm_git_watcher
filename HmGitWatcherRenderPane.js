@@ -106,6 +106,8 @@ function stopBGColorInterval() {
     }
 }
 
+debuginfo(2);
+var overrideIntervalMode = false;
 function tickBGColor() {
     var hasError = false;
     try {
@@ -113,7 +115,7 @@ function tickBGColor() {
         if (!curBGColor) {
             return;
         }
-
+console.log("コマンド送信");
         var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
         renderpanecommand({
             target: strRanderPaneName,
@@ -123,15 +125,39 @@ function tickBGColor() {
         stopBGColorInterval();
         hasError = true;
     } finally {
-        if (!hasError) {
-            // 背景カラーを変更しているとすればほとんどダイアログだろう。この時Tick間隔を狭める
-            if (isDialogOperation()) {
-                var overrideIntervalTime = Math.floor(bgColorIntervalTime / 5);
-                startBGColorInterval(overrideIntervalTime);
-            } else {
-                startBGColorInterval(bgColorIntervalTime);
-            }
+        // なんか不明なエラーが置きてるようなら何もしない。
+        if (hasError) {
+            overrideIntervalMode = false;
+            return;
         }
+
+        // ダイアログではない。通常運転
+        if (!isDialogOperation()) {
+            overrideIntervalMode = false;
+            startBGColorInterval(bgColorIntervalTime);
+            return;
+        }
+
+        // 背景カラーを、ファイルを開いた後に途中で変更する行為はかなり稀。
+        // ほぼダイアログだろう。この時Tick間隔を狭める
+        var overrideIntervalTime = Math.floor(bgColorIntervalTime / 5);
+
+        if (overrideIntervalMode) {
+            startBGColorInterval(overrideIntervalTime);
+            return;
+        }
+
+        // 色の指定というダイアログが出たら、「ダイアログが無くなるではoverrideモード維持」
+        var captionTitle = gitWatcherComponent.GetForegroundWindowText();
+        // 英語リソースもあるが、速度をブーストするだけなのでこれでよいだろう。(99.5％は日本語で利用してるだろう)
+        // たとえ英語リソースでも通常間隔では監視が続くので問題はない。
+        if (captionTitle == "色の指定" || captionTitle == "ファイルタイプ別の設定") {
+            overrideIntervalMode = true;
+            startBGColorInterval(overrideIntervalTime);
+            return;
+        }
+
+        startBGColorInterval(bgColorIntervalTime);
     }
 }
 
@@ -172,11 +198,11 @@ function onDPIChange(currentWindowDPI) {
     }
 }
 
-function getDPIScale() {
+function getStartDPIScale() {
     var dpiScale = 1;
     if (gitWatcherComponent) {
         try {
-            var currentWindowDPI = gitWatcherComponent.GetHidemaruDPI();
+            var currentWindowDPI = gitWatcherComponent.GetStartDPI();
             if (currentWindowDPI > 0) {
                 dpiScale = currentWindowDPI / 96;
             }
@@ -226,7 +252,7 @@ function openRenderPane() {
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
     // overlayは、DPIの影響をもろうけするため、DPIを考慮する必要がある。
-    var dpiScale = getDPIScale();
+    var dpiScale = getStartDPIScale();
     var windowRect = getWindowRect(dpiScale);
 
     // invisibleな隠した状態で配置しておく
