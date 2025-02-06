@@ -27,7 +27,7 @@ function shouldMacroReExecute() {
 
     // 保存直前からの呼び出しは対象外。保存直後｛ event==3 && geteventparam(0)==1 ｝からの呼び出しには対応。
     // 「ファイル名をつけて保存」だと、保存直前のタイミングで処理をしたとしても、直後にファイルに紐づいたjsmode(の実行空間)が解放されるので無意味なため。
-    if (eventId == 3 && geteventparam(0) == 0) {
+    if (eventId == 3 && geteventparam(0) != 1) {
         return 0;
     }
 
@@ -36,13 +36,13 @@ function shouldMacroReExecute() {
         return 0;
     }
 
-    // コンポーネントが解放されてしまっているなら、jsmodeの実行空間がクリアされてしまっている。改めて実行する必要がある。
-    if (typeof (gitWatcherComponent) == "undefined") {
-        return 1;
+    // コンポーネントは存在している。何もしない。
+    if (typeof (gitWatcherComponent) != "undefined") {
+        return 0;
     }
 
-    // コンポーネントは存在している。何もしない。
-    return 0;
+    // コンポーネントが解放されてしまっているなら、jsmodeの実行空間がクリアされてしまっている。改めて実行する必要がある。
+    return 1;
 }
 
 setVar("#ShouldMacroReExecute", shouldMacroReExecute());
