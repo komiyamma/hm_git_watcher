@@ -9,11 +9,13 @@
 
 var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジトリを控えておくため。
 
-function onButtonPushed(command_label) {
+function onButtonPushed(command_obj) {
 
     if (!isRenderPaneShowAndVisible()) {
         return;
     }
+
+    var command_label = command_obj.command
 
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     if (!gRepoFullPathAtPushButton) { return; }
