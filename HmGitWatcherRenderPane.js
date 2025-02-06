@@ -27,7 +27,6 @@ function closeRenderPane() {
     });
 
     stopBGColorInterval();
-    stopDPIInterval();
     stopUpdatedRenderPaneStatusRetry();
 }
 
@@ -40,7 +39,6 @@ function showRenderPane() {
     });
 
     startBGColorInterval();
-    startDPIInterval();
 }
 
 // レンダリングペインにjsコマンドを送る
@@ -149,74 +147,38 @@ function isDialogOperation() {
     return false;
 }
 
-
 // ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、それに応じて、レンダリングペインの位置やサイズを変更する。
-var dpiIntervalHandle; // 初期化してはならない
-var dpiIntervalTime = 2000; // チック間隔
-
-function startDPIInterval(intervalTime) {
-
-    if (!intervalTime) {
-        intervalTime = dpiIntervalTime;
-    }
-
-    if (typeof (dpiIntervalHandle) != "undefined") {
-        hidemaru.clearInterval(dpiIntervalHandle);
-    }
-    dpiIntervalHandle = hidemaru.setTimeout(tickDPI, intervalTime);
-}
-
-function stopDPIInterval() {
-    if (typeof (dpiIntervalHandle) != "undefined") {
-        hidemaru.clearInterval(dpiIntervalHandle);
-    }
-}
-
-function tickDPI() {
-    var hasError = false;
+function onDPIChange(currentWindowDpi) {
     try {
-        var dpiObj = getDpiScale();
-        if (!dpiObj.update) {
-            return;
+        if (currentWindowDpi > 0) {
+            var dpiScale = currentWindowDpi / 96;
+            var windowRect = getWindowRect(dpiScale);
+
+            renderpanecommand({
+                target: strRanderPaneName,
+                place: "overlay",
+                x: windowRect.x,
+                y: windowRect.y,
+                cx: windowRect.cx,
+                cy: windowRect.cy
+            });
         }
-
-        var dpiScale = dpiObj.dpi;
-
-        var windowRect = getWindowRect(dpiScale);
-
-        renderpanecommand({
-            target: strRanderPaneName,
-            place: "overlay",
-            x: windowRect.x,
-            y: windowRect.y,
-            cx: windowRect.cx,
-            cy: windowRect.cy
-        });
     } catch (e) {
-        stopDPIInterval();
-        hasError = true;
-    } finally {
-        startDPIInterval();
     }
 }
 
-var lastDPIScale = 1;
 function getDpiScale() {
     var dpiScale = 1;
     if (gitWatcherComponent) {
         try {
-            var currentWindowDpi = gitWatcherComponent.GetDpiFromWindowHandle(hidemaru.getCurrentWindowHandle());
+            var currentWindowDpi = gitWatcherComponent.GetHidemaruDpi();
             if (currentWindowDpi > 0) {
                 dpiScale = currentWindowDpi / 96;
             }
         } catch (e) { }
     }
 
-    if (lastDPIScale != dpiScale) {
-        lastDPIScale = dpiScale;
-        return { dpi: dpiScale, update: true };
-    }
-    return { dpi: dpiScale, update: false };
+    return dpiScale;
 }
 
 function getWindowRect(dpiScale) {
@@ -259,9 +221,7 @@ function openRenderPane() {
     var targetUrl = htmlUrl + '?callFuncId=' + callFuncId + '&bgColor=' + bgColor;
 
     // overlayは、DPIの影響をもろうけするため、DPIを考慮する必要がある。
-    var dpiObj = getDpiScale();
-    var dpiScale = dpiObj.dpi;
-
+    var dpiScale = getDpiScale();
     var windowRect = getWindowRect(dpiScale);
 
     // invisibleな隠した状態で配置しておく

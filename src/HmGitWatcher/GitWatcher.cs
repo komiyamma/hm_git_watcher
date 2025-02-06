@@ -472,13 +472,6 @@ public partial class HmGitWatcher
     {
         try
         {
-            DesposeFileWatcher();
-        }
-        catch (Exception ex)
-        {
-        }
-        try
-        {
             if (_cancellationTokenSource != null)
             {
                 _cancellationTokenSource.Cancel();
@@ -486,6 +479,22 @@ public partial class HmGitWatcher
                 _cancellationTokenSource = null;
                 // Hm.OutputPane.Output("Git監視を停止しました。\r\n");
             }
+        }
+        catch (Exception ex)
+        {
+        }
+
+        try
+        {
+            DesposeFileWatcher();
+        }
+        catch (Exception ex)
+        {
+        }
+
+        try
+        {
+            StopDPIWatcher();
         }
         catch (Exception ex)
         {

@@ -29,12 +29,17 @@ function onGitReposFound(repoFullPath) {
 
     showRenderPane();
 
+    if (gitWatcherComponent) {
+        gitWatcherComponent.ReCreateDPIWatcher(onDPIChange);
+    }
+
     if (use100MBLimitPreCommitFile) {
         hidemaru.setTimeout(function () {
             create100MBLimitPreCommitFile(repoFullPath);
         }, 0);
     }
 }
+
 
 var updatedRenderPaneStatusRetry; // 初期化しないこと。
 
