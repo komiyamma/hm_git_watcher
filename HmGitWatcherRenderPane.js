@@ -106,58 +106,34 @@ function stopBGColorInterval() {
     }
 }
 
-debuginfo(2);
-var overrideIntervalMode = false;
 function tickBGColor() {
+
     var hasError = false;
     try {
         var curBGColor = getBGColor();
         if (!curBGColor) {
             return;
         }
-console.log("コマンド送信");
         var jsCommand = "javascript:HmGitWatcher_UpdateBGColor('" + curBGColor + "');";
         renderpanecommand({
             target: strRanderPaneName,
             uri: jsCommand
         });
     } catch (e) {
-        stopBGColorInterval();
         hasError = true;
     } finally {
-        // なんか不明なエラーが置きてるようなら何もしない。
+        // エラーがあったらストップ
         if (hasError) {
-            overrideIntervalMode = false;
+            stopBGColorInterval();
             return;
         }
 
-        // ダイアログではない。通常運転
-        if (!isDialogOperation()) {
-            overrideIntervalMode = false;
+        // ダイアログの時は間隔を短くする。
+        if (isDialogOperation()) {
+            startBGColorInterval(Math.floor(bgColorIntervalTime / 5));
+        } else {
             startBGColorInterval(bgColorIntervalTime);
-            return;
         }
-
-        // 背景カラーを、ファイルを開いた後に途中で変更する行為はかなり稀。
-        // ほぼダイアログだろう。この時Tick間隔を狭める
-        var overrideIntervalTime = Math.floor(bgColorIntervalTime / 5);
-
-        if (overrideIntervalMode) {
-            startBGColorInterval(overrideIntervalTime);
-            return;
-        }
-
-        // 色の指定というダイアログが出たら、「ダイアログが無くなるではoverrideモード維持」
-        var captionTitle = gitWatcherComponent.GetForegroundWindowText();
-        // 英語リソースもあるが、速度をブーストするだけなのでこれでよいだろう。(99.5％は日本語で利用してるだろう)
-        // たとえ英語リソースでも通常間隔では監視が続くので問題はない。
-        if (captionTitle == "色の指定" || captionTitle == "ファイルタイプ別の設定") {
-            overrideIntervalMode = true;
-            startBGColorInterval(overrideIntervalTime);
-            return;
-        }
-
-        startBGColorInterval(bgColorIntervalTime);
     }
 }
 
@@ -171,6 +147,16 @@ function isDialogOperation() {
     }
 
     return false;
+}
+
+
+
+// DPIに変化がある時だけ、onDPIChange が呼ばれるようにする。
+// 事実上のシングルスレッドになってるJavaScriptのTickによるリソースは使わず、別のCore/Threadへと分散する。
+function startDPIWatcher() {
+    if (gitWatcherComponent) {
+        gitWatcherComponent.ReCreateDPIWatcher(onDPIChange);
+    }
 }
 
 // ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、この関数が非同期でdllから呼ばれる

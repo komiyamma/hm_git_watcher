@@ -29,9 +29,7 @@ function onGitReposFound(repoFullPath) {
 
     showRenderPane();
 
-    if (gitWatcherComponent) {
-        gitWatcherComponent.ReCreateDPIWatcher(onDPIChange);
-    }
+    startDPIWatcher();
 
     if (use100MBLimitPreCommitFile) {
         hidemaru.setTimeout(function () {
