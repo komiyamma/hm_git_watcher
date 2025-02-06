@@ -14,10 +14,6 @@ var gRepoFullPathAtPushButton = ""; // ボタンを押した瞬間のリポジ�
 // 外部マクロからこれを呼び出すことも考慮している、この時は、JSON文字列ではなく、そのままオブジェクト
 function onButtonPushed(command_obj) {
 
-    if (!isRenderPaneShowAndVisible()) {
-        return;
-    }
-
     if (!command_obj) { return; }
 
     // commandラベルを取得。command_obj.command に入っている
@@ -35,6 +31,9 @@ function onButtonPushed(command_obj) {
 
     var command_label = command_obj.command;
 
+    if (!isRenderPaneShowAndVisible()) {
+        return;
+    }
 
     gRepoFullPathAtPushButton = gRepoFullPath; // 押した瞬間に
     if (!gRepoFullPathAtPushButton) { return; }

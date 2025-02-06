@@ -79,7 +79,7 @@ public partial class HmGitWatcher
         // デストラクタ
         ~DpiWatcher()
         {
-            Hm.OutputPane.Output("DpiWatcher デストラクタ\r\n");
+            // Hm.OutputPane.Output("DpiWatcher デストラクタ\r\n");
             this.Stop();
         }
 

@@ -63,7 +63,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo?.FileName + " " + startInfo?.Arguments + "実行中にエラーが発生しました: {ex} + \r\n");
             return null;
         }
     }
@@ -121,7 +121,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo?.FileName + " " + startInfo?.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             Stop();
             return null; // エラー発生時もnullを返す
         }
@@ -179,7 +179,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo?.FileName + " " + startInfo?.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }
@@ -238,7 +238,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo?.FileName + " " + startInfo?.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }
@@ -276,7 +276,7 @@ public partial class HmGitWatcher
                     {
                         // ナル文字('\0')で分割
                         string[] parts = args.Data.Split('\0');
-                        foreach(var part in parts)
+                        foreach (var part in parts)
                         {
                             if (part.Length > 0)
                             {
@@ -305,7 +305,7 @@ public partial class HmGitWatcher
         }
         catch (Exception ex)
         {
-            Hm.OutputPane.Output(startInfo.FileName + " " + startInfo.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
+            Hm.OutputPane.Output(startInfo?.FileName + " " + startInfo?.Arguments + $"実行中にエラーが発生しました: {ex} + \r\n");
             return null; // エラー発生時もnullを返す
         }
     }
@@ -375,7 +375,7 @@ public partial class HmGitWatcher
                     prevFilePath = "";
                 }
 
-                else 
+                else
                 {
                     if (prevRepoPath != repoPath)
                     {
@@ -446,26 +446,38 @@ public partial class HmGitWatcher
         }
 
     }
+
     private CancellationTokenSource _cancellationTokenSource;
     private void StartCheck(dynamic callBackFoundRepos, dynamic callBackStatusChange)
     {
-        prevFilePath = Hm.Edit.FilePath;
+        try
+        {
+            prevFilePath = Hm.Edit.FilePath;
 
-        _cancellationTokenSource = new CancellationTokenSource();
-        var cancellationToken = _cancellationTokenSource.Token;
+            _cancellationTokenSource = new CancellationTokenSource();
+            var cancellationToken = _cancellationTokenSource.Token;
 
-        // 非同期処理を開始
-        Task.Run(async () => await CheckInternal(callBackFoundRepos, callBackStatusChange, cancellationToken));
-
+            // 非同期処理を開始
+            Task.Run(async () => await CheckInternal(callBackFoundRepos, callBackStatusChange, cancellationToken));
+        }
+        catch (Exception ex)
+        {
+        }
         // Hm.OutputPane.Output("Git監視を開始しました。\r\n");
     }
 
 
     public void ReStart(dynamic callBackFoundRepos, dynamic callBackStatusChange)
     {
-        // すでに監視を開始している場合は停止する
-        Stop();
-        StartCheck(callBackFoundRepos, callBackStatusChange);
+        try
+        {
+            // すでに監視を開始している場合は停止する
+            Stop();
+            StartCheck(callBackFoundRepos, callBackStatusChange);
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     public void Stop()
