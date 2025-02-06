@@ -89,11 +89,7 @@ function isDialogOperation() {
     ◯ 0x00000200 何らかのダイアログ表示中
     */
     var s = hidemaru.getInputStates();
-    if (s & 0x00000200) {
-        return true;
-    }
-
-    return false;
+    return s & 0x00000200;
 }
 
 
