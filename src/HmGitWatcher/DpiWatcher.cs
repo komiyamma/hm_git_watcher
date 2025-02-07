@@ -33,13 +33,13 @@ public partial class HmGitWatcher
 
         if ((IntPtr)hWnd == IntPtr.Zero)
         {
-            return 0;
+            return lastDpi;
         }
 
         int dpi = GetDpiForWindow((IntPtr)hWnd);
         if (dpi == 0)
         {
-            return 0;
+            return lastDpi;
         }
 
         return dpi;

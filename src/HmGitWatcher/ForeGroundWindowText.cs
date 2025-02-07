@@ -23,15 +23,25 @@ public partial class HmGitWatcher
 
     public string GetForegroundWindowText()
     {
-        // アクティブウィンドウのハンドルを取得
-        IntPtr hwnd = GetForegroundWindow();
+        try
+        {
+            // アクティブウィンドウのハンドルを取得
+            IntPtr hwnd = GetForegroundWindow();
+            if (hwnd == IntPtr.Zero)
+            {
+                return "";
+            }
+            // ウィンドウのタイトルを取得
+            System.Text.StringBuilder title = new System.Text.StringBuilder(MaxTitleLength);
+            GetWindowText(hwnd, title, MaxTitleLength);
 
-        // ウィンドウのタイトルを取得
-        System.Text.StringBuilder title = new System.Text.StringBuilder(MaxTitleLength);
-        GetWindowText(hwnd, title, MaxTitleLength);
+            // Hm.OutputPane.Output(title.ToString() + "★\r\n");
 
-        // Hm.OutputPane.Output(title.ToString() + "★\r\n");
-
-        return title.ToString();
+            return title.ToString();
+        }
+        catch (Exception ex)
+        {
+            return "";
+        }
     }
 }

@@ -15,19 +15,25 @@ public partial class HmGitWatcher
 
     private void ReCreateFileWatcher(string targetPath)
     {
-        DesposeFileWatcher();
-        watcher = new FileSystemWatcher();
-        watcher.Path = targetPath;
-        watcher.IncludeSubdirectories = true; // サブディレクトリも監視
-        watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
-        // 隠しファイルは対象にしない
+        try
+        {
+            DesposeFileWatcher();
+            watcher = new FileSystemWatcher();
+            watcher.Path = targetPath;
+            watcher.IncludeSubdirectories = true; // サブディレクトリも監視
+            watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.DirectoryName;
+            // 隠しファイルは対象にしない
 
-        watcher.Changed += OnFileChanged;
-        watcher.Created += OnFileChanged;
-        watcher.Deleted += OnFileChanged;
-        watcher.Renamed += OnFileChanged;
+            watcher.Changed += OnFileChanged;
+            watcher.Created += OnFileChanged;
+            watcher.Deleted += OnFileChanged;
+            watcher.Renamed += OnFileChanged;
 
-        watcher.EnableRaisingEvents = true;
+            watcher.EnableRaisingEvents = true;
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     private bool IsUnderHiddenDirectory(string path)
