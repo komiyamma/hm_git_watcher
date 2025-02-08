@@ -116,6 +116,15 @@ function getWorkSpaceDir(currentFileFullPath, gitRootDir) {
     return workSpaceDir;
 }
 
+// テンポラリフォルダに次の時だけソースリポジトリへと移動することを許可するために
+function makeTempFile() {
+    var tempfolder = getenv("temp") || getenv("tmp");
+    if (tempfolder) {
+        var tempFileFullPath = sprintf('%s\\HmOpenVSCodeFromHidemaru.txt', tempfolder);
+        hidemaru.saveTextFile(tempFileFullPath, "1", "utf8");
+    }
+}
+
 // 同期関数。VSCodeを指定のファイル、指定のディレクトリ(ワークスペース想定)、指定のポジションで開く
 function openVSCode(currentFileFullPath, cursorPos, gitRootDir) {
 
@@ -129,6 +138,7 @@ function openVSCode(currentFileFullPath, cursorPos, gitRootDir) {
 
     // gitRootDirが存在したのなら、gitビューモードへの移行が原則可能なハズ
     if (gitRootDir) {
+        makeTempFile();
 
         // ソースビューへと自動で移行。対象のリポジトリを作業場として、対象のファイルをunicodeベース換算でのlinenoとcolumn
         var command = sprintf('"%s" -n -g "%s" "%s:%d:%d" --extensionDevelopmentPath="%s"',
