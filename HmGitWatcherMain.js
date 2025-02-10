@@ -12,37 +12,41 @@ if (typeof gitWatcherComponent !== 'undefined') {
     gitWatcherComponent.Stop();
 }
 
-var gitWatcherComponent; // 宣言のみ。初期化しないこと。
+var gitWatcherComponent = registGitWatcherCommonObjectModel();
 
 function registGitWatcherCommonObjectModel() {
 
     var net4runtimeFullPath = currentMacroDirectory + "\\HmGitWatcher.fw.dll";
     var net8runtimeFullPath = currentMacroDirectory + "\\HmGitWatcher.comhost.dll";
 
+    var com = null;
 
     // 自動的に「現在のファイル」の「リポジトリの変化」や「リモートリポジトリとの変化」を監視し、変化があれば、JavaScriptの関数を非同期で呼び出す。
     if (existfile(net4runtimeFullPath)) {
-        gitWatcherComponent = createobject(net4runtimeFullPath, "HmGitWatcher.HmGitWatcher");
+        com = createobject(net4runtimeFullPath, "HmGitWatcher.HmGitWatcher");
         // ウィンドウズ10以降なら原則入っている 「.NET4.8 Framework」による 自動レジストリ登録が失敗している。
-        if (!gitWatcherComponent) {
+        if (!com) {
             writeOutputPane("「.NET 4.8」経由の「自動COM登録」に失敗しました。「.NET 8.0」等、別のものを試してください。");
         }
     }
 
-    if (!gitWatcherComponent) {
+    if (!com) {
 
         if (existfile(net8runtimeFullPath)) {
             // .NET8.0ランタイムインストールが必要とはなるが、COM登録インターフェイスの部分だけネイティブdll相当の.NET8.0経由で試みる
-            gitWatcherComponent = createobject(net8runtimeFullPath, "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
-            if (!gitWatcherComponent) {
+            com = createobject(net8runtimeFullPath, "{CD5AADB6-1A50-436F-85A1-84D72CFAECEB}");
+            if (!com) {
                 writeOutputPane("「.NET 8.0」経由の「自動COM登録」に失敗しました。");
             }
         }
     }
+
+    if (!com) {
+         writeOutputPane("コンポーネントを初期化できませんでした。");
+    }
+
+    return com;
 }
-
-registGitWatcherCommonObjectModel();
-
 
 function onGitReposFound(repoFullPath) {
     hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
