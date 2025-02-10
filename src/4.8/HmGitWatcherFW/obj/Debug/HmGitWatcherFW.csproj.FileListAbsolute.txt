@@ -1,0 +1,12 @@
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.csproj.AssemblyReference.cache
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.csproj.CoreCompileInputs.cache
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\bin\Debug\HmGitWatcherFW.dll
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\bin\Debug\HmGitWatcherFW.pdb
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.dll
+C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.pdb
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\bin\Debug\HmGitWatcher.fw.dll
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\bin\Debug\HmGitWatcher.fw.pdb
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.csproj.AssemblyReference.cache
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Debug\HmGitWatcherFW.csproj.CoreCompileInputs.cache
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Debug\HmGitWatcher.fw.dll
+G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Debug\HmGitWatcher.fw.pdb

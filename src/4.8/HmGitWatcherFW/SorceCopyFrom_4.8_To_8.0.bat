@@ -1,0 +1,1 @@
+copy *.cs ..\..\8.0\HmGitWatcher
