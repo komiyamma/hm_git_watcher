@@ -5,8 +5,6 @@ C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\bin\Release\HmGitWatc
 C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Release\HmGitWatcher.fw.dll
 C:\Users\master\source\repos\HmGitWatcherFW\HmGitWatcherFW\obj\Release\HmGitWatcher.fw.pdb
 G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\bin\Release\HmGitWatcher.fw.dll
-G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\bin\Release\HmGitWatcher.fw.pdb
 G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Release\HmGitWatcherFW.csproj.AssemblyReference.cache
 G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Release\HmGitWatcherFW.csproj.CoreCompileInputs.cache
 G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Release\HmGitWatcher.fw.dll
-G:\repogitory\hm_git_watcher\src\4.8\HmGitWatcherFW\obj\Release\HmGitWatcher.fw.pdb
