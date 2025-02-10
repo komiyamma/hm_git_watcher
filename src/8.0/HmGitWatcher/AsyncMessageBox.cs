@@ -183,8 +183,9 @@ internal partial class AsyncMessageBoxForm : Form
             Location = new System.Drawing.Point((int)(12 * dpiScale), (int)(220 * dpiScale)),
             Size = new System.Drawing.Size((int)(60 * dpiScale), (int)(32 * dpiScale)),
             TabIndex = 0,
-            Name = "コミット",
-            Text = button_text
+            Name = "ボタン",
+            Text = button_text,
+            Font = new Font("MS UI Gothic", (float)(12F * dpiScale), FontStyle.Regular, GraphicsUnit.Point, 128)
         };
 
         submitButton.Focus();

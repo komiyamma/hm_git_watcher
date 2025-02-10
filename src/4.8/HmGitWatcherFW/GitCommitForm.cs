@@ -177,7 +177,8 @@ internal partial class GitCommitForm : Form
             Location = new System.Drawing.Point((int)(12 * dpiScale), (int)(220 * dpiScale)),
             Size = new System.Drawing.Size((int)(60 * dpiScale), (int)(32 * dpiScale)),
             Name = "コミット",
-            Text = "コミット"
+            Text = "コミット",
+            Font = new Font("MS UI Gothic", (float)(12F* dpiScale), FontStyle.Regular, GraphicsUnit.Point, 128)
         };
         submitButton.Click += BtnSubmit_Click;
 
