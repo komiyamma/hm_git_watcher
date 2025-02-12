@@ -30,7 +30,7 @@ function getBGColor() {
     return null;
 }
 
-// ---- 設定の変更などで、背景色を変更したら、それを反映される。同じファイルに対して背景を変更する結構かなりまれな行為なのでゆっくり反映で良いだろう。
+// ---- 設定の変更などで、背景色を変更したら、それを反映される。同じファイルに対して「背景色の設定を変更する」などは、レアな行為なのでゆっくり反映で良いだろう。
 var bgColorIntervalHandle; // 初期化してはならない
 var bgColorIntervalTime = 5000; // チック間隔
 
@@ -53,6 +53,8 @@ function stopBGColorInterval() {
     }
 }
 
+// ファイル編集の途中で背景色を反映するとすれば、ほとんどの場合は、ダイアログだろう。
+// なので、秀丸が何らかのダイアログを出している、チェック間隔を短くする。
 function tickBGColor() {
 
     var hasError = false;

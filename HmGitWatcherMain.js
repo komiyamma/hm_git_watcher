@@ -80,6 +80,7 @@ function stopUpdatedRenderPaneStatusRetry() {
 
 stopUpdatedRenderPaneStatusRetry();
 
+
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
@@ -98,16 +99,8 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     // --------------------------------------------------------------------
     // プルする必要があるかどうかの判定
     // --------------------------------------------------------------------
-    // derived(派生)している。(github上のコミット進行とローカルリポジトリのコミット進行が異なってしまっている)
-    if (gitStatus.indexOf('use "git pull" to merge') !== -1) {
-        gitStatus = 2;
-    }
-    // 普通にプル可能
-    else if (gitStatus.indexOf('use "git pull" to update') !== -1) {
-        gitStatus = 1;
-    }
-    // 未知だが、まぁ新たな同士
-    else if (gitStatus.indexOf('use "git pull" to ') !== -1) {
+    // プル可能
+    if (gitStatus.indexOf('use "git pull"') !== -1) {
         gitStatus = 1;
     }
     // プルする必要はない
