@@ -49,7 +49,7 @@ function registGitWatcherCommonObjectModel() {
 }
 
 function onGitReposFound(repoFullPath) {
-    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     repoFullPath = repoFullPath || "";
 
@@ -90,7 +90,7 @@ debuginfo(2);
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
-    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     repoFullPath = repoFullPath || "";
     gitStatus = gitStatus || "";

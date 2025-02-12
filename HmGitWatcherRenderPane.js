@@ -62,7 +62,7 @@ function startDPIWatcher() {
 // ---- ディスプレイ間の移動・もしくはディスプレイの設定などでDPIが変わったら、この関数が非同期でdllから呼ばれる
 //      それに応じて、レンダリングペインの位置やスケールを変更する。
 function onDPIChange(currentWindowDPI) {
-    hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     var dpiScale = 1;
     try {
