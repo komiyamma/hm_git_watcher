@@ -288,7 +288,6 @@ public partial class HmGitWatcher
                         {
                             if (part.Length > 0)
                             {
-                                Hm.OutputPane.Output("★★★★" + part);
                                 stdOutSum += part + "\r\n";
                             }
                         }
@@ -342,7 +341,6 @@ public partial class HmGitWatcher
     {
         while (!cancellationToken.IsCancellationRequested)
         {
-            Hm.OutputPane.Output("●1\r\n");
             try
             {
                 if (callBackStatusChange == null)
@@ -352,7 +350,6 @@ public partial class HmGitWatcher
                 }
 
                 string filePath = Hm.Edit.FilePath;
-                Hm.OutputPane.Output("●2\r\n");
 
                 if (string.IsNullOrEmpty(filePath))
                 {
@@ -367,7 +364,6 @@ public partial class HmGitWatcher
                     break;
                 }
 
-                Hm.OutputPane.Output("●3\r\n");
                 if (prevFilePath != filePath)
                 {
                     prevStatus = "";
@@ -379,15 +375,14 @@ public partial class HmGitWatcher
                     Stop();
                     break;
                 }
-                Hm.OutputPane.Output("●4\r\n");
 
                 string repoPath = GetAbsoluteGitDir(filePath);
-                Hm.OutputPane.Output("●5\r\n");
                 if (String.IsNullOrEmpty(repoPath))
                 {
                     try
                     {
                         callBackStatusChange("", "", "");
+                        Stop();
                     }
                     catch (Exception ex)
                     {
@@ -418,15 +413,10 @@ public partial class HmGitWatcher
                         Hm.OutputPane.Output("■ReCreateFileWatcher");
                         ReCreateFileWatcher(repoPath);
                     }
-                    Hm.OutputPane.Output("start1\r\n");
                     GetGitFetch(repoPath);
-                    Hm.OutputPane.Output("fetch\r\n");
                     string status = GetGitStatus(repoPath);
-                    Hm.OutputPane.Output("status\r\n");
                     string porchain = GetGitStatusPorchain(repoPath);
-                    Hm.OutputPane.Output("C# porchain:" + porchain);
                     string cherry = GetGitCherry(repoPath);
-                    Hm.OutputPane.Output("cherry\r\n");
 
                     if (prevStatus == status && prevPorchain == porchain && prevCherry == cherry && prevRepoPath == repoPath)
                     {
@@ -445,10 +435,9 @@ public partial class HmGitWatcher
                         {
                             try
                             {
-                                Hm.OutputPane.Output("callBackStatusChange Before\r\n");
+                                Hm.OutputPane.Output("callBackStatusChange 変化あり\r\n");
                                 // 実行先が存在しないことが考えられる。
                                 callBackStatusChange(repoPath, status, porchain, cherry);
-                                Hm.OutputPane.Output("callBackStatusChange After\r\n");
                             }
                             catch (Exception ex)
                             {
@@ -483,7 +472,6 @@ public partial class HmGitWatcher
             }
         }
         Hm.OutputPane.Output("★終わり\r\n");
-
     }
 
     private CancellationTokenSource _cancellationTokenSource;
