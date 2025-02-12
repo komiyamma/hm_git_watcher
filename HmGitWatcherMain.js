@@ -51,21 +51,24 @@ function registGitWatcherCommonObjectModel() {
 function onGitReposFound(repoFullPath) {
     hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
-    repoFullPath = repoFullPath.replace(/\//g, '\\');
-    gRepoFullPath = repoFullPath;
+    try {
+        if (!repoFullPath) {
+            // レンダリングペインは消してしまう
+            closeRenderPane();
+            return;
+        }
 
-    if (!repoFullPath) {
-        // レンダリングペインは消してしまう
-        closeRenderPane();
-        return;
-    }
+        repoFullPath = repoFullPath.replace(/\//g, '\\');
+        gRepoFullPath = repoFullPath;
 
-    showRenderPane();
+        showRenderPane();
 
-    startDPIWatcher();
+        startDPIWatcher();
 
-    if (use100MBLimitPreCommitFile) {
-        create100MBLimitPreCommitFile(repoFullPath);
+        if (use100MBLimitPreCommitFile) {
+            create100MBLimitPreCommitFile(repoFullPath);
+        }
+    } catch(e) {
     }
 }
 
@@ -86,51 +89,56 @@ stopUpdatedRenderPaneStatusRetry();
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     hidemaruversion("9.25.99"); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
-    repoFullPath = repoFullPath.replace(/\//g, '\\');
-    gRepoFullPath = repoFullPath;
+    try {
+        // リポジトリに所属していないならば、
+        if (!repoFullPath) {
+            // レンダリングペインは消してしまう
+            closeRenderPane();
+            return;
+        }
 
-    // リポジトリに所属していないならば、
-    if (!repoFullPath) {
-        // レンダリングペインは消してしまう
-        closeRenderPane();
-        return;
-    }
+        repoFullPath = repoFullPath.replace(/\//g, '\\');
+        gRepoFullPath = repoFullPath;
 
-    // --------------------------------------------------------------------
-    // プルする必要があるかどうかの判定
-    // --------------------------------------------------------------------
-    // プル可能
-    if (gitStatus.indexOf('use "git pull"') !== -1) {
-        gitStatus = 1;
-    }
-    // プルする必要はない
-    else {
-        gitStatus = 0;
-    }
+        // --------------------------------------------------------------------
+        // プルする必要があるかどうかの判定
+        // --------------------------------------------------------------------
+        // プル可能
+        if (gitStatus.indexOf('use "git pull"') !== -1) {
+            gitStatus = 1;
+        }
+        // プルする必要はない
+        else {
+            gitStatus = 0;
+        }
 
-    // --------------------------------------------------------------------
-    // コミット可能かどうかの判定
-    // --------------------------------------------------------------------
-    if (gitStatusPorchain) {
-        gitStatusPorchain = 1;
-    } else {
-        gitStatusPorchain = 0;
-    }
+        // --------------------------------------------------------------------
+        // コミット可能かどうかの判定
+        // --------------------------------------------------------------------
+        if (gitStatusPorchain) {
+            gitStatusPorchain = 1;
+        } else {
+            gitStatusPorchain = 0;
+        }
 
-    // --------------------------------------------------------------------
-    // プッシュ可能かどうかの判定
-    // --------------------------------------------------------------------
-    if (gitCherry) {
-        gitCherry = 1;
-    } else {
-        gitCherry = 0;
+        // --------------------------------------------------------------------
+        // プッシュ可能かどうかの判定
+        // --------------------------------------------------------------------
+        if (gitCherry) {
+            gitCherry = 1;
+        } else {
+            gitCherry = 0;
+        }
+    } catch(e) {
     }
 
     function updateRenderPaneButton() {
         if (isRenderPaneReadyStateComplete()) {
-            var jsCommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
-            updateRenderPane(jsCommand);
-            return true;
+            try {
+                var jsCommand = 'javascript:HmGitWatcher_Update(' + gitStatus + ',' + gitStatusPorchain + ',' + gitCherry + ');';
+                updateRenderPane(jsCommand);
+                return true;
+            } catch(e) {}
         }
 
         return false;
@@ -211,7 +219,8 @@ openRenderPane();
 
 // エラーメッセージ用
 function writeOutputPane(msg) {
-    if (msg === null) { return; }
+    if (msg == null) { return; }
+    if (msg == "") { return; }
     var dll = loaddll("HmOutputPane.dll");
     msg = msg.toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
     dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
