@@ -216,14 +216,14 @@ function isNotDetectedOperation() {
     return (s & notAllowedMask) != 0;
 }
 
-// 監視コンポーネント・リスタート。
-// リポジトリを発見したら「onGitReposFound」を呼び出す。  
-// 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
-gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
+if (gitWatcherComponent) {
+    // 監視コンポーネント・リスタート。
+    // リポジトリを発見したら「onGitReposFound」を呼び出す。  
+    // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
+    gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
-
-
-openRenderPane();
+    openRenderPane();
+}
 
 
 
