@@ -20,6 +20,7 @@ function isRenderPaneShowAndVisible() {
 
 // レンダリングを閉じる。インスタンスも破棄
 function closeRenderPane() {
+console.log("◯closeRenderPane");
     renderpanecommand({
         target: strRanderPaneName,
         show: 0,      // コンポーネント破棄
@@ -32,6 +33,7 @@ function closeRenderPane() {
 
 // レンダリングペインの表示。インスタンス確立と実際の表示。
 function showRenderPane() {
+console.log("◯showRenderPane");
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
@@ -126,6 +128,7 @@ function getHtmlUrl() {
 
 // ---- レンダリングペインを開く（この段階ではまだ目に見えない。インスタンス確立だけ。実際に目に見えるのは、リポジトリに帰属することが決定してから）
 function openRenderPane() {
+console.log("◯openRenderPane");
 
     var bgColor = getBGColor();
 
@@ -141,6 +144,7 @@ function openRenderPane() {
     var dpiScale = getStartDPIScale();
     var windowRect = getWindowRect(dpiScale);
 
+console.log("◯instanceRenderPane");
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,

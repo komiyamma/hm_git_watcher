@@ -49,7 +49,8 @@ function registGitWatcherCommonObjectModel() {
 }
 
 function onGitReposFound(repoFullPath) {
-    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+console.log("●JavaScript Found:" + repoFullPath);
+hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     try {
         if (!repoFullPath) {
@@ -90,7 +91,7 @@ debuginfo(2);
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
-    console.log("●JavaScript Function onGitStatusChange\r\n");
+    console.log("●JavaScript Change\r\n");
 
     try {
         // リポジトリに所属していないならば、
