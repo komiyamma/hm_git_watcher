@@ -51,8 +51,6 @@ function registGitWatcherCommonObjectModel() {
 function onGitReposFound(repoFullPath) {
     hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
-    repoFullPath = repoFullPath || "";
-
     try {
         if (!repoFullPath) {
             // レンダリングペインは消してしまう
@@ -91,11 +89,6 @@ debuginfo(2);
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
     hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
-
-    repoFullPath = repoFullPath || "";
-    gitStatus = gitStatus || "";
-    gitStatusPorchain = gitStatusPorchain || "";
-    gitCherry = gitCherry || "";
 
     console.log("●JavaScript Function onGitStatusChange\r\n");
 

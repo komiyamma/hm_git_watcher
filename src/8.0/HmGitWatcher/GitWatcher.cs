@@ -406,7 +406,7 @@ public partial class HmGitWatcher
                     {
                         try
                         {
-                            callBackFoundRepos(repoPath);
+                            callBackFoundRepos(repoPath ?? "");
                         }
                         catch (Exception ex)
                         {
@@ -440,7 +440,7 @@ public partial class HmGitWatcher
                             {
                                 Hm.OutputPane.Output("■callBackStatusChange(...) 変化をJSに反映\r\n");
                                 // 実行先が存在しないことが考えられる。
-                                callBackStatusChange(repoPath, status, porchain, cherry);
+                                callBackStatusChange(repoPath ?? "", status ?? "", porchain ?? "", cherry ?? "");
                             }
                             catch (Exception ex)
                             {
