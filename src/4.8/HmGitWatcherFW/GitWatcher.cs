@@ -339,7 +339,7 @@ public partial class HmGitWatcher
 
     private async Task CheckInternal(dynamic callBackFoundRepos, dynamic callBackStatusChange, CancellationToken cancellationToken)
     {
-        Hm.OutputPane.Output("★タスク開始\r\n");
+        Hm.OutputPane.Output("▼タスク開始------------------\r\n");
         while (!cancellationToken.IsCancellationRequested)
         {
             try
@@ -438,7 +438,7 @@ public partial class HmGitWatcher
                         {
                             try
                             {
-                                Hm.OutputPane.Output("■callBackStatusChange(...) 変化あり\r\n");
+                                Hm.OutputPane.Output("■callBackStatusChange(...) 変化をJSに反映\r\n");
                                 // 実行先が存在しないことが考えられる。
                                 callBackStatusChange(repoPath, status, porchain, cherry);
                             }
@@ -475,7 +475,7 @@ public partial class HmGitWatcher
             }
         }
 
-        Hm.OutputPane.Output("★タスク終了\r\n");
+        Hm.OutputPane.Output("▲タスク終了------------------\r\n");
     }
 
     private CancellationTokenSource _cancellationTokenSource;
@@ -504,7 +504,7 @@ public partial class HmGitWatcher
         {
             // すでに監視を開始している場合は停止する
             Stop();
-            Hm.OutputPane.Output("★ReStart & STOP()\r\n");
+            Hm.OutputPane.Output("\r\n\r\n▲STOP() & ▼ReStart()\r\n");
             StartCheck(callBackFoundRepos, callBackStatusChange);
         }
         catch (Exception ex)
