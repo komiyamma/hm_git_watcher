@@ -97,7 +97,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     gitStatusPorchain = gitStatusPorchain || "";
     gitCherry = gitCherry || "";
 
-    console.log("onGitStatusChange\r\n");
+    console.log("●JavaScript Function onGitStatusChange\r\n");
 
     try {
         // リポジトリに所属していないならば、
