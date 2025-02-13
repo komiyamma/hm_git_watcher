@@ -171,7 +171,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
             }
 
             if (retryCounter > 5) {
-                writeOutputPane("HmGitWatcherアイコンの更新失敗");
+                writeOutputPane("HmGitWatcherアイコンの更新に失敗しました。");
                 stopUpdatedRenderPaneStatusRetry();
                 return;
             }
