@@ -73,7 +73,6 @@ hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由な�
     }
 }
 
-var updatedRenderPaneStatus = false;
 var updatedRenderPaneStatusRetry; // 初期化しないこと。
 
 function stopUpdatedRenderPaneStatusRetry() {
@@ -148,7 +147,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return false;
     }
 
-    updatedRenderPaneStatus = updateRenderPaneButton();
+    var updatedRenderPaneStatus = updateRenderPaneButton();
     if (updatedRenderPaneStatus) {
         return;
     }
@@ -162,6 +161,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
     updatedRenderPaneStatusRetry = hidemaru.setInterval(
         function () {
+console.log("待ち");
             if (updatedRenderPaneStatus) {
                 stopUpdatedRenderPaneStatusRetry();
                 return;

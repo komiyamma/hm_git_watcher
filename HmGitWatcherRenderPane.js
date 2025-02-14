@@ -165,6 +165,10 @@ console.log("◯instanceRenderPane");
         cy: windowRect.cy
     });
 
+    if (gitWatcherComponent) {
+        gitWatcherComponent.sendCommandRenderPaneCommand();
+    }
+
     // レインダリングペインがReadyStateになるまで待つ。
     // これをしないと、ReadyStateになる前に他のウィンドウがアクティブになるとヤバい。
     // 以下の２行を足せば、バグは置きないようだが、待機が目立つのでやりたくはないところ。
