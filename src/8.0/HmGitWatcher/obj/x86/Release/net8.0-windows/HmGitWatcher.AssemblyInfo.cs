@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("2024-2025 @ Akitsugu Komiyama")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.0.1")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.0.1+d943ec93635921323f992010d005b340fef0b5bb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.0.1+a8303b14818e53449c10705b020b25a6ff6d6336")]
 [assembly: System.Reflection.AssemblyProductAttribute("HmGitWatcher")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HmGitWatcher")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.2.0.1")]

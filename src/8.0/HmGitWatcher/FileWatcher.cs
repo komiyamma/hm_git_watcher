@@ -77,6 +77,11 @@ public partial class HmGitWatcher
 
     private void OnFileChanged(object sender, FileSystemEventArgs e)
     {
+        // 立てるべきフラグが立ってるなら無駄
+        if (isChangeNotify)
+        {
+            return;
+        }
         try
         {
             if (e.FullPath.Contains("\\.git\\") || e.FullPath.EndsWith("\\.git"))
@@ -102,6 +107,11 @@ public partial class HmGitWatcher
 
     private void OnFileChanged(object sender, RenamedEventArgs e)
     {
+        // 立てるべきフラグが立ってるなら無駄
+        if (isChangeNotify)
+        {
+            return;
+        }
         try
         {
             if (e.FullPath.Contains("\\.git\\") || e.FullPath.EndsWith("\\.git"))

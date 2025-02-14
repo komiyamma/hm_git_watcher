@@ -128,7 +128,6 @@ function getHtmlUrl() {
 
 // ---- レンダリングペインを開く（この段階ではまだ目に見えない。インスタンス確立だけ。実際に目に見えるのは、リポジトリに帰属することが決定してから）
 function openRenderPane() {
-console.log("◯openRenderPane");
 
     var bgColor = getBGColor();
 
@@ -168,28 +167,4 @@ console.log("◯instanceRenderPane");
     if (gitWatcherComponent) {
         gitWatcherComponent.sendCommandRenderPaneCommand();
     }
-
-    // レインダリングペインがReadyStateになるまで待つ。
-    // これをしないと、ReadyStateになる前に他のウィンドウがアクティブになるとヤバい。
-    // 以下の２行を足せば、バグは置きないようだが、待機が目立つのでやりたくはないところ。
-    // hidemaru.clearTimeout(handleOpenRanderPaneComplete);
-    // hidemaru.setTimeout(waitOpenRanderPaneComplete, 150, 0);
 }
-
-/*
-var handleOpenRanderPaneComplete; // 初期化しないこと
-
-// レインダリングペインがReadyStateになるまで待つ。これをしないと、やばい。
-function waitOpenRanderPaneComplete(tryCount) {
-    tryCount++;
-    if (isRenderPaneReadyStateComplete()) {
-        hidemaru.notifyAwait("HmGitWatcherRnderPaneComplete");//awaitjsの待機を抜ける
-        return;
-    }
-    if (tryCount > 10) {
-        hidemaru.notifyAwait("HmGitWatcherRnderPaneComplete");//awaitjsの待機を抜ける
-        return;
-    }
-    hidemaru.setTimeout(waitOpenRanderPaneComplete, 150, tryCount);
-}
-*/

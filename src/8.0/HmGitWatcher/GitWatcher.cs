@@ -339,143 +339,151 @@ public partial class HmGitWatcher
 
     private async Task CheckInternal(dynamic callBackFoundRepos, dynamic callBackStatusChange, CancellationToken cancellationToken)
     {
-        Hm.OutputPane.Output("▼タスク開始------------------\r\n");
+        // Hm.OutputPane.Output("▼タスク開始------------------\r\n");
         while (!cancellationToken.IsCancellationRequested)
         {
-            try
+            if (renderpaneCommand)
             {
-                if (callBackStatusChange == null)
+                try
                 {
-                    Hm.OutputPane.Output("★callBackStatusChange is null & STOP()\r\n");
-                    Stop();
-                    break;
-                }
-
-                string filePath = Hm.Edit.FilePath;
-
-                if (string.IsNullOrEmpty(filePath))
-                {
-                    // callBackFunc("", "", "");
-                    prevStatus = "";
-                    prevPorchain = "";
-                    prevCherry = "";
-                    prevRepoPath = "";
-                    prevFilePath = "";
-                    Hm.OutputPane.Output("★IsNullOrEmpty & STOP()\r\n");
-                    Stop();
-                    break;
-                }
-
-                if (prevFilePath != filePath)
-                {
-                    prevStatus = "";
-                    prevPorchain = "";
-                    prevCherry = "";
-                    prevRepoPath = "";
-                    prevFilePath = "";
-                    Hm.OutputPane.Output("★(prevFilePath != filePath) & STOP()\r\n");
-                    Stop();
-                    break;
-                }
-
-                string repoPath = GetAbsoluteGitDir(filePath);
-                if (String.IsNullOrEmpty(repoPath))
-                {
-                    try
+                    if (callBackStatusChange == null)
                     {
-                        Hm.OutputPane.Output("■callBackStatusChange(Empty Args) & STOP()\r\n");
-                        callBackStatusChange("", "", "");
-                        Stop();
-                    }
-                    catch (Exception ex)
-                    {
-                        Hm.OutputPane.Output("■callBackStatusChange(Empty Args) raise Exception & STOP()\r\n");
+                        // Hm.OutputPane.Output("★callBackStatusChange is null & STOP()\r\n");
                         Stop();
                         break;
                     }
-                    prevStatus = "";
-                    prevPorchain = "";
-                    prevCherry = "";
-                    prevRepoPath = "";
-                    prevFilePath = "";
-                }
 
-                else
-                {
-                    if (prevRepoPath != repoPath)
+                    string filePath = Hm.Edit.FilePath;
+
+                    if (string.IsNullOrEmpty(filePath))
+                    {
+                        // callBackFunc("", "", "");
+                        prevStatus = "";
+                        prevPorchain = "";
+                        prevCherry = "";
+                        prevRepoPath = "";
+                        prevFilePath = "";
+                        // Hm.OutputPane.Output("★IsNullOrEmpty & STOP()\r\n");
+                        Stop();
+                        break;
+                    }
+
+                    if (prevFilePath != filePath)
+                    {
+                        prevStatus = "";
+                        prevPorchain = "";
+                        prevCherry = "";
+                        prevRepoPath = "";
+                        prevFilePath = "";
+                        // Hm.OutputPane.Output("★(prevFilePath != filePath) & STOP()\r\n");
+                        Stop();
+                        break;
+                    }
+
+                    string repoPath = GetAbsoluteGitDir(filePath);
+                    if (String.IsNullOrEmpty(repoPath))
                     {
                         try
                         {
-                            callBackFoundRepos(repoPath ?? "");
+                            // Hm.OutputPane.Output("■callBackStatusChange(Empty Args) & STOP()\r\n");
+                            callBackStatusChange("", "", "");
+                            Stop();
                         }
                         catch (Exception ex)
                         {
+                            // Hm.OutputPane.Output("■callBackStatusChange(Empty Args) raise Exception & STOP()\r\n");
+                            Stop();
+                            break;
                         }
-
-
-                        Hm.OutputPane.Output("★FileWatcher ReCreate\r\n");
-                        ReCreateFileWatcher(repoPath);
+                        prevStatus = "";
+                        prevPorchain = "";
+                        prevCherry = "";
+                        prevRepoPath = "";
+                        prevFilePath = "";
                     }
-                    GetGitFetch(repoPath);
-                    string status = GetGitStatus(repoPath);
-                    string porchain = GetGitStatusPorchain(repoPath);
-                    string cherry = GetGitCherry(repoPath);
 
-                    if (prevStatus == status && prevPorchain == porchain && prevCherry == cherry && prevRepoPath == repoPath)
-                    {
-                        // 変更なし
-                    }
                     else
                     {
-                        // Hm.OutputPane.Output("変更がありました。");
-                        prevStatus = status;
-                        prevPorchain = porchain;
-                        prevCherry = cherry;
-                        prevRepoPath = repoPath;
-
-                        string lastCheckFilePath = Hm.Edit.FilePath;
-                        if (!string.IsNullOrEmpty(lastCheckFilePath))
+                        if (prevRepoPath != repoPath)
                         {
                             try
                             {
-                                Hm.OutputPane.Output("■callBackStatusChange(...) 変化をJSに反映\r\n");
-                                // 実行先が存在しないことが考えられる。
-                                callBackStatusChange(repoPath ?? "", status ?? "", porchain ?? "", cherry ?? "");
+                                callBackFoundRepos(repoPath ?? "");
                             }
                             catch (Exception ex)
                             {
-                                Hm.OutputPane.Output("■callBackStatusChange(...) raise Exception & STOP()\r\n");
-                                Stop();
-                                break;
+                            }
+
+
+                            // Hm.OutputPane.Output("★FileWatcher ReCreate\r\n");
+                            ReCreateFileWatcher(repoPath);
+                        }
+                        GetGitFetch(repoPath);
+                        string status = GetGitStatus(repoPath);
+                        string porchain = GetGitStatusPorchain(repoPath);
+                        string cherry = GetGitCherry(repoPath);
+
+                        if (prevStatus == status && prevPorchain == porchain && prevCherry == cherry && prevRepoPath == repoPath)
+                        {
+                            // 変更なし
+                        }
+                        else
+                        {
+                            // Hm.OutputPane.Output("変更がありました。");
+                            prevStatus = status;
+                            prevPorchain = porchain;
+                            prevCherry = cherry;
+                            prevRepoPath = repoPath;
+
+                            string lastCheckFilePath = Hm.Edit.FilePath;
+                            if (!string.IsNullOrEmpty(lastCheckFilePath))
+                            {
+                                try
+                                {
+                                    // Hm.OutputPane.Output("■callBackStatusChange(...) 変化をJSに反映\r\n");
+                                    // 実行先が存在しないことが考えられる。
+                                    callBackStatusChange(repoPath ?? "", status ?? "", porchain ?? "", cherry ?? "");
+                                }
+                                catch (Exception ex)
+                                {
+                                    // Hm.OutputPane.Output("■callBackStatusChange(...) raise Exception & STOP()\r\n");
+                                    Stop();
+                                    break;
+                                }
                             }
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
+                catch (Exception ex)
+                {
+                    Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
+                }
+
+                // 何もなければ、8秒に１回の間隔でチェック
+                for (int i = 0; i < 16; i++)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        // Hm.OutputPane.Output("★IsCancellationRequested\r\n");
+                        break;
+                    }
+                    if (isChangeNotify)
+                    {
+                        // Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
+                        isChangeNotify = false;
+                        break;
+                    }
+                    await Task.Delay(500, cancellationToken); // 0.5秒間隔
+                }
             }
 
-            // 何もなければ、8秒に１回の間隔でチェック
-            for (int i = 0; i < 16; i++)
+            else // renderpaneCommand)
             {
-                if (cancellationToken.IsCancellationRequested)
-                {
-                    Hm.OutputPane.Output("★IsCancellationRequested\r\n");
-                    break;
-                }
-                if (isChangeNotify)
-                {
-                    // Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
-                    isChangeNotify = false;
-                    break;
-                }
                 await Task.Delay(500, cancellationToken); // 0.5秒間隔
             }
         }
 
-        Hm.OutputPane.Output("▲タスク終了------------------\r\n");
+        // Hm.OutputPane.Output("▲タスク終了------------------\r\n");
     }
 
     private CancellationTokenSource _cancellationTokenSource;
@@ -483,6 +491,8 @@ public partial class HmGitWatcher
     {
         try
         {
+            renderpaneCommand = false;
+
             prevFilePath = Hm.Edit.FilePath;
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -504,7 +514,7 @@ public partial class HmGitWatcher
         {
             // すでに監視を開始している場合は停止する
             Stop();
-            Hm.OutputPane.Output("\r\n\r\n▲STOP() & ▼ReStart()\r\n");
+            // Hm.OutputPane.Output("\r\n\r\n▲STOP() & ▼ReStart()\r\n");
             StartCheck(callBackFoundRepos, callBackStatusChange);
         }
         catch (Exception ex)
@@ -584,5 +594,11 @@ public partial class HmGitWatcher
     public void ChangeNotify()
     {
         isChangeNotify = true;
+    }
+
+    bool renderpaneCommand = false;
+    public void sendCommandRenderPaneCommand()
+    {
+        renderpaneCommand = true;
     }
 }
