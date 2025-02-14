@@ -144,12 +144,17 @@ console.log("◯openRenderPane");
     var dpiScale = getStartDPIScale();
     var windowRect = getWindowRect(dpiScale);
 
+    renderpanecommand({
+        target: strRanderPaneName,
+        show: 0,      // インスタンスを破棄してからやらないと、以前のゴミが残っていたらヤバい
+    });
+
 console.log("◯instanceRenderPane");
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        // invisible: 1, // 隠した状態での配置
+        invisible: 1, // 隠した状態での配置
         uri: targetUrl,
         place: "overlay",
         align: "right",
