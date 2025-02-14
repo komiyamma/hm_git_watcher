@@ -73,7 +73,7 @@ hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由な�
     }
 }
 
-
+var updatedRenderPaneStatus = false;
 var updatedRenderPaneStatusRetry; // 初期化しないこと。
 
 function stopUpdatedRenderPaneStatusRetry() {
@@ -148,7 +148,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         return false;
     }
 
-    var updatedRenderPaneStatus = updateRenderPaneButton();
+    updatedRenderPaneStatus = updateRenderPaneButton();
     if (updatedRenderPaneStatus) {
         return;
     }

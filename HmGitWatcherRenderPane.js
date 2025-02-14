@@ -149,7 +149,7 @@ console.log("◯instanceRenderPane");
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,      // 見えるではなく、コンポーネント配置の意味なので注意
-        invisible: 1, // 隠した状態での配置
+        // invisible: 1, // 隠した状態での配置
         uri: targetUrl,
         place: "overlay",
         align: "right",
@@ -160,4 +160,27 @@ console.log("◯instanceRenderPane");
         cy: windowRect.cy
     });
 
+    // レインダリングペインがReadyStateになるまで待つ。
+    // これをしないと、ReadyStateになる前に他のウィンドウがアクティブになるとヤバい。
+    // 以下の２行を足せば、バグは置きないようだが、待機が目立つのでやりたくはないところ。
+    // hidemaru.clearTimeout(handleOpenRanderPaneComplete);
+    // hidemaru.setTimeout(waitOpenRanderPaneComplete, 150, 0);
 }
+
+/*
+var handleOpenRanderPaneComplete; // 初期化しないこと
+
+// レインダリングペインがReadyStateになるまで待つ。これをしないと、やばい。
+function waitOpenRanderPaneComplete(tryCount) {
+    tryCount++;
+    if (isRenderPaneReadyStateComplete()) {
+        hidemaru.notifyAwait("HmGitWatcherRnderPaneComplete");//awaitjsの待機を抜ける
+        return;
+    }
+    if (tryCount > 10) {
+        hidemaru.notifyAwait("HmGitWatcherRnderPaneComplete");//awaitjsの待機を抜ける
+        return;
+    }
+    hidemaru.setTimeout(waitOpenRanderPaneComplete, 150, tryCount);
+}
+*/
