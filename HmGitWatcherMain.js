@@ -49,8 +49,8 @@ function registGitWatcherCommonObjectModel() {
 }
 
 function onGitReposFound(repoFullPath) {
-console.log("●JavaScript Found:" + repoFullPath);
-hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
+
+    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     try {
         if (!repoFullPath) {
@@ -88,9 +88,8 @@ debuginfo(2);
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
-    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
-    console.log("●JavaScript Change\r\n");
+    hidemaruversion(targetHidemaruversion); // なぜか必要。別スレ経由なため、うまく伝搬しないことがある？
 
     try {
         // リポジトリに所属していないならば、
@@ -161,7 +160,6 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
     updatedRenderPaneStatusRetry = hidemaru.setInterval(
         function () {
-console.log("待ち");
             if (updatedRenderPaneStatus) {
                 stopUpdatedRenderPaneStatusRetry();
                 return;

@@ -20,7 +20,7 @@ function isRenderPaneShowAndVisible() {
 
 // レンダリングを閉じる。インスタンスも破棄
 function closeRenderPane() {
-console.log("◯closeRenderPane");
+
     renderpanecommand({
         target: strRanderPaneName,
         show: 0,      // コンポーネント破棄
@@ -33,7 +33,7 @@ console.log("◯closeRenderPane");
 
 // レンダリングペインの表示。インスタンス確立と実際の表示。
 function showRenderPane() {
-console.log("◯showRenderPane");
+
     renderpanecommand({
         target: strRanderPaneName,
         show: 1,     // 見えるではなく、コンポーネント配置の意味なので注意
@@ -148,7 +148,6 @@ function openRenderPane() {
         show: 0,      // インスタンスを破棄してからやらないと、以前のゴミが残っていたらヤバい
     });
 
-console.log("◯instanceRenderPane");
     // invisibleな隠した状態で配置しておく
     renderpanecommand({
         target: strRanderPaneName,

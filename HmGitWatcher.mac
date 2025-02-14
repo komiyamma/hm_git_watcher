@@ -30,11 +30,3 @@ execjs currentmacrodirectory + @"\HmGitWatcherRenderPane.js";
 execjs currentmacrodirectory + @"\HmGitWatcher100MBLimit.js";
 
 execjs currentmacrodirectory + @"\HmGitWatcherMain.js";
-
-/*
-awaitjs "HmGitWatcherRnderPaneComplete";
-
-js {
-    console.log(filename2() + ":▶MacroComplete");
-}
-*/
