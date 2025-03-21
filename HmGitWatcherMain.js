@@ -190,7 +190,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         }
     }
 
-    updatedRenderPaneStatusRetry = hidemaru.setInterval(attemptRenderPaneStatusRetry, 0);
+    updatedRenderPaneStatusRetry = hidemaru.setTimeout(attemptRenderPaneStatusRetry, 0);
 }
 
 function isNotDetectedOperation() {
