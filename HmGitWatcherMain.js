@@ -79,7 +79,7 @@ var updatedRenderPaneStatusRetry; // 初期化しないこと。
 
 function stopUpdatedRenderPaneStatusRetry() {
     if (typeof (updatedRenderPaneStatusRetry) != "undefined") {
-        hidemaru.clearInterval(updatedRenderPaneStatusRetry);
+        hidemaru.clearTimeout(updatedRenderPaneStatusRetry);
     }
 }
 
