@@ -42,14 +42,14 @@ function startBGColorInterval(intervalTime) {
 
     // 同一ファイルに対して背景色をチョクチョク変更することなどはないので、5秒に一度程度でよいだろう。
     if (typeof (bgColorIntervalHandle) != "undefined") {
-        hidemaru.clearInterval(bgColorIntervalHandle);
+        hidemaru.clearTimeout(bgColorIntervalHandle);
     }
     bgColorIntervalHandle = hidemaru.setTimeout(tickBGColor, intervalTime);
 }
 
 function stopBGColorInterval() {
     if (typeof (bgColorIntervalHandle) != "undefined") {
-        hidemaru.clearInterval(bgColorIntervalHandle);
+        hidemaru.clearTimeout(bgColorIntervalHandle);
     }
 }
 
