@@ -303,23 +303,17 @@ function onCloseGitCommit() {
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
 function pushPostExecMacroFile(command, arg) {
     var isScheduled = 0;
-    // まずは0ディレイで実行を試みる。setTimeoutに乗せる。
-    hidemaru.setTimeout(function () {
+
+    function attempExecution() {
         if (!isScheduled) {
             isScheduled = hidemaru.postExecMacroFile(command, arg);
-            if (isScheduled !== 0) { isScheduled = 1; }
         }
-    }, 0);
+        if (!isScheduled) {
+            hidemaru.setTimeout(attempExecution, 0);
+        }
+    }
 
-    // この下の処理が必要な理由は秀丸エディタv9.22～v9.34のバグのため。setTimeoutが同じフレーム(1秒60フレーム)内に
-    // ２回実行されると、一方が実行されないバグのため。このため、上の処理が本当に成功したのか？ の確認が必要になる。
-    var peRetry = hidemaru.setInterval(function () {
-        if (isScheduled === 0) {
-            isScheduled = hidemaru.postExecMacroFile(command, arg);
-            if (isScheduled !== 0) { isScheduled = 1; }
-        }
-        if (isScheduled) { hidemaru.clearInterval(peRetry); }
-    }, 250);
+    hidemaru.setTimeout(attempExecution, 0);
 }
 
 

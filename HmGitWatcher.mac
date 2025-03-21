@@ -11,7 +11,7 @@ jsmode @"JScript\HmGitWatcher";
 
 js {
 
-var targetHidemaruversion = "9.25.99";
+var targetHidemaruversion = "9.35.99";
 hidemaruversion(targetHidemaruversion);
 
 var use100MBLimitPreCommitFile = true;
