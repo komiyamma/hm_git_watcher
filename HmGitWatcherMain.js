@@ -173,7 +173,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         }
 
         if (isNotDetectedOperation()) {
-            hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
+            updatedRenderPaneStatusRetry = hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
             return;
         }
 
@@ -186,9 +186,11 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
         }
 
         if (!updatedRenderPaneStatus) {
-            hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
+            updatedRenderPaneStatusRetry = hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
         }
     }
+
+    updatedRenderPaneStatusRetry = hidemaru.setInterval(attemptRenderPaneStatusRetry, 0);
 }
 
 function isNotDetectedOperation() {
