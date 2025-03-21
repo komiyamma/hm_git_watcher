@@ -160,28 +160,35 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
 
     stopUpdatedRenderPaneStatusRetry();
 
-    updatedRenderPaneStatusRetry = hidemaru.setInterval(
-        function () {
-            if (updatedRenderPaneStatus) {
-                stopUpdatedRenderPaneStatusRetry();
-                return;
-            }
+    function attemptRenderPaneStatusRetry() {
+        if (updatedRenderPaneStatus) {
+            stopUpdatedRenderPaneStatusRetry();
+            return;
+        }
 
-            if (isNotDetectedOperation()) {
-                return;
-            }
+        if (retryCounter > 5) {
+            writeOutputPane("HmGitWatcherアイコンの更新に失敗しました。");
+            stopUpdatedRenderPaneStatusRetry();
+            return;
+        }
 
-            if (retryCounter > 5) {
-                writeOutputPane("HmGitWatcherアイコンの更新に失敗しました。");
-                stopUpdatedRenderPaneStatusRetry();
-                return;
-            }
+        if (isNotDetectedOperation()) {
+            hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
+            return;
+        }
 
-            updatedRenderPaneStatus = updateRenderPaneButton();
-            retryCounter++;
-        },
-        1000
-    );
+        updatedRenderPaneStatus = updateRenderPaneButton();
+        retryCounter++;
+
+        if (updatedRenderPaneStatus) {
+            stopUpdatedRenderPaneStatusRetry();
+            return;
+        }
+
+        if (!updatedRenderPaneStatus) {
+            hidemaru.setTimeout(attemptRenderPaneStatusRetry, 1000);
+        }
+    }
 }
 
 function isNotDetectedOperation() {
