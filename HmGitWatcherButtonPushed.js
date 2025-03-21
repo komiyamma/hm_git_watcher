@@ -299,6 +299,11 @@ function onCloseGitCommit() {
 
 // -------------------------- V S C O D E 用 -------------------------------------
 
+var openTimeHandler;
+
+if (typeof(openTimeHandler) == "undefined") {
+    hidemaru.clearTimeout(openTimeHandler);
+}
 
 // hidemaru.pushPostExecMacroFileの実行を確かなものとする関数
 function pushPostExecMacroFile(command, arg) {
@@ -309,11 +314,11 @@ function pushPostExecMacroFile(command, arg) {
             isScheduled = hidemaru.postExecMacroFile(command, arg);
         }
         if (!isScheduled) {
-            hidemaru.setTimeout(attempExecution, 0);
+            openTimeHandler = hidemaru.setTimeout(attempExecution, 300);
         }
     }
 
-    hidemaru.setTimeout(attempExecution, 0);
+    openTimeHandler = hidemaru.setTimeout(attempExecution, 0);
 }
 
 

@@ -86,7 +86,6 @@ function stopUpdatedRenderPaneStatusRetry() {
 stopUpdatedRenderPaneStatusRetry();
 
 
-debuginfo(2);
 // この関数は「C#のdllの中」から「非同期」で呼び出される。(JavaScriptとして非同期で呼ばれる)
 // 「ローカルリポジトリ」「リモートリポジトリ」との変化を検知した際に呼び出される。
 function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry) {
@@ -193,6 +192,7 @@ function onGitStatusChange(repoFullPath, gitStatus, gitStatusPorchain, gitCherry
     updatedRenderPaneStatusRetry = hidemaru.setTimeout(attemptRenderPaneStatusRetry, 0);
 }
 
+// 非同期マクロから何か操作すべきではない状態
 function isNotDetectedOperation() {
     /*
     ○ 0x00000002 ウィンドウ移動/サイズ変更中
@@ -220,12 +220,14 @@ function isNotDetectedOperation() {
 }
 
 if (gitWatcherComponent) {
-    // 監視コンポーネント・リスタート。
-    // リポジトリを発見したら「onGitReposFound」を呼び出す。  
-    // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
-    gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
+    hidemaru.setTimeout( function() {
+	    // 監視コンポーネント・リスタート。
+	    // リポジトリを発見したら「onGitReposFound」を呼び出す。  
+	    // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
+	    gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
 
-    openRenderPane();
+	    openRenderPane();
+    }, 0);
 }
 
 
