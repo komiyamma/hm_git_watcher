@@ -12,7 +12,6 @@ if (typeof gitWatcherComponent !== 'undefined') {
     gitWatcherComponent.Stop();
 }
 
-var gitWatcherComponent = registGitWatcherCommonObjectModel();
 
 function registGitWatcherCommonObjectModel() {
 
@@ -219,16 +218,21 @@ function isNotDetectedOperation() {
     return (s & notAllowedMask) != 0;
 }
 
-if (gitWatcherComponent) {
-    hidemaru.setTimeout( function() {
-	    // 監視コンポーネント・リスタート。
-	    // リポジトリを発見したら「onGitReposFound」を呼び出す。  
-	    // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
-	    gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
+var gitWatcherComponent; // 宣言のみ
 
-	    openRenderPane();
-    }, 0);
-}
+hidemaru.setTimeout( function() {
+
+    gitWatcherComponent = registGitWatcherCommonObjectModel();
+    if (gitWatcherComponent) {
+        // 監視コンポーネント・リスタート。
+        // リポジトリを発見したら「onGitReposFound」を呼び出す。  
+        // 変化を感じ取ったら「onGitStatusChange」関数を呼び出す。
+        gitWatcherComponent.ReStart(onGitReposFound, onGitStatusChange);
+
+        openRenderPane();
+    }
+
+}, 0);
 
 
 
