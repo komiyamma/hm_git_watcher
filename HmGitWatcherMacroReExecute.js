@@ -18,7 +18,14 @@
 
 function shouldMacroReExecute() {
 
-    var eventId = event();
+    var eventId = 0;
+
+    // イベントIDが意図的に伝搬してきているならば...
+    if (argcount > 0) {
+        eventId = Number(getarg(0));
+    } else {
+        eventId = event();
+    }
 
     // 「手動実行」なら強制的に再実行。
     if (eventId == 0) {
