@@ -18,6 +18,11 @@ var use100MBLimitPreCommitFile = true;
 
 }
 
+$CONDITION_JAVASCRIPT_FILE = currentmacrodirectory + @"\HmGitWatcherCustomCondition.js";
+if (existfile($CONDITION_JAVASCRIPT_FILE)) {
+    execjs $CONDITION_JAVASCRIPT_FILE;
+}
+
 execjs currentmacrodirectory + @"\HmGitWatcherMacroReExecute.js";
 if (!#ShouldMacroReExecute) { endmacro; }
 

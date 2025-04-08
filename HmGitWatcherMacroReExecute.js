@@ -27,6 +27,12 @@ function shouldMacroReExecute() {
         eventId = event();
     }
 
+    if (typeof(necessaryCustomCondition) == "function") {
+        if (!necessaryCustomCondition()) {
+            return 0;
+        }
+    }
+
     // 「手動実行」なら強制的に再実行。
     if (eventId == 0) {
         return 1;
