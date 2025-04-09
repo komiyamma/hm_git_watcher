@@ -242,6 +242,6 @@ function writeOutputPane(msg) {
     if (msg == "") { return; }
     var dll = loaddll("HmOutputPane.dll");
     msg = msg.toString().replace(/\r\n/g, "\n").replace(/\n/g, "\r\n");
-    dll.dllFunc.Output(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
+    dll.dllFuncW.OutputW(hidemaru.getCurrentWindowHandle(), msg + "\r\n");
 }
 
