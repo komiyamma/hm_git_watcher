@@ -27,10 +27,9 @@ function shouldMacroReExecute() {
         eventId = event();
     }
 
-    if (typeof(necessaryCustomCondition) == "function") {
-        if (!necessaryCustomCondition()) {
-            return 0;
-        }
+    // ファイル名が無題。何もしない。
+    if (!filename2()) {
+        return 0;
     }
 
     // 「手動実行」なら強制的に再実行。
@@ -49,17 +48,19 @@ function shouldMacroReExecute() {
         return 0;
     }
 
-    // ファイル名が無題。何もしない。
-    if (!filename2()) {
-        return 0;
-    }
-
     // コンポーネントは存在している。何もしない。
     if (typeof (gitWatcherComponent) != "undefined") {
         return 0;
     }
 
-    // コンポーネントが解放されてしまっているなら、jsmodeの実行空間がクリアされてしまっている。改めて実行する必要がある。
+    // ユーザーが特別に用意した最低条件関数
+    if (typeof(necessaryCustomCondition) == "function") {
+        if (!necessaryCustomCondition()) {
+            return 0;
+        }
+    }
+
+    // 改めて実行する必要がある。
     return 1;
 }
 
