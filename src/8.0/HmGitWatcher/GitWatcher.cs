@@ -20,6 +20,7 @@ namespace HmGitWatcher;
 public partial class HmGitWatcher
 {
 
+
     string GetAbsoluteGitDir(string filePath)
     {
         var directory = Path.GetDirectoryName(filePath);
@@ -459,8 +460,7 @@ public partial class HmGitWatcher
                     Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
                 }
 
-                // 何もなければ、8秒に１回の間隔でチェック
-                for (int i = 0; i < 16; i++)
+                for (int i = 0; i < 200; i++)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -472,6 +472,15 @@ public partial class HmGitWatcher
                         // Hm.OutputPane.Output("isChangeNotifyを検知したので、タイムを短縮");
                         isChangeNotify = false;
                         break;
+                    }
+                    if (i > 30) // 15秒以上経過
+                    {
+                        int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
+                        // 非アクティブではない(=自分のプロセスはアクティブである)
+                        if (currentWindowBackGround == 0)
+                        {
+                            break;
+                        }
                     }
                     await Task.Delay(500, cancellationToken); // 0.5秒間隔
                 }
