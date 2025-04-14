@@ -1,28 +1,22 @@
 // ----------- 編集ペインの背景を取得する。nullを返す時は、取得しなおす必要がないということ ----------
-var lastBGColor = "";
+var lastBGR = -1;
 function getBGColor() {
     try {
-        var curNormalColorJson = getconfigcolor({ "normal": "*" });
+        var backBGR = getconfigcolor(0, 1);
 
-        if (!curNormalColorJson) {
+        if (backBGR == lastBGR) {
             return null;
         }
 
-        var bgColor = curNormalColorJson.normal.back;
+        lastBGR = backBGR;
 
-        if (bgColor == lastBGColor) {
-            return null;
-        }
+        // BGRの順をRGBの順へ
+        var R = backBGR & 0xFF;
+        var G = (backBGR >> 8) & 0xFF;
+        var B = (backBGR >> 16) & 0xFF;
+        var backRGB = (R << 16) | (G << 8) | B;
 
-        lastBGColor = bgColor;
-
-        if (gitWatcherComponent) {
-            bgColor = gitWatcherComponent.ConvertSystemColorNameToRGB(curNormalColorJson.normal.back);
-        }
-
-        bgColor = bgColor.replace("#", "");
-
-        return bgColor;
+        return sprintf("%06X", backRGB);
 
     } catch (e) {
     }
