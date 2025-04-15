@@ -27,6 +27,10 @@ public partial class HmGitWatcher
     [DllImport("user32.dll", SetLastError = true)]
     private static extern IntPtr FindWindow(string lpClassName, IntPtr none);
 
+    // ウィンドウハンドルのクラス名を取得
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount=256);
+
     string GetAbsoluteGitDir(string filePath)
     {
         var directory = Path.GetDirectoryName(filePath);
@@ -342,6 +346,9 @@ public partial class HmGitWatcher
     string prevRepoPath = "";
     string prevFilePath = "";
 
+    // Hm.WindowHandleのクラス名。ストア版とデスクトップ版で異なため、それを考慮してキャッシュする。
+    string curHmWndClassNameCache = null;
+
     private bool isChangeNotify = false;
 
     private async Task CheckInternal(dynamic callBackFoundRepos, dynamic callBackStatusChange, CancellationToken cancellationToken)
@@ -481,30 +488,10 @@ public partial class HmGitWatcher
                     }
                     if (i > 30) // 15秒以上経過
                     {
-                        IntPtr curHWnd = Hm.WindowHandle;
-                        // タブモードなら
-                        if (GetParent(curHWnd) != IntPtr.Zero)
+                        if (IsCurrentWindowFront())
                         {
-                            int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
-                            // 非アクティブではない(=自分のプロセスはアクティブである)
-                            if (currentWindowBackGround == 0)
-                            {
-                                break;
-                            }
+                            break;
                         }
-                        // 非タブモードなら
-                        else
-                        {
-                            IntPtr firstFindWnd = FindWindow("Hidemaru32Class", IntPtr.Zero);
-                            // 自分が秀丸の中でトップのウィンドウである
-                            if (firstFindWnd == curHWnd)
-                            {
-                                // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
-                                break;
-                            }
-
-                        }
-
                     }
                     await Task.Delay(500, cancellationToken); // 0.5秒間隔
                 }
@@ -517,6 +504,47 @@ public partial class HmGitWatcher
         }
 
         // Hm.OutputPane.Output("▲タスク終了------------------\r\n");
+    }
+
+    private bool IsCurrentWindowFront()
+    {
+        IntPtr curHWnd = Hm.WindowHandle;
+        // タブモードなら
+        if (GetParent(curHWnd) != IntPtr.Zero)
+        {
+            int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
+            // 非アクティブではない(=自分のプロセスはアクティブである)
+            if (currentWindowBackGround == 0)
+            {
+                return true;
+            }
+        }
+        // 非タブモードなら
+        else
+        {
+            // 自身のウィンドウハンドルのクラス名のキャッシュがない
+            if (curHmWndClassNameCache == null)
+            {
+                StringBuilder className = new StringBuilder(256);
+                GetClassName(curHWnd, className, className.Capacity);
+                // Hm.OutputPane.Output("className:" + className.ToString() + "\r\n");
+                curHmWndClassNameCache = className.ToString();
+            }
+
+            if (curHmWndClassNameCache?.Length > 0)
+            {
+                // そのクラス名で検索。（非タブモードならデスクトップ直下のルートウィンドウとして秀丸ウィンドが存在する)
+                IntPtr firstFindWnd = FindWindow(curHmWndClassNameCache, IntPtr.Zero);
+                // 自分が秀丸の中でトップのウィンドウである
+                if (firstFindWnd == curHWnd)
+                {
+                    // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
+                    return true; ;
+                }
+            }
+        }
+
+        return false;
     }
 
     private CancellationTokenSource _cancellationTokenSource;
