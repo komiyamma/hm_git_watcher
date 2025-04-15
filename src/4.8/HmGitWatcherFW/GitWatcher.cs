@@ -19,7 +19,13 @@ namespace HmGitWatcher;
 
 public partial class HmGitWatcher
 {
+    // GetParentWinndow
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetParent(IntPtr hWnd);
 
+    // FindWindow
+    [DllImport("user32.dll", SetLastError = true)]
+    private static extern IntPtr FindWindow(string lpClassName, IntPtr none);
 
     string GetAbsoluteGitDir(string filePath)
     {
@@ -475,12 +481,30 @@ public partial class HmGitWatcher
                     }
                     if (i > 30) // 15秒以上経過
                     {
-                        int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
-                        // 非アクティブではない(=自分のプロセスはアクティブである)
-                        if (currentWindowBackGround == 0)
+                        IntPtr curHWnd = Hm.WindowHandle;
+                        // タブモードなら
+                        if (GetParent(curHWnd) != IntPtr.Zero)
                         {
-                            break;
+                            int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
+                            // 非アクティブではない(=自分のプロセスはアクティブである)
+                            if (currentWindowBackGround == 0)
+                            {
+                                break;
+                            }
                         }
+                        // 非タブモードなら
+                        else
+                        {
+                            IntPtr firstFindWnd = FindWindow("Hidemaru32Class", IntPtr.Zero);
+                            // 自分が秀丸の中でトップのウィンドウである
+                            if (firstFindWnd == curHWnd)
+                            {
+                                // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
+                                break;
+                            }
+
+                        }
+
                     }
                     await Task.Delay(500, cancellationToken); // 0.5秒間隔
                 }
