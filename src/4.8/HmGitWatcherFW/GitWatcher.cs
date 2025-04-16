@@ -27,6 +27,10 @@ public partial class HmGitWatcher
     [DllImport("user32.dll", SetLastError = true)]
     private static extern IntPtr FindWindow(string lpClassName, IntPtr none);
 
+    // FindWindowExW の定義 (P/Invoke)
+    [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    public static extern IntPtr FindWindowEx( IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, IntPtr none);
+
     // ウィンドウハンドルのクラス名を取得
     [DllImport("user32.dll", SetLastError = true)]
     private static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount=256);
@@ -346,9 +350,6 @@ public partial class HmGitWatcher
     string prevRepoPath = "";
     string prevFilePath = "";
 
-    // Hm.WindowHandleのクラス名。ストア版とデスクトップ版で異なため、それを考慮してキャッシュする。
-    string curHmWndClassNameCache = null;
-
     private bool isChangeNotify = false;
 
     private async Task CheckInternal(dynamic callBackFoundRepos, dynamic callBackStatusChange, CancellationToken cancellationToken)
@@ -473,8 +474,8 @@ public partial class HmGitWatcher
                     Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
                 }
 
-                // 最大で100秒待機
-                for (int i = 0; i < 200; i++)
+                // 最大で600秒待機
+                for (int i = 0; i < 600; i++)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -487,7 +488,7 @@ public partial class HmGitWatcher
                         isChangeNotify = false;
                         break;
                     }
-                    if (i > 30) // 15秒以上経過
+                    if (i > 20) // 10秒以上経過
                     {
                         if (IsCurrentWindowFront())
                         {
@@ -507,11 +508,16 @@ public partial class HmGitWatcher
         // Hm.OutputPane.Output("▲タスク終了------------------\r\n");
     }
 
+    // Hm.WindowHandleのクラス名。ストア版とデスクトップ版で異なため、それを考慮してキャッシュする。
+    string curHmWndClassNameCache = null;
+
     private bool IsCurrentWindowFront()
     {
         IntPtr curHWnd = Hm.WindowHandle;
-        // タブモードなら
-        if (GetParent(curHWnd) != IntPtr.Zero)
+
+        IntPtr parentWnd = GetParent(curHWnd);
+        // タブモードである
+        if (parentWnd != IntPtr.Zero)
         {
             int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
             // 非アクティブではない(=自分のプロセスはアクティブである)
@@ -541,6 +547,15 @@ public partial class HmGitWatcher
                 {
                     // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
                     return true; ;
+                }
+                else
+                {
+                    IntPtr secondFindWnd = FindWindowEx(IntPtr.Zero, firstFindWnd, curHmWndClassNameCache, IntPtr.Zero);
+                    if (secondFindWnd == curHWnd)
+                    {
+                        // Hm.OutputPane.Output("セカンドウィンドウだよ\r\n");
+                        return true; ;
+                    }
                 }
             }
         }
