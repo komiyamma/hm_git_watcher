@@ -48,6 +48,7 @@
     <Compile Include="AsyncPopupMenu.cs" />
     <Compile Include="DpiWatcher.cs" />
     <Compile Include="FileWatcher.cs" />
+    <Compile Include="FrontWindow.cs" />
     <Compile Include="GitCommitDryRun.cs" />
     <Compile Include="GitCommitForm.cs" />
     <Compile Include="GitWatcher.cs" />
