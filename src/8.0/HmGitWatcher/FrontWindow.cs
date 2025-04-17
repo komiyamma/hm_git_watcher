@@ -31,16 +31,50 @@ public partial class HmGitWatcher
     // Hm.WindowHandleのクラス名。ストア版とデスクトップ版で異なため、それを考慮してキャッシュする。
     string curHmWndClassNameCache = null;
 
+    // 指定されたウィンドウのクラス名を取得する関数
+    private string GetWindowClass(IntPtr hWnd)
+    {
+        StringBuilder className = new StringBuilder(256);
+        int result = GetClassName(hWnd, className, className.Capacity);
+        if (result > 0)
+        {
+            return className.ToString();
+        }
+        return null;
+    }
+
+    // 親ウィンドウをたどり、同じクラス名のウィンドウがあるか判定する関数
+    public bool HasSameClassParent(IntPtr hWnd)
+    {
+        IntPtr parentHWnd = GetParent(hWnd);
+        while (parentHWnd != IntPtr.Zero)
+        {
+            string parentClassName = GetWindowClass(parentHWnd);
+            if (parentClassName == curHmWndClassNameCache)
+            {
+                return true; // 同じクラス名の親ウィンドウが見つかった
+            }
+            parentHWnd = GetParent(parentHWnd); // さらに親をたどる
+        }
+
+        return false; // 同じクラス名の親ウィンドウは見つからなかった
+    }
+
     private bool IsCurrentWindowFront()
     {
         IntPtr curHWnd = Hm.WindowHandle;
 
-        IntPtr parentWnd = GetParent(curHWnd);
+        // 自身のウィンドウハンドルのクラス名のキャッシュがない
+        if (curHmWndClassNameCache == null)
+        {
+            curHmWndClassNameCache = GetWindowClass(curHWnd);
+        }
+
         // タブモードである
-        if (parentWnd != IntPtr.Zero)
+        if (HasSameClassParent(curHWnd) )
         {
             int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
-            // 非アクティブではない(=自分のプロセスはアクティブである)
+            // 自武のウィンドウはタブの裏に隠れていたり、非表示とかになっていない (=自分のプロセスはそのタブグループの中では手前にある)
             if (currentWindowBackGround == 0)
             {
                 return true;
@@ -49,33 +83,21 @@ public partial class HmGitWatcher
         // 非タブモードなら
         else
         {
-            // 自身のウィンドウハンドルのクラス名のキャッシュがない
-            if (curHmWndClassNameCache == null)
+            // そのクラス名で検索。（非タブモードならデスクトップ直下のルートウィンドウとして秀丸ウィンドが存在する)
+            IntPtr firstFindWnd = FindWindow(curHmWndClassNameCache, IntPtr.Zero);
+            // 自分が秀丸の中でトップのウィンドウである
+            if (firstFindWnd == curHWnd)
             {
-                StringBuilder className = new StringBuilder(256);
-                GetClassName(curHWnd, className, className.Capacity);
-                // Hm.OutputPane.Output("className:" + className.ToString() + "\r\n");
-                curHmWndClassNameCache = className.ToString();
+                // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
+                return true; ;
             }
-
-            if (curHmWndClassNameCache?.Length > 0)
+            else
             {
-                // そのクラス名で検索。（非タブモードならデスクトップ直下のルートウィンドウとして秀丸ウィンドが存在する)
-                IntPtr firstFindWnd = FindWindow(curHmWndClassNameCache, IntPtr.Zero);
-                // 自分が秀丸の中でトップのウィンドウである
-                if (firstFindWnd == curHWnd)
+                IntPtr secondFindWnd = FindWindowEx(IntPtr.Zero, firstFindWnd, curHmWndClassNameCache, IntPtr.Zero);
+                if (secondFindWnd == curHWnd)
                 {
-                    // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
+                    // Hm.OutputPane.Output("セカンドウィンドウだよ\r\n");
                     return true; ;
-                }
-                else
-                {
-                    IntPtr secondFindWnd = FindWindowEx(IntPtr.Zero, firstFindWnd, curHmWndClassNameCache, IntPtr.Zero);
-                    if (secondFindWnd == curHWnd)
-                    {
-                        // Hm.OutputPane.Output("セカンドウィンドウだよ\r\n");
-                        return true; ;
-                    }
                 }
             }
         }
