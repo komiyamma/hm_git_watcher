@@ -21,7 +21,7 @@ public partial class HmGitWatcher
 
     // FindWindowExW の定義 (P/Invoke)
     [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    public static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, IntPtr none);
+    private static extern IntPtr FindWindowEx(IntPtr hWndParent, IntPtr hWndChildAfter, string lpszClass, IntPtr none);
 
     // ウィンドウハンドルのクラス名を取得
     [DllImport("user32.dll", SetLastError = true)]
@@ -29,7 +29,7 @@ public partial class HmGitWatcher
 
 
     // Hm.WindowHandleのクラス名。ストア版とデスクトップ版で異なため、それを考慮してキャッシュする。
-    string curHmWndClassNameCache = null;
+    private string curHmWndClassNameCache = null;
 
     // 指定されたウィンドウのクラス名を取得する関数
     private string GetWindowClass(IntPtr hWnd)
@@ -43,9 +43,11 @@ public partial class HmGitWatcher
         return null;
     }
 
-    // 親ウィンドウをたどり、同じクラス名のウィンドウがあるか判定する関数
-    public bool HasSameClassParent(IntPtr hWnd)
+    // この秀丸プロセスはタブモードなのか？
+    private bool IsThisHmProcessTabMode(IntPtr hWnd)
     {
+        // 親ウィンドウをたどり、同じクラス名のウィンドウがあるか判定する
+        // 親を巡っていって同じクラス名があるのなら、それはタブモードである。
         IntPtr parentHWnd = GetParent(hWnd);
         while (parentHWnd != IntPtr.Zero)
         {
@@ -71,7 +73,7 @@ public partial class HmGitWatcher
         }
 
         // タブモードである
-        if (HasSameClassParent(curHWnd) )
+        if (IsThisHmProcessTabMode(curHWnd) )
         {
             int currentWindowBackGround = Hm.Edit.InputStates & 0x00000800;
             // 自武のウィンドウはタブの裏に隠れていたり、非表示とかになっていない (=自分のプロセスはそのタブグループの中では手前にある)
