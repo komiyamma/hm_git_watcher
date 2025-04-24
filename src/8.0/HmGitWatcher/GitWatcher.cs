@@ -459,8 +459,8 @@ public partial class HmGitWatcher
                     Hm.OutputPane.Output($"Gitリポジトリ調査中にエラー発生: {ex.Message}");
                 }
 
-                // 最大で600秒待機
-                for (int i = 0; i < 600; i++)
+                // 最大で300秒待機
+                for (int i = 0; i < 300*2; i++)
                 {
                     if (cancellationToken.IsCancellationRequested)
                     {
@@ -473,14 +473,23 @@ public partial class HmGitWatcher
                         isChangeNotify = false;
                         break;
                     }
-                    if (i > 20) // 10秒以上経過
+                    if (i > 10*2 && IsCurrentWindowOperate()) // 10秒以上経過で、操作しているウィンドウ
                     {
-                        if (IsCurrentWindowFront())
-                        {
-                            break;
-                        }
+                        break;
                     }
-                    await Task.Delay(500, cancellationToken); // 0.5秒間隔
+
+                    int layer = IsCurrentWindowFront(); // 1が手前に見えてる、２は見えてるかわからんが２番手
+                    if (i > 20*2 && layer == 1) // 20秒以上経過で、前面もしくはそれ相当
+                    { 
+                        break;
+                    }
+
+                    if (i > 45*2 && layer == 2) // 45秒以上経過で、２番手
+                    {
+                        break;
+                    }
+
+                    await Task.Delay(1000/2, cancellationToken); // 0.5秒間隔
                 }
             }
 

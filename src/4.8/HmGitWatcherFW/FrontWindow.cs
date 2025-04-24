@@ -62,7 +62,17 @@ public partial class HmGitWatcher
         return false; // 同じクラス名の親ウィンドウは見つからなかった
     }
 
-    private bool IsCurrentWindowFront()
+    private bool IsCurrentWindowOperate()
+    {
+        // 今のウィンドウは操作されていないウィンドウである？
+        int isNonOperateWindow = (Hm.Edit.InputStates & 0x00200000);
+
+        // この値が0であるならば、操作されているウィンドウである。
+        return isNonOperateWindow == 0;
+    }
+
+    // 現在そのウィンドウは操作アクティブウィンドウである。
+    private int IsCurrentWindowFront()
     {
         IntPtr curHWnd = Hm.WindowHandle;
 
@@ -79,7 +89,7 @@ public partial class HmGitWatcher
             // 自武のウィンドウはタブの裏に隠れていたり、非表示とかになっていない (=自分のプロセスはそのタブグループの中では手前にある)
             if (currentWindowBackGround == 0)
             {
-                return true;
+                return 1;
             }
         }
         // 非タブモードなら
@@ -91,7 +101,7 @@ public partial class HmGitWatcher
             if (firstFindWnd == curHWnd)
             {
                 // Hm.OutputPane.Output("トップウィンドウだよ\r\n");
-                return true; ;
+                return 1; ;
             }
             else
             {
@@ -99,12 +109,12 @@ public partial class HmGitWatcher
                 if (secondFindWnd == curHWnd)
                 {
                     // Hm.OutputPane.Output("セカンドウィンドウだよ\r\n");
-                    return true; ;
+                    return 2; ;
                 }
             }
         }
 
-        return false;
+        return 0;
     }
 
 }
