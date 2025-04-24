@@ -43,7 +43,7 @@ function create100MBLimitPreCommitFile(repoPath) {
         var scriptContent = hidemaru.loadTextFile(currentMacroDirectory + "\\HmGitWatcher100MBLimit.v1.pre-commit");
         hidemaru.saveTextFile(preCommitFilePath, scriptContent, "utf8");
 
-        writeOutputPane("このリポジトリに100MB以上のファイルをコミットしようとすると自動的にキャンセルする仕組みを導入しました。");
+        writeOutputPane("このリポジトリに、「ファイルサイズが100MB以上」のファイルをコミットしようとすると、自動的にキャンセルする仕組みを導入しました。");
     } catch (e) {
     }
 

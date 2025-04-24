@@ -11,16 +11,16 @@ jsmode @"JScript\HmGitWatcher";
 
 js {
 
-var targetHidemaruversion = "9.46.02";
+var targetHidemaruversion = "9.44.99";
 hidemaruversion(targetHidemaruversion);
 
 var use100MBLimitPreCommitFile = true;
 
 }
 
-$CONDITION_JAVASCRIPT_FILE = currentmacrodirectory + @"\HmGitWatcherCustomCondition.js";
-if (existfile($CONDITION_JAVASCRIPT_FILE)) {
-    execjs $CONDITION_JAVASCRIPT_FILE;
+$customConditionJSFile = currentmacrodirectory + @"\HmGitWatcherCustomCondition.js";
+if (existfile($customConditionJSFile)) {
+    execjs $customConditionJSFile;
 }
 
 execjs currentmacrodirectory + @"\HmGitWatcherMacroReExecute.js";
