@@ -8,9 +8,9 @@
 		<UseWindowsForms>true</UseWindowsForms>
 		<Platforms>x86;x64</Platforms>
 		<LangVersion>latest</LangVersion>
-		<AssemblyVersion>1.2.0.2</AssemblyVersion>
-		<FileVersion>1.2.0.2</FileVersion>
-		<Version>1.2.0.2</Version>
+		<AssemblyVersion>1.2.0.3</AssemblyVersion>
+		<FileVersion>1.2.0.3</FileVersion>
+		<Version>1.2.0.3</Version>
 		<Authors>Akitsugu Komiyama</Authors>
 		<Copyright>2024-2025 @ $(Authors)</Copyright>
 	</PropertyGroup>

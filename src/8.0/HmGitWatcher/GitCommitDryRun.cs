@@ -26,7 +26,7 @@ public partial class HmGitWatcher
         {
             string stdOutSum = "";
             string stdErrSum = "";
-            Hm.OutputPane.Output(startInfo.Arguments + "\r\n");
+            // Hm.OutputPane.Output(startInfo.Arguments + "\r\n");
 
             using (Process process = new Process())
             {
