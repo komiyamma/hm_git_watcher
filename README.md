@@ -1,6 +1,6 @@
 # HmGitWatcher
 
-![HmGitWatcher v1.2.0.1](https://img.shields.io/badge/HmGitWatcher-v1.2.0-6479ff.svg)
+![HmGitWatcher](https://img.shields.io/github/v/release/komiyamma/hm_git_watcher?label=HmGitWatcher)
 [![MIT](https://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 ![Hidemaru 9.35](https://img.shields.io/badge/Hidemaru-v9.35-6479ff.svg)
 ![.NET 4.8 or .NET 9.0](https://img.shields.io/badge/.NET-4.8_|_9.0-6479ff.svg)
